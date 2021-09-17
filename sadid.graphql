@@ -1,0 +1,279 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+"An object with an ID"
+interface Node {
+    "The ID of the object."
+    id: ID!
+}
+
+type AshkhasType implements Node {
+    Adress: String
+    CodeMeli: String
+    DaryaftSood: Boolean
+    Des: String
+    Fname: String
+    Hesab: String
+    Lname: String
+    MizanHarMelyoon: Int
+    MizanHarMelyoonMoaref: Int
+    MizanHarMelyoonMoaref2: Int
+    MoarefTblAshkhasId2: Int
+    MorefiBekhod: Boolean
+    ShomareKart: String
+    Tel: String
+    VarizBeMoaref: Boolean
+    "The ID of the object."
+    id: ID!
+    "معرف"
+    moaref: String
+    moarefiShodeHa: [MoarefiShodeHaType]
+    seporde: Float
+    tarakoneshha(after: String, before: String, dateTime_Gte: DateTime, dateTime_Lte: DateTime, dateTime_Range: [DateTime], first: Int, last: Int, offset: Int, shakhs_Id: Float): TarakoneshTypeConnection!
+    user: UserType
+}
+
+type AshkhasTypeConnection {
+    "Contains the nodes in this connection."
+    edges: [AshkhasTypeEdge]!
+    "Pagination data for this connection."
+    pageInfo: PageInfo!
+}
+
+"A Relay edge containing a `AshkhasType` and its cursor."
+type AshkhasTypeEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: AshkhasType
+}
+
+type CreateTransaction {
+    transaction: TransactionType
+}
+
+type Login {
+    token: String
+    user: UserType
+}
+
+type MoarefiShodeHaType {
+    Adress: String
+    CodeMeli: String
+    DaryaftSood: Boolean
+    Des: String
+    Fname: String
+    Hesab: String
+    Lname: String
+    MizanHarMelyoon: Int
+    MizanHarMelyoonMoaref: Int
+    MizanHarMelyoonMoaref2: Int
+    MoarefTblAshkhasId2: Int
+    MorefiBekhod: Boolean
+    MorefiBekhod2: Boolean
+    ShomareKart: String
+    Tel: String
+    VarizBeMoaref: Boolean
+    id: ID!
+    user: UserType
+}
+
+type Mutation {
+    createTransaction(
+        amount: Int!,
+        date: Date!,
+        transactTypes: Transaction_Type_Enum!,
+        "کاربر تراکنش"
+        userId: Int!
+    ): CreateTransaction
+    deleteToken(refreshToken: String): Revoke
+    login(password: String!, username: String!): Login
+    refreshToken(token: String): Refresh
+    "Obtain JSON Web Token mutation"
+    tokenAuth(password: String!, username: String!): ObtainJSONWebToken
+    verifyToken(token: String): Verify
+}
+
+"Obtain JSON Web Token mutation"
+type ObtainJSONWebToken {
+    payload: GenericScalar!
+    refreshExpiresIn: Int!
+    token: String!
+}
+
+"The Relay compliant `PageInfo` type, containing data necessary to paginate this connection."
+type PageInfo {
+    "When paginating forwards, the cursor to continue."
+    endCursor: String
+    "When paginating forwards, are there more items?"
+    hasNextPage: Boolean!
+    "When paginating backwards, are there more items?"
+    hasPreviousPage: Boolean!
+    "When paginating backwards, the cursor to continue."
+    startCursor: String
+}
+
+type PostType implements Node {
+    body: String
+    "The ID of the object."
+    id: ID!
+    isPublic: Boolean!
+    owner: UserType!
+    title: String!
+}
+
+type PostTypeConnection {
+    "Contains the nodes in this connection."
+    edges: [PostTypeEdge]!
+    "Pagination data for this connection."
+    pageInfo: PageInfo!
+}
+
+"A Relay edge containing a `PostType` and its cursor."
+type PostTypeEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: PostType
+}
+
+type Query {
+    ashkhas(Lname: String, Lname_Icontains: String, Lname_Istartswith: String, after: String, before: String, first: Int, id: Float, last: Int, offset: Int): AshkhasTypeConnection
+    me: UserType
+    posts: [PostType]
+    tarakoneshs(after: String, before: String, dateTime_Gte: DateTime, dateTime_Lte: DateTime, dateTime_Range: [DateTime], first: Int, last: Int, offset: Int, shakhs_Id: Float): TarakoneshTypeConnection
+    transactionKinds: [TransactionKindType]
+    transactions: [TransactionType]
+    users(after: String, before: String, first: Int, id: Float, last: Int, lastName: String, mobile: String, offset: Int): UserTypeConnection
+}
+
+type Refresh {
+    payload: GenericScalar!
+    refreshExpiresIn: Int!
+    token: String!
+}
+
+type Revoke {
+    revoked: Int!
+}
+
+type TarakoneshType implements Node {
+    DarMelyoon: Int!
+    Des: String
+    Mablagh: Int!
+    TarikhMoaser: String!
+    dateTime: DateTime!
+    "The ID of the object."
+    id: ID!
+    kind: TransactionKindType!
+    shakhs: AshkhasType!
+}
+
+type TarakoneshTypeConnection {
+    "Contains the nodes in this connection."
+    edges: [TarakoneshTypeEdge]!
+    "Pagination data for this connection."
+    pageInfo: PageInfo!
+    totalCount: Int
+}
+
+"A Relay edge containing a `TarakoneshType` and its cursor."
+type TarakoneshTypeEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: TarakoneshType
+}
+
+type TransactionKindType {
+    id: ID!
+    title: String!
+}
+
+type TransactionType {
+    amount: Int!
+    created: DateTime!
+    createdBy: UserType!
+    date: Date!
+    id: ID!
+    kind: TransactionKindType!
+    modified: DateTime!
+    modifiedBy: UserType!
+    shamseDate: String
+    user: UserType!
+}
+
+type UserType implements Node {
+    createBy: [TransactionType!]!
+    dateJoined: DateTime!
+    email: String!
+    firstName: String!
+    "The ID of the object."
+    id: ID!
+    "Designates whether this user should be treated as active. Unselect this instead of deleting accounts."
+    isActive: Boolean!
+    "Designates whether the user can log into this admin site."
+    isStaff: Boolean!
+    "Designates that this user has all permissions without explicitly assigning them."
+    isSuperuser: Boolean!
+    lastLogin: DateTime
+    lastName: String!
+    "شماره موبایل"
+    mobile: String
+    modifiedBy: [TransactionType!]!
+    posts(after: String, before: String, first: Int, last: Int, offset: Int): PostTypeConnection!
+    transactions: [TransactionType!]!
+    "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+    username: String!
+    users(Lname: String, Lname_Icontains: String, Lname_Istartswith: String, after: String, before: String, first: Int, id: Float, last: Int, offset: Int): AshkhasTypeConnection!
+}
+
+type UserTypeConnection {
+    "Contains the nodes in this connection."
+    edges: [UserTypeEdge]!
+    "Pagination data for this connection."
+    pageInfo: PageInfo!
+}
+
+"A Relay edge containing a `UserType` and its cursor."
+type UserTypeEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: UserType
+}
+
+type Verify {
+    payload: GenericScalar!
+}
+
+enum Transaction_Type_Enum {
+    bardasht
+    variz
+}
+
+
+"""
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime
+
+"""
+The `Date` scalar type represents a Date
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar Date
+
+"""
+The `GenericScalar` scalar type represents a generic
+GraphQL scalar value that could be:
+String, Boolean, Int, Float, List or Object.
+"""
+scalar GenericScalar
