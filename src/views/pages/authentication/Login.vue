@@ -213,7 +213,7 @@
 /* eslint-disable global-require */
 import {ValidationProvider, ValidationObserver} from 'vee-validate'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
-import { GC_USER_ID, GC_AUTH_TOKEN } from '@/constants/settings'
+import {GC_USER_ID, GC_AUTH_TOKEN, GC_USER_DATA} from '@/constants/settings'
 import {LOGIN} from "@/constants/graphql";
 import {
   BRow,
@@ -267,10 +267,9 @@ export default {
   data() {
     return {
       status: '',
-      password: 'admin',
-      username: 'admin@demo.com',
+      password: 'M@123456',
+      username: 'morteza',
       sideImg: require('@/assets/images/pages/login-v2.svg'),
-
       // validation rules
       required,
       email,
@@ -304,6 +303,7 @@ export default {
             }).then((result) => {
               const id = result.data.login.user.id
               const token = result.data.login.token
+              const fullName=result.data.login.user.firstName+' '+result.data.login.user.lastName
               this.saveUserData(id, token)
               this.$router.push({path: '/'})
             }).catch((error) => {
@@ -314,9 +314,20 @@ export default {
         }
       })
     },
-    saveUserData(id, token) {
+    saveUserData(id, token,fullName) {
+      let userData={
+        id: 1,
+        fullName: fullName,
+        username: this.$data.username,
+        avatar: "/demo/vuexy-vuejs-admin-dashboard-template/demo-1/img/13-small.d796bffd.png",
+        email: "admin@demo.com",
+        role: "admin",
+        ability: [{"action": "manage", "subject": "all"}],
+        extras: {"eCommerceCartItemsCount": 5}
+      }
       localStorage.setItem(GC_USER_ID, id)
       localStorage.setItem(GC_AUTH_TOKEN, token)
+      localStorage.setItem(GC_USER_DATA,JSON.stringify(userData) )
       this.$root.$data.userId = localStorage.getItem(GC_USER_ID)
       this.$store.commit('login')
       // alert(this.$store.getters.isLogin)
