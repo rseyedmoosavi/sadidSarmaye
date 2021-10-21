@@ -50,6 +50,6 @@ module.exports = {
   transpileDependencies: ['vue-echarts', 'resize-detector'],
 
   pwa: {
-    name: 'SadidSarmaye'
-  }
+    name: 'SadidSarmaye',
+  },
 }
