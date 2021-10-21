@@ -6,11 +6,11 @@ export default [
     tagVariant: 'light-warning',
     children: [
       {
-        title: 'eCommerce',
+        title: 'خدمات ما',
         route: 'dashboard-ecommerce',
       },
       {
-        title: 'Analytics',
+        title: 'خدمات شما',
         route: 'dashboard-analytics',
       },
     ],

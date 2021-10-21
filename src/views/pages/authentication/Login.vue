@@ -64,7 +64,7 @@
                 icon="HelpCircleIcon"
                 size="18"
                 class="position-absolute"
-                style="top: 10; right: 10;"
+                style="top: 10px; right: 10px;"
             />
           </b-alert>
 
@@ -232,11 +232,9 @@ import {
   BAlert,
   VBTooltip,
 } from 'bootstrap-vue'
-import useJwt from '@/auth/jwt/useJwt'
 import {required, email} from '@validations'
 import {togglePasswordVisibility} from '@core/mixins/ui/forms'
 import store from '@/store/index'
-import {getHomeRouteForLoggedInUser} from '@/auth/utils'
 
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
@@ -292,7 +290,7 @@ export default {
     login() {
       this.$refs.loginForm.validate().then(success => {
         if (success) {
-          const {name, username, password} = this.$data
+          const {username, password} = this.$data
           if (this.login) {
             this.$apollo.mutate({
               mutation: LOGIN,
@@ -303,9 +301,20 @@ export default {
             }).then((result) => {
               const id = result.data.login.user.id
               const token = result.data.login.token
-              const fullName=result.data.login.user.firstName+' '+result.data.login.user.lastName
+              const fullName = result.data.login.user.firstName + ' ' + result.data.login.user.lastName
               this.saveUserData(id, token)
-              this.$router.push({path: '/'})
+              this.$router.push({path: '/'}).then(() => {
+                this.$toast({
+                  component: ToastificationContent,
+                  position: 'top-left',
+                  props: {
+                    title: `Welcome ${fullName || this.$data.username}`,
+                    icon: 'CoffeeIcon',
+                    variant: 'success',
+                    text: `You have successfully logged in as admin. Now you can start to explore!`,
+                  },
+                })
+              })
             }).catch((error) => {
               alert(error);
               console.log(error)
@@ -314,8 +323,8 @@ export default {
         }
       })
     },
-    saveUserData(id, token,fullName) {
-      let userData={
+    saveUserData(id, token, fullName) {
+      let userData = {
         id: 1,
         fullName: fullName,
         username: this.$data.username,
@@ -327,15 +336,15 @@ export default {
       }
       localStorage.setItem(GC_USER_ID, id)
       localStorage.setItem(GC_AUTH_TOKEN, token)
-      localStorage.setItem(GC_USER_DATA,JSON.stringify(userData) )
+      localStorage.setItem(GC_USER_DATA, JSON.stringify(userData))
       this.$root.$data.userId = localStorage.getItem(GC_USER_ID)
-      this.$store.commit('login')
-      // alert(this.$store.getters.isLogin)
+      this.$ability.update(userData.ability)
+      this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)
     }
   },
 }
 </script>
 
 <style lang="scss">
-@import '@core/scss/vue/pages/page-auth.scss';
+@import "@core/scss/vue/pages/page-auth.scss";
 </style>

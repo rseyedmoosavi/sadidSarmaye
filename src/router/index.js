@@ -22,6 +22,11 @@ const router = new VueRouter({
   },
   routes: [
     { path: '/', redirect: { name: 'dashboard-ecommerce' } },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: () => import('@/views/Logout'),
+    },
     ...apps,
     ...dashboard,
     ...pages,
@@ -36,7 +41,7 @@ const router = new VueRouter({
   ],
 })
 
-// router.beforeEach((to, _, next) => {
+// router.beforeEach1((to, _, next) => {
 //   const isLoggedIn = isUserLoggedIn()
 //
 //   if (!canNavigate(to)) {

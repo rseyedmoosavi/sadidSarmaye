@@ -30,9 +30,9 @@
                   alt="logo"
                 />
               </span>
-              <h2 class="brand-text">
-                {{ appName }}
-              </h2>
+<!--              <h2 class="brand-text">-->
+<!--                {{ appName }}-->
+<!--              </h2>-->
             </b-link>
           </li>
 

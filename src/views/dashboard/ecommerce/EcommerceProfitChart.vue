@@ -6,7 +6,7 @@
   >
     <h6>Profit</h6>
     <h2 class="font-weight-bolder mb-1">
-      6,24k
+      12,063k
     </h2>
     <!-- chart -->
     <vue-apex-charts
