@@ -8,6 +8,17 @@
       format('svg'); /* iOS 4.1- */
 }
 
+@font-face {
+  font-family: yekan;
+  src: url('fonts/yekan/yekan.eot');
+  src: url('fonts/yekan/yekan.eot?#iefix') format('yekan-opentype'),
+  url('fonts/yekan/yekan.woff') format('woff'),
+  url('fonts/yekan/yekan.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 .feather {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'feather' !important;
