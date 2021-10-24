@@ -1,6 +1,39 @@
 import gql from 'graphql-tag'
 
-
+export const PROFILE_FOR_DROPDOWN = gql`
+query profile{
+    profiles {
+        edges {
+            node {
+                firstName
+                lastName
+                codeMeli
+                presenter
+            }
+        }
+    }
+}
+`
+export const PROFILE=gql`
+    query profile($id:Float!){
+        profiles(id:$id) {
+            edges {
+                node {
+                    firstName
+                    lastName
+                    codeMeli
+                    presenter
+                    adress
+                    shomareKart
+                    shomareHesab
+                    description
+                    tel
+                    mobile1
+                }
+            }
+        }
+    }
+`
 export const PERSON_SEPORDE = gql`
     query personSeporde{
         me{

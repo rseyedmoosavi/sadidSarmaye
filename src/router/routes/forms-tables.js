@@ -392,6 +392,23 @@ export default [
     },
   },
   {
+    path: '/table/bs-table_o',
+    name: 'table-bs-table',
+    component: () => import('@/views/table/bs-table/Table_o.vue'),
+    meta: {
+      pageTitle: 'BS Table',
+      breadcrumb: [
+        {
+          text: 'Table_o',
+        },
+        {
+          text: 'BS Table_o',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
     path: '/table/vue-good-table',
     name: 'table-good-table',
     component: () => import('@/views/table/vue-good-table/GoodTable.vue'),

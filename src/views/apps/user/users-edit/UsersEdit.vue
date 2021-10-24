@@ -82,6 +82,7 @@ import userStoreModule from '../userStoreModule'
 import UserEditTabAccount from './UserEditTabAccount.vue'
 import UserEditTabInformation from './UserEditTabInformation.vue'
 import UserEditTabSocial from './UserEditTabSocial.vue'
+import {LOGIN, PROFILE} from "@/constants/graphql";
 
 export default {
   components: {
@@ -95,31 +96,46 @@ export default {
     UserEditTabInformation,
     UserEditTabSocial,
   },
-  setup() {
-    const userData = ref(null)
-
-    const USER_APP_STORE_MODULE_NAME = 'app-user'
-
-    // Register module
-    if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
-
-    // UnRegister on leave
-    onUnmounted(() => {
-      if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
-    })
-
-    store.dispatch('app-user/fetchUser', { id: router.currentRoute.params.id })
-      .then(response => { userData.value = response.data })
-      .catch(error => {
-        if (error.response.status === 404) {
-          userData.value = undefined
-        }
-      })
-
+  data(){
     return {
-      userData,
+      userData : {}
     }
   },
+  apollo:{
+    useData:{query:PROFILE}
+  },
+  // setup() {
+  //
+  //   // const USER_APP_STORE_MODULE_NAME = 'app-user'
+  //
+  //   this.$apollo.mutate({
+  //     mutation: PROFILE,
+  //   }).then((result) => {
+  //     console.log(result)
+  //     userData.value = result.data
+  //   }).catch((result)=> {
+  //     console.log(result)
+  //   })
+  //   // Register module
+  //   // if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
+  //   //
+  //   // // UnRegister on leave
+  //   // onUnmounted(() => {
+  //   //   if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
+  //   // })
+  //   //
+  //   // store.dispatch('app-user/fetchUser', { id: router.currentRoute.params.id })
+  //   //   .then(response => { userData.value = response.data })
+  //   //   .catch(error => {
+  //   //     if (error.response.status === 404) {
+  //   //       userData.value = undefined
+  //   //     }
+  //   //   })
+  //
+  //   return {
+  //     userData,
+  //   }
+  // },
 }
 </script>
 
