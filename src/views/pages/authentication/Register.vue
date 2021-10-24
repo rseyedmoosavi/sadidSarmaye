@@ -2,32 +2,7 @@
   <div class="auth-wrapper auth-v2">
     <b-row class="auth-inner m-0">
 
-      <!-- Brand logo-->
-      <b-link class="brand-logo">
-        <vuexy-logo />
-
-        <h2 class="brand-text text-primary ml-1">
-          Vuexy
-        </h2>
-      </b-link>
-      <!-- /Brand logo-->
-
-      <!-- Left Text-->
-      <b-col
-        lg="8"
-        class="d-none d-lg-flex align-items-center p-5"
-      >
-        <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
-          <b-img
-            fluid
-            :src="imgUrl"
-            alt="Register V2"
-          />
-        </div>
-      </b-col>
-      <!-- /Left Text-->
-
-      <!-- Register-->
+     <!-- Register-->
       <b-col
         lg="4"
         class="d-flex align-items-center auth-bg px-2 p-lg-5"
@@ -39,10 +14,10 @@
           class="px-xl-2 mx-auto"
         >
           <b-card-title class="mb-1">
-            Adventure starts here 🚀
+            ثبت نام برای اقتصادی بهتر
           </b-card-title>
           <b-card-text class="mb-2">
-            Make your app management easy and fun!
+            بسیار ساده است، ثبت نام کنید.
           </b-card-text>
 
           <!-- form -->
@@ -56,7 +31,7 @@
             >
               <!-- username -->
               <b-form-group
-                label="Username"
+                label="نام کاربری"
                 label-for="register-username"
               >
                 <validation-provider
@@ -70,7 +45,7 @@
                     v-model="username"
                     name="register-username"
                     :state="errors.length > 0 ? false:null"
-                    placeholder="johndoe"
+                    placeholder="mohammad"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -78,21 +53,21 @@
 
               <!-- email -->
               <b-form-group
-                label="Email"
-                label-for="register-email"
+                label="شماره همراه"
+                label-for="register-mobile"
               >
                 <validation-provider
                   #default="{ errors }"
-                  name="Email"
-                  vid="email"
-                  rules="required|email"
+                  name="mobile"
+                  vid="mobile"
+                  rules="required|number"
                 >
                   <b-form-input
-                    id="register-email"
-                    v-model="userEmail"
-                    name="register-email"
+                    id="register-mobile"
+                    v-model="mobile"
+                    name="mobile"
                     :state="errors.length > 0 ? false:null"
-                    placeholder="john@example.com"
+                    placeholder="09123456789"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -101,7 +76,7 @@
               <!-- password -->
               <b-form-group
                 label-for="register-password"
-                label="Password"
+                label="کلمه عبور"
               >
                 <validation-provider
                   #default="{ errors }"
@@ -140,8 +115,9 @@
                   v-model="status"
                   name="checkbox-1"
                 >
-                  I agree to
-                  <b-link>privacy policy & terms</b-link>
+                  ثبت نام به منزله تایید
+                  <b-link>مفاد قرارداد</b-link>
+                  می باشد
                 </b-form-checkbox>
               </b-form-group>
 
@@ -151,54 +127,49 @@
                 type="submit"
                 :disabled="invalid"
               >
-                Sign up
+                ثبت نام
               </b-button>
             </b-form>
           </validation-observer>
 
           <p class="text-center mt-2">
-            <span>Already have an account?</span>
+            <span>قبلا عضو شده اید؟</span>
             <b-link :to="{name:'auth-login'}">
-              <span>&nbsp;Sign in instead</span>
+              <span> وارد شوید</span>
             </b-link>
           </p>
 
-          <!-- divider -->
-          <div class="divider my-2">
-            <div class="divider-text">
-              or
-            </div>
-          </div>
-
-          <div class="auth-footer-btn d-flex justify-content-center">
-            <b-button
-              variant="facebook"
-              href="javascript:void(0)"
-            >
-              <feather-icon icon="FacebookIcon" />
-            </b-button>
-            <b-button
-              variant="twitter"
-              href="javascript:void(0)"
-            >
-              <feather-icon icon="TwitterIcon" />
-            </b-button>
-            <b-button
-              variant="google"
-              href="javascript:void(0)"
-            >
-              <feather-icon icon="MailIcon" />
-            </b-button>
-            <b-button
-              variant="github"
-              href="javascript:void(0)"
-            >
-              <feather-icon icon="GithubIcon" />
-            </b-button>
-          </div>
         </b-col>
       </b-col>
     <!-- /Register-->
+
+      <!-- Brand logo-->
+      <b-link class="brand-logo">
+        <b-img
+            fluid
+            :src="logo"
+            alt="ثبت نام"
+        />
+        <h2 class="brand-text text-primary ml-1">
+          سدید سرمایه
+        </h2>
+      </b-link>
+      <!-- /Brand logo-->
+
+      <!-- Left Text-->
+      <b-col
+          lg="8"
+          class="d-none d-lg-flex align-items-center p-5"
+      >
+        <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
+          <b-img
+              fluid
+              :src="imgUrl"
+              alt="Register V2"
+          />
+        </div>
+      </b-col>
+      <!-- /Left Text-->
     </b-row>
   </div>
 </template>
@@ -242,7 +213,8 @@ export default {
       username: '',
       userEmail: '',
       password: '',
-      sideImg: require('@/assets/images/pages/register-v2.svg'),
+      sideImg: require('@/assets/images/pages/register.png'),
+      logo: require('@/assets/images/logo/logo.png'),
       // validation
       required,
       email,
@@ -255,7 +227,7 @@ export default {
     imgUrl() {
       if (store.state.appConfig.layout.skin === 'dark') {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.sideImg = require('@/assets/images/pages/register-v2-dark.svg')
+        this.sideImg = require('@/assets/images/pages/register.png')
         return this.sideImg
       }
       return this.sideImg

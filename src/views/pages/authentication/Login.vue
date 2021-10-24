@@ -1,31 +1,6 @@
 <template>
   <div class="auth-wrapper auth-v2">
     <b-row class="auth-inner m-0">
-
-      <!-- Brand logo-->
-      <b-link class="brand-logo">
-        <vuexy-logo/>
-        <h2 class="brand-text text-primary ml-1">
-          Vuexy
-        </h2>
-      </b-link>
-      <!-- /Brand logo-->
-
-      <!-- Left Text-->
-      <b-col
-          lg="8"
-          class="d-none d-lg-flex align-items-center p-5"
-      >
-        <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
-          <b-img
-              fluid
-              :src="imgUrl"
-              alt="Login V2"
-          />
-        </div>
-      </b-col>
-      <!-- /Left Text-->
-
       <!-- Login-->
       <b-col
           lg="4"
@@ -41,32 +16,11 @@
               class="mb-1 font-weight-bold"
               title-tag="h2"
           >
-            Welcome to Vuexy! 👋
+            به سدید سرمایه خوش آمدید
           </b-card-title>
           <b-card-text class="mb-2">
-            Please sign-in to your account and start the adventure
+            برای ورود به صفحه شخصی، از نام کاربری و کلمه عبور خود استفاده نمایید.
           </b-card-text>
-
-          <b-alert
-              variant="primary"
-              show
-          >
-            <div class="alert-body font-small-2">
-              <p>
-                <small class="mr-50"><span class="font-weight-bold">Admin:</span> admin@demo.com | admin</small>
-              </p>
-              <p>
-                <small class="mr-50"><span class="font-weight-bold">Client:</span> client@demo.com | client</small>
-              </p>
-            </div>
-            <feather-icon
-                v-b-tooltip.hover.left="'This is just for ACL demo purpose'"
-                icon="HelpCircleIcon"
-                size="18"
-                class="position-absolute"
-                style="top: 10px; right: 10px;"
-            />
-          </b-alert>
 
           <!-- form -->
           <validation-observer
@@ -79,7 +33,7 @@
             >
               <!-- email -->
               <b-form-group
-                  label="Email"
+                  label="نام کاربری/شماره همراه"
                   label-for="login-email"
               >
                 <validation-provider
@@ -102,9 +56,9 @@
               <!-- forgot password -->
               <b-form-group>
                 <div class="d-flex justify-content-between">
-                  <label for="login-password">Password</label>
+                  <label for="login-password">کلمه عبور</label>
                   <b-link :to="{name:'auth-forgot-password'}">
-                    <small>Forgot Password?</small>
+                    <small>کلمه عبور خودتان را فراموش کرده اید؟</small>
                   </b-link>
                 </div>
                 <validation-provider
@@ -145,7 +99,7 @@
                     v-model="status"
                     name="checkbox-1"
                 >
-                  Remember Me
+                  در سیستم بمانم
                 </b-form-checkbox>
               </b-form-group>
 
@@ -156,55 +110,50 @@
                   block
                   :disabled="invalid"
               >
-                Sign in
+                ورود!
               </b-button>
             </b-form>
           </validation-observer>
 
           <b-card-text class="text-center mt-2">
-            <span>New on our platform? </span>
+            <span>عضو نیستید؟</span>
             <b-link :to="{name:'auth-register'}">
-              <span>&nbsp;Create an account</span>
+              <span>&nbsp;هم اکنون ثبت نام کنید</span>
             </b-link>
           </b-card-text>
 
-          <!-- divider -->
-          <div class="divider my-2">
-            <div class="divider-text">
-              or
-            </div>
-          </div>
-
-          <!-- social buttons -->
-          <div class="auth-footer-btn d-flex justify-content-center">
-            <b-button
-                variant="facebook"
-                href="javascript:void(0)"
-            >
-              <feather-icon icon="FacebookIcon"/>
-            </b-button>
-            <b-button
-                variant="twitter"
-                href="javascript:void(0)"
-            >
-              <feather-icon icon="TwitterIcon"/>
-            </b-button>
-            <b-button
-                variant="google"
-                href="javascript:void(0)"
-            >
-              <feather-icon icon="MailIcon"/>
-            </b-button>
-            <b-button
-                variant="github"
-                href="javascript:void(0)"
-            >
-              <feather-icon icon="GithubIcon"/>
-            </b-button>
-          </div>
         </b-col>
       </b-col>
       <!-- /Login-->
+
+      <!-- Brand logo-->
+      <b-link class="brand-logo">
+<!--        <vuexy-logo/>-->
+        <b-img
+            fluid
+            :src="Logo"
+            alt="سدید سرمایه"
+        />
+        <h2 class="brand-text text-primary ml-1">
+          سرمایه
+        </h2>
+      </b-link>
+      <!-- /Brand logo-->
+
+      <!-- Left Text-->
+      <b-col
+          lg="8"
+          class="d-none d-lg-flex align-items-center p-5"
+      >
+        <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
+          <b-img
+              fluid
+              :src="imgUrl"
+              alt="Login V2"
+          />
+        </div>
+      </b-col>
+      <!-- /Left Text-->
     </b-row>
   </div>
 </template>
@@ -235,7 +184,6 @@ import {
 import {required, email} from '@validations'
 import {togglePasswordVisibility} from '@core/mixins/ui/forms'
 import store from '@/store/index'
-
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
@@ -267,7 +215,8 @@ export default {
       status: '',
       password: 'M@123456',
       username: 'morteza',
-      sideImg: require('@/assets/images/pages/login-v2.svg'),
+      sideImg: require('@/assets/images/pages/login.png'),
+      Logo: require('@/assets/images/logo/logo.png'),
       // validation rules
       required,
       email,
@@ -280,7 +229,7 @@ export default {
     imgUrl() {
       if (store.state.appConfig.layout.skin === 'dark') {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.sideImg = require('@/assets/images/pages/login-v2-dark.svg')
+        this.sideImg = require('@/assets/images/pages/login.png')
         return this.sideImg
       }
       return this.sideImg
