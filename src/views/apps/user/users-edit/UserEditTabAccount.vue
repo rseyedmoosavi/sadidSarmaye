@@ -240,7 +240,7 @@ export default {
   },
   setup(props) {
     const { resolveUserRoleVariant } = useUsersList()
-
+    consol
     const roleOptions = [
       { label: 'Admin', value: 'admin' },
       { label: 'Author', value: 'author' },

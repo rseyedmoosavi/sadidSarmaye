@@ -11,8 +11,8 @@ interface Node {
     id: ID!
 }
 
-type CreateProfile {
-    profile: ProfileType
+type CreateProfilePayload {
+    profile: ProfileType!
 }
 
 type CreateTransaction {
@@ -40,7 +40,8 @@ type MoarefiShodeHaType {
 }
 
 type Mutation {
-    createProfile(input: profileInput!): CreateProfile
+    "نام کاربری و کلمه عبور معرفی شده برای ساخت کاربر جدید و اتصال آن به پروفایل درحال ساخت استفاده میشود"
+    createProfile(input: CreateProfileInput!): CreateProfilePayload
     createTransaction(
         amount: Int!,
         date: Date!,
@@ -55,6 +56,8 @@ type Mutation {
     refreshToken(token: String): Refresh
     "Obtain JSON Web Token mutation"
     tokenAuth(password: String!, username: String!): ObtainJSONWebToken
+    "بنابه دلایلی از اینجا نام کاربری و کلمه عبور را نمیتوان تغییر داد"
+    updateProfile(input: UpdateProfileInput!): UpdateProfilePayload
     verifyToken(token: String): Verify
 }
 
@@ -94,8 +97,6 @@ type ProfileType implements Node {
     id: ID!
     images: [ImageType]
     lastName: String
-    "معرف"
-    moaref: String
     moarefiShodeHa: [MoarefiShodeHaType]
     mobile1: String
     "نمایش جزیات محاسبه سود از تاریخ تا تاریخ برای کاربر جاری"
@@ -105,6 +106,10 @@ type ProfileType implements Node {
         "تا تاریخ"
         taDate: Date!
     ): [ProfitCalculateType]
+    "معرف"
+    presenter: String
+    "معرف id"
+    presenterId: Int
     seporde: Float
     shomareHesab: String
     shomareKart: String
@@ -159,7 +164,7 @@ type Query {
         userId: Int!
     ): [ProfitCalculateType]
     posts: [PostType]
-    profiles(after: String, before: String, codeMeli: String, codeMeli_Icontains: String, codeMeli_Istartswith: String, first: Int, id: Float, last: Int, lastName: String, lastName_Icontains: String, lastName_Istartswith: String, mobile1: String, mobile1_Icontains: String, mobile1_Istartswith: String, offset: Int): ProfileTypeConnection
+    profiles(after: String, before: String, codeMeli: String, codeMeli_Icontains: String, codeMeli_Istartswith: String, first: Int, id: Float, last: Int, lastName: String, lastName_Icontains: String, lastName_Istartswith: String, mobile1: String, mobile1_Icontains: String, mobile1_Istartswith: String, offset: Int, presenter_Id: Float): ProfileTypeConnection
     transactionKinds: [TransactionKindType]
     transactions(after: String, before: String, dateTime_Gte: DateTime, dateTime_Lte: DateTime, dateTime_Range: [DateTime], first: Int, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection
     users: [UserType]
@@ -208,6 +213,10 @@ type TransactionTypeEdge {
     node: TransactionType
 }
 
+type UpdateProfilePayload {
+    profile: ProfileType!
+}
+
 "me"
 type UserType {
     email: String!
@@ -229,21 +238,44 @@ enum Transaction_Type_Enum {
     variz
 }
 
+input CreateProfileInput {
+    adress: String
+    codeMeli: String
+    description: String
+    firstName: String
+    lastName: String
+    mobile1: String
+    mobile2: String
+    "id معرف"
+    presenterId: Int
+    shomareHesab: String
+    shomareKart: String
+    tel: String
+    user: UserInput!
+}
+
+input UpdateProfileInput {
+    adress: String
+    codeMeli: String
+    description: String
+    firstName: String
+    id: ID!
+    lastName: String
+    mobile1: String
+    mobile2: String
+    "id معرف"
+    presenterId: Int
+    shomareHesab: String
+    shomareKart: String
+    tel: String
+    user: UserInput!
+}
+
 input UserInput {
     email: String
     id: ID
     password: String!
     username: String!
-}
-
-input profileInput {
-    codeMeli: String
-    file: Upload!
-    firstName: String
-    id: ID
-    lastName: String
-    "کاربر متناظر"
-    userId: Int
 }
 
 
@@ -260,12 +292,6 @@ value as specified by
 [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
 """
 scalar Date
-
-"""
-Create scalar that ignores normal serialization/deserialization, since
-that will be handled by the multipart request spec
-"""
-scalar Upload
 
 """
 The `GenericScalar` scalar type represents a generic

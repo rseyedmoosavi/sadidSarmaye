@@ -27,7 +27,7 @@
                 rules="required"
               >
                 <b-form-input
-                  v-model="name"
+                  v-model="firstName"
                   :state="errors.length > 0 ? false:null"
                   placeholder="First Name"
                 />
