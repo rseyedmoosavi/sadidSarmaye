@@ -1,24 +1,43 @@
 import gql from 'graphql-tag'
 
-export const PROFILE_FOR_DROPDOWN = gql`
-query profile{
-    profiles {
-        edges {
-            node {
-                firstName
-                lastName
-                codeMeli
-                presenter
+export const GET_ALL_PRESENTER = gql`
+    query getAllPresenter{
+        profiles{
+            edges{
+                node{
+                    firstName
+                    lastName
+                    id
+                }
             }
         }
     }
-}
 `
-export const PROFILE=gql`
-    query profile($id:Float!){
+
+export const PROFILE_FOR_DROPDOWN = gql`
+    query profile{
+        profiles {
+            edges {
+                node {
+                    id
+                    firstName
+                    lastName
+                    codeMeli
+                    presenter
+                    #                transactions(kind_Id:1){
+                    #                    totalSum
+                    #                }
+                }
+            }
+        }
+    }
+`
+export const PROFILE = gql`
+    query profile($id:Float){
         profiles(id:$id) {
             edges {
                 node {
+                    id
                     firstName
                     lastName
                     codeMeli
@@ -94,6 +113,55 @@ export const DASHBOARD = gql`
     }
 `
 
+export const USER_TRANSACTIONS = gql`
+    query transactions($profile_Id:Float){
+        transactions(profile_Id:$profile_Id) {
+            totalCount
+            edges {
+                node {
+                    profile{
+                        firstName
+                        lastName
+                    }
+                    amount
+                    effectiveDate
+                    id
+                    kind {
+                        id
+                    }
+
+                }
+
+            }
+
+        }
+    }
+`
+
+export const TRANSACTION_SEARCH = gql`
+    query transactions($profile_Id:Float,$effectiveDate_Lte: Date,$effectiveDate_Gte: Date,$kind_Id: Float){
+        transactions(profile_Id:$profile_Id,effectiveDate_Lte:$effectiveDate_Lte,effectiveDate_Gte:$effectiveDate_Gte,kind_Id:$kind_Id) {
+            edges {
+                node {
+                    profile{
+                        firstName
+                        lastName
+                    }
+                    amount
+                    effectiveDate
+                    id
+                    kind {
+                        id
+                    }
+
+                }
+
+            }
+
+        }
+    }
+`
+
 export const LOGIN = gql`
     # 2
     mutation LoginToSite($username: String!, $password: String!) {
@@ -108,6 +176,40 @@ export const LOGIN = gql`
                 lastLogin
             }
             token
+        }
+    }
+`
+
+export const CREATE_PROFILE = gql`
+    mutation createProfile($input: CreateProfileInput!){
+        createProfile(
+            input:$input
+        ){
+            profile{
+                id
+            }
+        }
+    }
+`
+export const CREATE_TRANSACTION = gql`
+    mutation createTransaction($input: CreateTransactionInput!) {
+        createTransaction(input:$input){
+            transaction {
+                profile {
+                    firstName
+                }
+            }
+        }
+    }
+`
+export const UPDATE_PROFILE = gql`
+    mutation updateProfile($input:  UpdateProfileInput!){
+        updateProfile(
+            input:$input
+        ){
+            profile{
+                id
+            }
         }
     }
 `

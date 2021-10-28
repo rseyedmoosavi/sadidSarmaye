@@ -15,8 +15,8 @@ type CreateProfilePayload {
     profile: ProfileType!
 }
 
-type CreateTransaction {
-    transaction: TransactionType
+type CreateTransactionPayload {
+    transaction: TransactionType!
 }
 
 type CreateUser {
@@ -42,13 +42,8 @@ type MoarefiShodeHaType {
 type Mutation {
     "نام کاربری و کلمه عبور معرفی شده برای ساخت کاربر جدید و اتصال آن به پروفایل درحال ساخت استفاده میشود"
     createProfile(input: CreateProfileInput!): CreateProfilePayload
-    createTransaction(
-        amount: Int!,
-        date: Date!,
-        "کاربر تراکنش"
-        profileId: Int!,
-        transactTypes: Transaction_Type_Enum!
-    ): CreateTransaction
+    "ایجاد تراکنش"
+    createTransaction(input: CreateTransactionInput!): CreateTransactionPayload
     "ایجاد کاربر"
     createUser(input: UserInput!): CreateUser
     deleteToken(refreshToken: String): Revoke
@@ -58,6 +53,7 @@ type Mutation {
     tokenAuth(password: String!, username: String!): ObtainJSONWebToken
     "بنابه دلایلی از اینجا نام کاربری و کلمه عبور را نمیتوان تغییر داد"
     updateProfile(input: UpdateProfileInput!): UpdateProfilePayload
+    updateTransaction(input: UpdateTransactionInput!): UpdateTransactionPayload
     verifyToken(token: String): Verify
 }
 
@@ -121,7 +117,7 @@ type ProfileType implements Node {
         taDate: Date!
     ): Float
     tel: String
-    transactions(after: String, before: String, dateTime_Gte: DateTime, dateTime_Lte: DateTime, dateTime_Range: [DateTime], first: Int, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection!
+    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection!
     user: UserType
 }
 
@@ -166,7 +162,7 @@ type Query {
     posts: [PostType]
     profiles(after: String, before: String, codeMeli: String, codeMeli_Icontains: String, codeMeli_Istartswith: String, first: Int, id: Float, last: Int, lastName: String, lastName_Icontains: String, lastName_Istartswith: String, mobile1: String, mobile1_Icontains: String, mobile1_Istartswith: String, offset: Int, presenter_Id: Float): ProfileTypeConnection
     transactionKinds: [TransactionKindType]
-    transactions(after: String, before: String, dateTime_Gte: DateTime, dateTime_Lte: DateTime, dateTime_Range: [DateTime], first: Int, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection
+    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection
     users: [UserType]
 }
 
@@ -186,10 +182,10 @@ type TransactionKindType {
 }
 
 type TransactionType implements Node {
-    TarikhMoaser: String!
     amount: Int!
     dateTime: DateTime!
     description: String
+    effectiveDate: Date
     id: ID!
     kind: TransactionKindType!
     percent: Int!
@@ -217,7 +213,11 @@ type UpdateProfilePayload {
     profile: ProfileType!
 }
 
-"me"
+type UpdateTransactionPayload {
+    transaction: TransactionType!
+}
+
+"اطلاعات کاربر جاری"
 type UserType {
     email: String!
     firstName: String!
@@ -233,9 +233,10 @@ type Verify {
     payload: GenericScalar!
 }
 
-enum Transaction_Type_Enum {
-    bardasht
-    variz
+input CreateImageInput {
+    description: String
+    image: Upload!
+    kindId: Int
 }
 
 input CreateProfileInput {
@@ -243,6 +244,7 @@ input CreateProfileInput {
     codeMeli: String
     description: String
     firstName: String
+    images: [CreateImageInput]
     lastName: String
     mobile1: String
     mobile2: String
@@ -252,6 +254,27 @@ input CreateProfileInput {
     shomareKart: String
     tel: String
     user: UserInput!
+}
+
+"ورودی های لازم برای ایجاد تراکنش"
+input CreateTransactionInput {
+    "مبلغ"
+    amount: Int!
+    "توضیحات"
+    description: String
+    "تاریخ موثر"
+    effectiveDate: Date!
+    "id نوع تراکنش"
+    kindId: Int!
+    "کاربر تراکنش"
+    profileId: Int!
+}
+
+input UpdateImageInput {
+    description: String
+    id: ID!
+    image: Upload
+    kindId: Int
 }
 
 input UpdateProfileInput {
@@ -260,6 +283,7 @@ input UpdateProfileInput {
     description: String
     firstName: String
     id: ID!
+    images: [UpdateImageInput]
     lastName: String
     mobile1: String
     mobile2: String
@@ -268,7 +292,20 @@ input UpdateProfileInput {
     shomareHesab: String
     shomareKart: String
     tel: String
-    user: UserInput!
+    user: UserInput
+}
+
+"مبلغ را نمیتوان به روز کرد"
+input UpdateTransactionInput {
+    "توضیحات"
+    description: String
+    "تاریخ موثر"
+    effectiveDate: Date!
+    id: ID!
+    "id نوع تراکنش"
+    kindId: Int!
+    "کاربر تراکنش"
+    profileId: Int!
 }
 
 input UserInput {
@@ -292,6 +329,12 @@ value as specified by
 [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
 """
 scalar Date
+
+"""
+Create scalar that ignores normal serialization/deserialization, since
+that will be handled by the multipart request spec
+"""
+scalar Upload
 
 """
 The `GenericScalar` scalar type represents a generic

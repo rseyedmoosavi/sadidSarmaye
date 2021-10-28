@@ -3,13 +3,45 @@
       :title="title"
   >
     <b-card-text>
-      <span>ویرایش مشخصات کاربر</span>
+      <span>ایجاد کاربر جدید</span>
     </b-card-text>
 
     <!-- form -->
     <validation-observer ref="simpleRules">
       <b-form>
         <b-row>
+          <b-col md="6">
+            <b-form-group>
+              <validation-provider
+                  #default="{ errors }"
+                  name="userName"
+                  rules="required"
+              >
+                <b-form-input
+                    v-model="username"
+                    :state="errors.length > 0 ? false:null"
+                    placeholder="نام کاربر"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+          </b-col>
+          <b-col md="6">
+            <b-form-group>
+              <validation-provider
+                  #default="{ errors }"
+                  name="password"
+                  rules="required"
+              >
+                <b-form-input
+                    v-model="password"
+                    :state="errors.length > 0 ? false:null"
+                    placeholder="کلمه عبور"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+          </b-col>
           <b-col md="6">
             <!-- ******************** -->
             <b-form-group>
@@ -66,18 +98,19 @@
             <b-form-group>
               <validation-provider
                   #default="{ errors }"
-                  name="adress"
+                  name="presenter"
                   rules="required"
               >
-                <v-select
-                    v-model="selected"
-                    :dir="rtl"
-                    label="title"
-                    :options="presenter"
+                <b-form-input
+                    v-model="presenter"
+                    :state="errors.length > 0 ? false:null"
+                    placeholder="معرف"
                 />
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
+            <!-- ********************* -->
+
             <!-- ******************** -->
             <b-form-group>
               <validation-provider
@@ -202,12 +235,11 @@
 <script>
 import BCardCode from '@core/components/b-card-code'
 import {ValidationProvider, ValidationObserver} from 'vee-validate'
-import vSelect from 'vue-select'
 import {
   BFormInput, BFormGroup, BForm, BRow, BCol, BButton, BCardText,
 } from 'bootstrap-vue'
 import {required, email} from '@validations'
-import {UPDATE_PROFILE, PROFILE, GET_ALL_PRESENTER,} from '@/constants/graphql'
+import {CREATE_PROFILE} from '@/constants/graphql'
 
 
 export default {
@@ -216,40 +248,7 @@ export default {
     'user'
   ],
   mounted() {
-    this.$apollo.mutate({
-      mutation: PROFILE,
-      variables: {
-        id: this.$route.params.id
-      }
-    }).then((result) => {
-      this.$apollo.mutate({
-        mutation: GET_ALL_PRESENTER
-      }).then((presenter) => {
-        var presenters = new Array()
-        var items = presenter.data.profiles.edges
-        for (const item of items) {
-          presenters.push({
-            'title': item.node.firstName + ' ' + item.node.lastName,
-            'value': item.node.id
-          })
-        }
-        this.presenter = presenters
-      })
-      this.id = result.data.profiles.edges[0].node.id;
-      this.firstName = result.data.profiles.edges[0].node.firstName;
-      this.lastName = result.data.profiles.edges[0].node.lastName;
-      this.codeMeli = result.data.profiles.edges[0].node.codeMeli;
-      this.presenter = result.data.profiles.edges[0].node.presenter;
-      this.selected = result.data.profiles.edges[0].node.presenter;
-      this.adress = result.data.profiles.edges[0].node.adress;
-      this.shomareKart = result.data.profiles.edges[0].node.shomareKart;
-      this.shomareHesab = result.data.profiles.edges[0].node.shomareHesab;
-      this.description = result.data.profiles.edges[0].node.description;
-      this.tel = result.data.profiles.edges[0].node.tel;
-      this.mobile1 = result.data.profiles.edges[0].node.mobile1;
-    }).catch((result) => {
-      alert("catch")
-    })
+
   },
   components: {
     BCardCode,
@@ -262,13 +261,12 @@ export default {
     BRow,
     BCol,
     BButton,
-    vSelect
   },
   data() {
     return {
-      selected: {title: ''},
-      id: '',
-      firstName: '',
+      username: '',
+      password: '',
+      firstName: 'ُ',
       lastName: '',
       codeMeli: '',
       presenter: '',
@@ -277,7 +275,7 @@ export default {
       shomareHesab: '',
       description: '',
       tel: '',
-      mobile1: '',
+      mobile: '',
       required,
       email,
     }
@@ -287,30 +285,29 @@ export default {
       this.$refs.simpleRules.validate().then(success => {
         if (success) {
           // eslint-disable-next-line
-          var input = {
-            id: Number(this.id),
-            firstName: this.firstName,
-            lastName: this.lastName,
-            codeMeli: this.codeMeli,
-            presenterId: this.selected.value,
-            adress: this.adress,
-            shomareKart: this.shomareKart,
-            shomareHesab: this.shomareHesab,
-            description: this.description,
-            tel: this.tel,
-            mobile1: this.mobile1
-          }
-          if (!this.selected.value) {
-            delete input.presenterId
-
-          }
           this.$apollo.mutate({
-            mutation: UPDATE_PROFILE,
+            mutation: CREATE_PROFILE,
             variables: {
-              input: input
+              input: {
+                user:{
+                  username:this.username,
+                  password:this.password,
+                  email:"test@gmail.com"
+                },
+                firstName:this.firstName,
+                lastName:this.lastName,
+                codeMeli:this.codeMeli,
+                presenterId:Number(this.presenter),
+                adress:this.adress,
+                shomareKart:this.shomareKart,
+                shomareHesab:this.shomareHesab,
+                description:this.description,
+                tel:this.tel,
+                mobile1:this.mobile1
+              }
             }
           }).then((result) => {
-            alert("ok")
+            // console.log(result.data.profiles.edges[0].node.firstName)
             console.log(result)
           }).catch((result) => {
             alert("catch")

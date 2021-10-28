@@ -1,11 +1,12 @@
 <template>
   <b-card-code
-    title="Formatter callback"
-    no-body
+      title="Formatter callback"
+      no-body
   >
     <b-table
-      :fields="fields"
-      :items="items"
+        :fields="fields"
+        :items="items"
+        @row-clicked="myRowClickHandler"
     >
       <template #cell(name)="data">
 
@@ -24,14 +25,19 @@
 
 <script>
 import BCardCode from '@core/components/b-card-code/BCardCode.vue'
-import { BTable, BLink } from 'bootstrap-vue'
-import { codeFormatterCallback } from './code'
+import {BTable, BLink} from 'bootstrap-vue'
+import {codeFormatterCallback} from './code'
 
 export default {
   components: {
     BCardCode,
     BTable,
     BLink,
+  },
+  methods: {
+    myRowClickHandler(record,index) {
+      console.log(record)
+    }
   },
   data() {
     return {
@@ -56,11 +62,11 @@ export default {
         },
       ],
       items: [
-        { name: { first: 'John', last: 'Doe' }, sex: 'Male', age: 42 },
-        { name: { first: 'Clemens', last: 'Doe' }, sex: 'Female', age: 36 },
-        { name: { first: 'Rubin', last: 'Kincade' }, sex: 'male', age: 73 },
-        { name: { first: 'Shirley', last: 'Partridge' }, sex: 'female', age: 62 },
-        { name: { first: 'Olenka', last: 'Brawley' }, sex: 'female', age: 26 },
+        {name: {first: 'John', last: 'Doe'}, sex: 'Male', age: 42},
+        {name: {first: 'Clemens', last: 'Doe'}, sex: 'Female', age: 36},
+        {name: {first: 'Rubin', last: 'Kincade'}, sex: 'male', age: 73},
+        {name: {first: 'Shirley', last: 'Partridge'}, sex: 'female', age: 62},
+        {name: {first: 'Olenka', last: 'Brawley'}, sex: 'female', age: 26},
       ],
       codeFormatterCallback,
     }
