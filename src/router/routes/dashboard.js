@@ -1,14 +1,14 @@
 export default [
-  // {
-  //   path: '/dashboard/analytics',
-  //   name: 'dashboard-analytics',
-  //   component: () => import('@/views/dashboard/analytics/Analytics.vue'),
-  // },
-  // {
-  //   path: '/dashboard/ecommerce',
-  //   name: 'dashboard-ecommerce',
-  //   component: () => import('@/views/dashboard/ecommerce/Ecommerce.vue'),
-  // },
+  {
+    path: '/dashboard/analytics',
+    name: 'dashboard-analytics',
+    component: () => import('@/views/dashboard/analytics/Analytics.vue'),
+  },
+  {
+    path: '/dashboard/ecommerce',
+    name: 'dashboard-ecommerce',
+    component: () => import('@/views/dashboard/ecommerce/Ecommerce.vue'),
+  },
   {
     path: '/profile/create',
     name: 'create-profile',
@@ -23,6 +23,11 @@ export default [
     path: '/transaction/create',
     name: 'create-transaction',
     component: () => import('@/views/forms/form-validation/FormCreateTransaction.vue'),
+  },
+  {
+    path: '/transaction/update',
+    name: 'update-transaction',
+    component: () => import('@/views/forms/form-validation/FormUpdateTransaction.vue'),
   },
   {
     path: '/transaction',

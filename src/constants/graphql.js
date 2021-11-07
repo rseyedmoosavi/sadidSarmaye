@@ -137,13 +137,34 @@ export const USER_TRANSACTIONS = gql`
         }
     }
 `
-
+export const GET_TRANSACTION=gql`
+    query getTransaction($id:Float){
+        transactions(id:$id){
+            edges{
+                node{
+                    profile{
+                        id
+                        firstName
+                        lastName
+                    }
+                    amount
+                    effectiveDate
+                    kind{
+                        id
+                        title
+                    }
+                    description
+                }
+            }
+        }
+    }
+`
 export const TRANSACTION_SEARCH = gql`
-    query transactions($profile_Id:Float,$effectiveDate_Lte: Date,$effectiveDate_Gte: Date,$kind_Id: Float){
-        transactions(profile_Id:$profile_Id,effectiveDate_Lte:$effectiveDate_Lte,effectiveDate_Gte:$effectiveDate_Gte,kind_Id:$kind_Id) {
+    query transactions($profile_Id: Float, $effectiveDate_Lte: Date, $effectiveDate_Gte: Date, $kind_Id: Float) {
+        transactions(profile_Id: $profile_Id, effectiveDate_Lte: $effectiveDate_Lte, effectiveDate_Gte: $effectiveDate_Gte, kind_Id: $kind_Id) {
             edges {
                 node {
-                    profile{
+                    profile {
                         firstName
                         lastName
                     }
@@ -153,13 +174,11 @@ export const TRANSACTION_SEARCH = gql`
                     kind {
                         id
                     }
-
                 }
-
             }
-
         }
     }
+
 `
 
 export const LOGIN = gql`
@@ -202,6 +221,18 @@ export const CREATE_TRANSACTION = gql`
         }
     }
 `
+
+export const UPDATE_TRANSACTION = gql`
+    mutation updateTransaction($input:UpdateTransactionInput!){
+        updateTransaction(input:$input)
+        {
+            transaction{
+                id
+            }
+        }
+    }
+`
+
 export const UPDATE_PROFILE = gql`
     mutation updateProfile($input:  UpdateProfileInput!){
         updateProfile(

@@ -18,6 +18,16 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: yekan;
+  src: url('fonts/yekan/BRoya.eot');
+  src: url('fonts/yekan/BRoya.eot?#iefix') format('BRoya-opentype'),
+  url('fonts/yekan/BRoya.woff') format('woff'),
+  url('fonts/yekan/BRoya.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 
 .feather {
   /* use !important to prevent issues with browser extensions that change fonts */

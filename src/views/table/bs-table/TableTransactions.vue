@@ -30,7 +30,6 @@ export default {
     this.$apollo.mutate({
       mutation: USER_TRANSACTIONS,
       variables:{
-        profile_Id:3
       }
     }).then((result) => {
       var transactions=new Array()

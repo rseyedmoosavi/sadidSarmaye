@@ -11,65 +11,65 @@
         <b-row>
           <b-col md="3">
             <b-form-group>
-              کاربر
               <validation-provider
                   #default="{ errors }"
                   name="userId"
-                  rules="required"
+                  rules=""
               >
-                <v-select
-                    v-model="selected"
-                    dir="rtl"
-                    label="title"
-                    :options="presenter"
-                />
+                <b-input-group prepend="کاربر">
+                  <v-select
+                      v-model="selected"
+                      dir="rtl"
+                      label="title"
+                      :options="presenter"
+                  />
+                </b-input-group>
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
           </b-col>
           <b-col md="3">
             <b-form-group>
-              نوع
               <validation-provider
                   #default="{ errors }"
                   name="kindId"
-                  rules="required"
+                  rules=""
               >
-                <v-select
-                    v-model="kindSelected"
-                    dir="rtl"
-                    label="title"
-                    :options="kind"
-                />
+                <b-input-group  prepend="نوع">
+                  <v-select
+                      v-model="kindSelected"
+                      dir="rtl"
+                      label="title"
+                      :options="kind"
+                  />
+                </b-input-group>
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
           </b-col>
           <b-col md="2">
             <b-form-group>
-              از تاریخ
               <validation-provider
                   #default="{ errors }"
                   name="fromDate"
-                  rules="required"
+                  rules=""
               >
-                <date-picker v-model="fromDate" :auto-submit="true" />
+                <date-picker label="از تاریخ" v-model="fromDate" :auto-submit="true"/>
                 <small class="text-danger">{{ errors[0] }}</small>
               </validation-provider>
             </b-form-group>
           </b-col>
           <b-col md="2">
-          <b-form-group>
-            تا تاریخ
-            <validation-provider
-                #default="{ errors }"
-                name="toDate"
-                rules="required"
-            >
-              <date-picker v-model="toDate" :auto-submit="true" />
-              <small class="text-danger">{{ errors[0] }}</small>
-            </validation-provider>
-          </b-form-group>
+            <b-form-group>
+              <validation-provider
+                  #default="{ errors }"
+                  name="toDate"
+                  rules=""
+              >
+                <date-picker style="border-radius: 0px" label="تا تاریخ" v-model="toDate" :auto-submit="true"/>
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
           </b-col>
           <b-col cols="2">
             <b-button
@@ -98,7 +98,13 @@
         :filter="filter"
         :filter-included-fields="filterOn"
         @filtered="onFiltered"
+        ref="table"
     >
+      <template #cell(fullName)="data">
+        <b-link :href="`/forms/transaction/`+data.item.id">
+          {{ data.value }}
+        </b-link>
+      </template>
       <template #cell(kindId)="data">
         <b-badge :variant="kindIdType[1][data.value]">
           {{ kindIdType[0][data.value] }}
@@ -108,7 +114,7 @@
         {{ data.index + 1 }}
       </template>
       <template #cell(date)="data">
-        {{ getDate(data.value) }}
+        {{ toShamsiDate(data.value) }}
       </template>
       <template #cell(amount)="data">
         {{ convertToCurrency(data.value) }}
@@ -173,7 +179,7 @@
 import BCardCode from '@core/components/b-card-code/BCardCode.vue'
 import moment from 'jalali-moment'
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
-import {TRANSACTION_SEARCH} from  '@/constants/graphql'
+import {TRANSACTION_SEARCH} from '@/constants/graphql'
 
 import {
   BTable,
@@ -229,10 +235,11 @@ export default {
   ],
   data() {
     return {
-      fromDate:'',
-      toDate:'',
-      selected: {title: ''},
-      kindSelected: {title: ''},
+      fromDate: '',
+      toDate: '',
+      mutableItems: this.items,
+      selected: {title: null, value: null},
+      kindSelected: {title: null, value: null},
       perPage: 30,
       pageOptions: [30, 50, 100],
       totalRows: 1,
@@ -274,7 +281,7 @@ export default {
     }
   },
   updated() {
-    this.totalRows = 100
+    this.totalRows = this.items.length
   },
   computed: {
     sortOptions() {
@@ -289,8 +296,8 @@ export default {
     this.$apollo.mutate({
       mutation: GET_ALL_PRESENTER
     }).then((presenter) => {
-      var presenters = new Array()
-      var items = presenter.data.profiles.edges
+      let presenters = new Array()
+      let items = presenter.data.profiles.edges
       for (const item of items) {
         presenters.push({
           'title': item.node.firstName + ' ' + item.node.lastName,
@@ -302,49 +309,68 @@ export default {
     // Set the initial number of items
     this.totalRows = this.items.length
   },
+  watch: {
+    items(val, oldVal) {
+      // console.log(val,oldVal)
+    }
+  },
   methods: {
-
     validationForm() {
       this.$refs.simpleRules.validate().then(success => {
         if (success) {
-          var input = {
-            profile_Id:this.selected,
-            kind_Id:this.kindSelected,
-            effectiveDate_Lte:this.fromDate,
-            effectiveDate_Gte:this.toDate
+          let input = {
+            profile_Id: (this.selected ? this.selected.value : null),
+            kind_Id: (this.kindSelected ? this.kindSelected.value : null),
+            effectiveDate_Gte: this.fromDate,
+            effectiveDate_Lte: this.toDate
           }
-          if (!this.selected.value) {
-            delete input.profile_Id
-          }
-          if (!this.kindSelected.value) {
-            delete input.kind_Id
-          }
-          if (this.fromDate="") {
-            delete input.effectiveDate_Lte
-          }
-          if (this.toDate="") {
+          if (this.fromDate === "") {
             delete input.effectiveDate_Gte
+          }
+          if (this.toDate === "") {
+            delete input.effectiveDate_Lte
           }
 
           this.$apollo.mutate({
             mutation: TRANSACTION_SEARCH,
             variables: {
-              input: input
+              profile_Id: input.profile_Id,
+              kind_Id: input.kind_Id,
+              effectiveDate_Gte: this.toGregorianDate(input.effectiveDate_Gte),
+              effectiveDate_Lte: this.toGregorianDate(input.effectiveDate_Lte)
             }
           }).then((result) => {
-            alert("ok")
-            console.log(result)
+            let transactions = new Array()
+            let items = result.data.transactions.edges
+            for (const item of items) {
+              transactions.push({
+                "fullName": item.node.profile.firstName + ' ' + item.node.profile.lastName,
+                "id": item.node.id,
+                "kindId": item.node.kind.id,
+                "amount": item.node.amount,
+                "date": item.node.effectiveDate
+              })
+            }
+            this.totalRows = this.items.length
+            this.items = transactions;
+            this.$refs.table.refresh();
+
           }).catch((result) => {
             alert("catch")
+            JSON.stringify(this.fromDate);
+
           })
         }
       })
     },
 
-    getDate(date) {
-      var m = moment(date, 'YYYY-M-D')
-      m.locale('fa');
-      return m.format('YYYY/MM/DD');
+    toShamsiDate(date) {
+      return moment(date, 'YYYY-M-D').locale('fa').format('YYYY/MM/DD')
+    },
+    toGregorianDate(date) {
+      if (date) {
+        return moment.from(date, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD')
+      }
     },
     convertToCurrency(Number) {
       var x, y, z;

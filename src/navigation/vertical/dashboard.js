@@ -1,6 +1,6 @@
 export default [
   {
-    title: 'Dashboards',
+    title: 'داشبورد',
     icon: 'HomeIcon',
     tag: '4',
     tagVariant: 'light-warning',

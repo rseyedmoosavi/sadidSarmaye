@@ -358,6 +358,23 @@ export default [
         },
     },
     {
+        path: '/forms/transaction/:id',
+        name: 'transaction update',
+        component: () => import('@/views/forms/form-validation/FormUpdateTransaction'),
+        meta: {
+            pageTitle: 'Transaction Update',
+            breadcrumb: [
+                {
+                    text: 'Form Profile',
+                },
+                {
+                    text: 'Form profile',
+                    active: true,
+                },
+            ],
+        },
+    },
+    {
         path: '/profile/create',
         name: 'create profile',
         component: () => import('@/views/forms/form-validation/FormCreateProfile.vue'),
@@ -427,7 +444,7 @@ export default [
     },
     {
         path: '/table/bs-table_o',
-        name: 'table-bs-table',
+        name: 'table-bs-table_o',
         component: () => import('@/views/table/bs-table/Table_o.vue'),
         meta: {
             pageTitle: 'BS Table',
