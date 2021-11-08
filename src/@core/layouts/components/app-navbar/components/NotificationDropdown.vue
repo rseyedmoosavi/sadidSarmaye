@@ -6,7 +6,7 @@
   >
     <template #button-content>
       <feather-icon
-        badge="6"
+        badge="3"
         badge-classes="bg-danger"
         class="text-body"
         icon="BellIcon"
@@ -18,13 +18,13 @@
     <li class="dropdown-menu-header">
       <div class="dropdown-header d-flex">
         <h4 class="notification-title mb-0 mr-auto">
-          Notifications
+          اعلانات
         </h4>
         <b-badge
           pill
           variant="light-primary"
         >
-          6 New
+          3 جدید
         </b-badge>
       </div>
     </li>
@@ -60,38 +60,38 @@
       </b-link>
 
       <!-- System Notification Toggler -->
-      <div class="media d-flex align-items-center">
-        <h6 class="font-weight-bolder mr-auto mb-0">
-          System Notifications
-        </h6>
-        <b-form-checkbox
-          :checked="true"
-          switch
-        />
-      </div>
+<!--      <div class="media d-flex align-items-center">-->
+<!--        <h6 class="font-weight-bolder mr-auto mb-0">-->
+<!--          System Notifications-->
+<!--        </h6>-->
+<!--        <b-form-checkbox-->
+<!--          :checked="true"-->
+<!--          switch-->
+<!--        />-->
+<!--      </div>-->
 
       <!-- System Notifications -->
-      <b-link
-        v-for="notification in systemNotifications"
-        :key="notification.subtitle"
-      >
-        <b-media>
-          <template #aside>
-            <b-avatar
-              size="32"
-              :variant="notification.type"
-            >
-              <feather-icon :icon="notification.icon" />
-            </b-avatar>
-          </template>
-          <p class="media-heading">
-            <span class="font-weight-bolder">
-              {{ notification.title }}
-            </span>
-          </p>
-          <small class="notification-text">{{ notification.subtitle }}</small>
-        </b-media>
-      </b-link>
+<!--      <b-link-->
+<!--        v-for="notification in systemNotifications"-->
+<!--        :key="notification.subtitle"-->
+<!--      >-->
+<!--        <b-media>-->
+<!--          <template #aside>-->
+<!--            <b-avatar-->
+<!--              size="32"-->
+<!--              :variant="notification.type"-->
+<!--            >-->
+<!--              <feather-icon :icon="notification.icon" />-->
+<!--            </b-avatar>-->
+<!--          </template>-->
+<!--          <p class="media-heading">-->
+<!--            <span class="font-weight-bolder">-->
+<!--              {{ notification.title }}-->
+<!--            </span>-->
+<!--          </p>-->
+<!--          <small class="notification-text">{{ notification.subtitle }}</small>-->
+<!--        </b-media>-->
+<!--      </b-link>-->
     </vue-perfect-scrollbar>
 
     <!-- Cart Footer -->
@@ -99,7 +99,7 @@
       v-ripple.400="'rgba(255, 255, 255, 0.15)'"
       variant="primary"
       block
-    >Read all notifications</b-button>
+    >نمایش همه </b-button>
     </li>
   </b-nav-item-dropdown>
 </template>
@@ -129,21 +129,21 @@ export default {
     /* eslint-disable global-require */
     const notifications = [
       {
-        title: 'Congratulation Sam 🎉',
+        title: 'کاربر جدید ثبت نام کزد',
         avatar: require('@/assets/images/avatars/6-small.png'),
-        subtitle: 'Won the monthly best seller badge',
+        subtitle: 'سیدروح الله احمدی',
         type: 'light-success',
       },
       {
-        title: 'New message received',
+        title: 'واریزی جدید',
         avatar: require('@/assets/images/avatars/9-small.png'),
-        subtitle: 'You have 10 unread messages',
+        subtitle: 'توسط اعظم رمضانی',
         type: 'light-info',
       },
       {
-        title: 'Revised Order 👋',
+        title: 'درخواست برداشت اضطراری',
         avatar: 'MD',
-        subtitle: 'MD Inc. order updated',
+        subtitle: 'جهت:رفع بیماری',
         type: 'light-danger',
       },
     ]

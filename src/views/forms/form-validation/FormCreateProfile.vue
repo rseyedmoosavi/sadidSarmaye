@@ -266,7 +266,7 @@ export default {
     return {
       username: '',
       password: '',
-      firstName: 'ُ',
+      firstName: '',
       lastName: '',
       codeMeli: '',
       presenter: '',
