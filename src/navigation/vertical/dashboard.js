@@ -3,7 +3,7 @@ export default [
     title: 'داشبورد',
     icon: 'HomeIcon',
     tag: '4',
-    tagVariant: 'light-warning',
+    tagVariant: 'light-success',
     children: [
       // {
       //   title: 'خدمات ما',
