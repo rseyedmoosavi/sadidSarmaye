@@ -1,17 +1,33 @@
 export default [
   {
-    title: 'Dashboards',
+    title: 'داشبورد',
     icon: 'HomeIcon',
-    tag: '2',
+    tag: '4',
     tagVariant: 'light-warning',
     children: [
+      // {
+      //   title: 'خدمات ما',
+      //   route: 'dashboard-ecommerce',
+      // },
+      // {
+      //   title: 'خدمات شما',
+      //   route: 'dashboard-analytics',
+      // },
       {
-        title: 'خدمات ما',
-        route: 'dashboard-ecommerce',
+        title: 'کاربر جدید',
+        route: 'create-profile',
       },
       {
-        title: 'خدمات شما',
-        route: 'dashboard-analytics',
+        title: 'لیست کاربران',
+        route: 'profiles',
+      },
+      {
+        title: 'تراکنش جدید',
+        route: 'create-transaction',
+      },
+      {
+        title: 'لیست تراکنش ها',
+        route: 'transactions',
       },
     ],
   },

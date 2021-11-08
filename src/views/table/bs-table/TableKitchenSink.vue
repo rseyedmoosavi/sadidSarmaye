@@ -5,46 +5,6 @@
   >
     <b-card-body>
       <div class="d-flex justify-content-between  flex-wrap">
-
-        <!-- sorting  -->
-        <!--        <b-form-group-->
-        <!--          label="Sort"-->
-        <!--          label-size="sm"-->
-        <!--          label-align-sm="left"-->
-        <!--          label-cols-sm="2"-->
-        <!--          label-for="sortBySelect"-->
-        <!--          class="mr-1 mb-md-0"-->
-        <!--        >-->
-        <!--          <b-input-group-->
-        <!--            size="sm"-->
-        <!--          >-->
-        <!--            <b-form-select-->
-        <!--              id="sortBySelect"-->
-        <!--              v-model="sortBy"-->
-        <!--              :options="sortOptions"-->
-        <!--            >-->
-        <!--              <template #first>-->
-        <!--                <option value="">-->
-        <!--                  none-->
-        <!--                </option>-->
-        <!--              </template>-->
-        <!--            </b-form-select>-->
-        <!--            <b-form-select-->
-        <!--              v-model="sortDesc"-->
-        <!--              size="sm"-->
-        <!--              :disabled="!sortBy"-->
-        <!--            >-->
-        <!--              <option :value="false">-->
-        <!--                Asc-->
-        <!--              </option>-->
-        <!--              <option :value="true">-->
-        <!--                Desc-->
-        <!--              </option>-->
-        <!--            </b-form-select>-->
-        <!--          </b-input-group>-->
-        <!--        </b-form-group>-->
-
-        <!-- filter -->
         <b-form-group
             label="جستوجو"
             label-cols-sm="3"
@@ -90,7 +50,7 @@
         @filtered="onFiltered"
     >
       <template #cell(firstName)="data">
-        <b-link :href="`#`">
+        <b-link :href="`/forms/form-profile/`+data.item.id">
           {{ data.value }}
         </b-link>
       </template>
@@ -215,12 +175,13 @@ export default {
         content: '',
       },
       fields: [
+        {key: 'id', label: '#', sortable: true},
         {key: 'firstName', label: 'نام', sortable: true},
         {key: 'lastName', label: 'نام خانوادگی', sortable: true},
         {key: 'codeMeli', label: 'کدملی', sortable: true},
         {key: 'mobile', label: 'موبایل', sortable: true},
         {key: 'presenter', label: 'معرف', sortable: true},
-        {key: 'totalSum', label: 'جمع سپرده گزاری', sortable: true},
+        // {key: 'totalSum', label: 'جمع سپرده گزاری', sortable: true},
         {key: 'status', label: 'وضعیت', sortable: true},
       ],
       status: [{
@@ -233,10 +194,11 @@ export default {
     }
   },
   updated() {
-    this.totalRows = this.items.length
+    this.totalRows = 100
   },
   computed: {
     sortOptions() {
+      this.totalRows = this.items.length
       // Create an options list from our fields
       return this.fields
           .filter(f => f.sortable)
