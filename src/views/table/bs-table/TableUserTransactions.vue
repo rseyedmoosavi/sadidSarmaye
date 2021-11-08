@@ -35,7 +35,7 @@
                   name="kindId"
                   rules=""
               >
-                <b-input-group  prepend="نوع">
+                <b-input-group prepend="نوع">
                   <v-select
                       v-model="kindSelected"
                       dir="rtl"
@@ -83,6 +83,10 @@
         </b-row>
       </b-form>
     </validation-observer>
+    <div v-if="loading" style="text-align: center;color: #30007e;">
+      لطفا چند لحظه صبر کنید
+      <b-spinner variant="primary" label="Spinning"></b-spinner>
+    </div>
     <b-table
         striped
         hover
@@ -121,7 +125,7 @@
       </template>
     </b-table>
 
-    <b-card-body class="d-flex justify-content-between flex-wrap pt-0">
+    <b-card-body v-if="!loading" class="d-flex justify-content-between flex-wrap pt-0">
 
       <!-- page length -->
       <b-form-group
@@ -197,7 +201,8 @@ import {
   BCol,
   BRow,
   BForm,
-  BCardText
+  BCardText,
+  BSpinner
 } from 'bootstrap-vue'
 import {codeKitchenSink} from './code'
 import vSelect from 'vue-select'
@@ -227,6 +232,7 @@ export default {
     BRow,
     BForm,
     BCardText,
+    BSpinner,
     datePicker: VuePersianDatetimePicker
   },
   props: [
@@ -235,6 +241,7 @@ export default {
   ],
   data() {
     return {
+      loading: 1,
       fromDate: '',
       toDate: '',
       mutableItems: this.items,
@@ -293,6 +300,7 @@ export default {
     },
   },
   mounted() {
+    this.loading = 1;
     this.$apollo.mutate({
       mutation: GET_ALL_PRESENTER
     }).then((presenter) => {
@@ -305,6 +313,7 @@ export default {
         })
       }
       this.presenter = presenters
+      this.loading = 0
     })
     // Set the initial number of items
     this.totalRows = this.items.length
@@ -318,6 +327,7 @@ export default {
     validationForm() {
       this.$refs.simpleRules.validate().then(success => {
         if (success) {
+          this.loading=1;
           let input = {
             profile_Id: (this.selected ? this.selected.value : null),
             kind_Id: (this.kindSelected ? this.kindSelected.value : null),
@@ -354,7 +364,7 @@ export default {
             this.totalRows = this.items.length
             this.items = transactions;
             this.$refs.table.refresh();
-
+            this.loading=0
           }).catch((result) => {
             alert("catch")
             JSON.stringify(this.fromDate);
