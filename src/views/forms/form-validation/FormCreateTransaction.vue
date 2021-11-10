@@ -235,7 +235,7 @@ export default {
       }else if(!Number(this.amount)){
         this.makeToast("لطفا مبلغ را به طور صحیح وارد نمایید", "danger")
       }else if(this.amount<20000000){
-        this.makeToast("حداقل مبلغ دو میلیون تومان می باشد", "danger")
+        this.makeToast("حداقل مبلغ بیست میلیون ریال می باشد", "danger")
       }else if(this.effectiveDate===null){
         this.makeToast("لطفا تاریخ را وارد نمایید", "danger")
       }else if(this.image===null){
@@ -258,8 +258,6 @@ export default {
               description: this.description,
               images:{
                 image:document.getElementsByName('file').value,
-                kindId:1,
-                description:"تست سیدموسوی"
               }
             }
           }
