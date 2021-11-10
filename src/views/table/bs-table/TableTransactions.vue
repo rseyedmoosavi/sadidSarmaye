@@ -10,7 +10,7 @@
 import {BRow, BCol} from 'bootstrap-vue'
 import TableKitchenSink from './TableKitchenSink.vue'
 import TableUserTransactions from './TableUserTransactions.vue'
-import {PROFILE_FOR_DROPDOWN,USER_TRANSACTIONS} from "@/constants/graphql";
+import {USER_TRANSACTIONS} from "@/constants/graphql";
 
 export default {
   data() {

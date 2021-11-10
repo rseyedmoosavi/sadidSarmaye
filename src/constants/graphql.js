@@ -116,7 +116,10 @@ export const DASHBOARD = gql`
 export const USER_TRANSACTIONS = gql`
     query transactions($profile_Id:Float){
         transactions(profile_Id:$profile_Id) {
-            totalCount
+            pageInfo{
+                hasNextPage
+                endCursor
+            }
             edges {
                 node {
                     profile{

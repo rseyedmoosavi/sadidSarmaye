@@ -1,182 +1,217 @@
 <template>
-  <b-card-code
-      :title="title"
+  <b-card
+      no-body
+      class="card-browser-states"
   >
-    <b-card-text>
-      <span>جستوجو</span>
-    </b-card-text>
-
-    <validation-observer ref="simpleRules">
-      <b-form>
-        <b-row>
-          <b-col md="3">
-            <b-form-group>
-              <validation-provider
-                  #default="{ errors }"
-                  name="userId"
-                  rules=""
-              >
-                <b-input-group prepend="کاربر">
-                  <v-select
-                      v-model="selected"
-                      dir="rtl"
-                      label="title"
-                      :options="presenter"
-                  />
-                </b-input-group>
-                <small class="text-danger">{{ errors[0] }}</small>
-              </validation-provider>
-            </b-form-group>
-          </b-col>
-          <b-col md="3">
-            <b-form-group>
-              <validation-provider
-                  #default="{ errors }"
-                  name="kindId"
-                  rules=""
-              >
-                <b-input-group prepend="نوع">
-                  <v-select
-                      v-model="kindSelected"
-                      dir="rtl"
-                      label="title"
-                      :options="kind"
-                  />
-                </b-input-group>
-                <small class="text-danger">{{ errors[0] }}</small>
-              </validation-provider>
-            </b-form-group>
-          </b-col>
-          <b-col md="2">
-            <b-form-group>
-              <validation-provider
-                  #default="{ errors }"
-                  name="fromDate"
-                  rules=""
-              >
-                <date-picker label="از تاریخ" v-model="fromDate" :auto-submit="true"/>
-                <small class="text-danger">{{ errors[0] }}</small>
-              </validation-provider>
-            </b-form-group>
-          </b-col>
-          <b-col md="2">
-            <b-form-group>
-              <validation-provider
-                  #default="{ errors }"
-                  name="toDate"
-                  rules=""
-              >
-                <date-picker style="border-radius: 0px" label="تا تاریخ" v-model="toDate" :auto-submit="true"/>
-                <small class="text-danger">{{ errors[0] }}</small>
-              </validation-provider>
-            </b-form-group>
-          </b-col>
-          <b-col cols="2">
-            <b-button
-                variant="primary"
-                type="submit"
-                @click.prevent="validationForm"
-            >
-              جستوجو
-            </b-button>
-          </b-col>
-        </b-row>
-      </b-form>
-    </validation-observer>
-    <div v-if="loading" style="text-align: center;color: #30007e;">
-      لطفا چند لحظه صبر کنید
-      <b-spinner variant="primary" label="Spinning"></b-spinner>
-    </div>
-    <b-table
-        striped
-        hover
-        responsive
-        class="position-relative"
-        :per-page="perPage"
-        :current-page="currentPage"
-        :items="items"
-        :fields="fields"
-        :sort-by.sync="sortBy"
-        :sort-desc.sync="sortDesc"
-        :sort-direction="sortDirection"
-        :filter="filter"
-        :filter-included-fields="filterOn"
-        @filtered="onFiltered"
-        ref="table"
-    >
-      <template #cell(fullName)="data">
-        <b-link :href="`/forms/transaction/`+data.item.id">
-          {{ data.value }}
-        </b-link>
-      </template>
-      <template #cell(kindId)="data">
-        <b-badge :variant="kindIdType[1][data.value]">
-          {{ kindIdType[0][data.value] }}
-        </b-badge>
-      </template>
-      <template #cell(id)="data">
-        {{ data.index + 1 }}
-      </template>
-      <template #cell(date)="data">
-        {{ toShamsiDate(data.value) }}
-      </template>
-      <template #cell(amount)="data">
-        {{ convertToCurrency(data.value) }}
-      </template>
-    </b-table>
-
-    <b-card-body v-if="!loading" class="d-flex justify-content-between flex-wrap pt-0">
-
-      <!-- page length -->
-      <b-form-group
-          label="درصفحه"
-          label-cols="3"
-          label-align="right"
-          label-size="sm"
-          label-for="sortBySelect"
-          class="text-nowrap mb-md-0 mr-1"
-      >
-        <b-form-select
-            id="perPageSelect"
-            v-model="perPage"
-            size="sm"
-            inline
-            :options="pageOptions"
-        />
-      </b-form-group>
-
-      <!-- pagination -->
+    <b-card-header>
       <div>
-        <b-pagination
-            v-model="currentPage"
-            :total-rows="totalRows"
-            :per-page="perPage"
-            first-number
-            last-number
-            prev-class="prev-item"
-            next-class="next-item"
-            class="mb-0"
+        <b-card-title>
+          {{ title }}
+          <b-button
+              v-ripple.400="'rgba(113, 102, 240, 0.15)'"
+              v-b-modal.createTransaction
+              variant="gradient-primary"
+              class="btn-icon rounded-circle"
+          >
+            <feather-icon icon="PlusIcon"/>
+          </b-button>
+        </b-card-title>
+        <!-- modal -->
+        <b-modal
+            id="createTransaction"
+            title="ثبت تراکنش جدید"
+            hide-footer
         >
-          <template #prev-text>
-            <feather-icon
-                icon="ChevronLeftIcon"
-                size="18"
-            />
-          </template>
-          <template #next-text>
-            <feather-icon
-                icon="ChevronRightIcon"
-                size="18"
-            />
-          </template>
-        </b-pagination>
-      </div>
-    </b-card-body>
+          <FormCreateTransaction/>
+        </b-modal>
 
-    <template #code>
-      {{ codeKitchenSink }}
-    </template>
-  </b-card-code>
+        <!-- modal -->
+      </div>
+      <feather-icon
+          icon="PlusIcon"
+          size="18"
+          class="cursor-pointer"
+      />
+    </b-card-header>
+
+    <!-- body -->
+    <b-card-body>
+      <!--      <b-card-text class="font-small-2">-->
+      <!--        Counter August 2020-->
+      <!--      </b-card-text>-->
+      <validation-observer ref="simpleRules">
+        <b-form>
+          <b-row>
+            <b-col md="3">
+              <b-form-group>
+                <validation-provider
+                    #default="{ errors }"
+                    name="userId"
+                    rules=""
+                >
+                  <b-input-group prepend="کاربر">
+                    <v-select
+                        v-model="selected"
+                        dir="rtl"
+                        label="title"
+                        :options="presenter"
+                    />
+                  </b-input-group>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col md="3">
+              <b-form-group>
+                <validation-provider
+                    #default="{ errors }"
+                    name="kindId"
+                    rules=""
+                >
+                  <b-input-group prepend="نوع">
+                    <v-select
+                        v-model="kindSelected"
+                        dir="rtl"
+                        label="title"
+                        :options="kind"
+                    />
+                  </b-input-group>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col md="2">
+              <b-form-group>
+                <validation-provider
+                    #default="{ errors }"
+                    name="fromDate"
+                    rules=""
+                >
+                  <date-picker label="از تاریخ" v-model="fromDate" :auto-submit="true"/>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col md="2">
+              <b-form-group>
+                <validation-provider
+                    #default="{ errors }"
+                    name="toDate"
+                    rules=""
+                >
+                  <date-picker style="border-radius: 0px" label="تا تاریخ" v-model="toDate" :auto-submit="true"/>
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col cols="2">
+              <b-button
+                  variant="primary"
+                  type="submit"
+                  @click.prevent="validationForm"
+              >
+                جستوجو
+              </b-button>
+            </b-col>
+          </b-row>
+        </b-form>
+      </validation-observer>
+      <div v-if="loading" style="text-align: center;color: #30007e;">
+        لطفا چند لحظه صبر کنید
+        <b-spinner variant="primary" label="Spinning"></b-spinner>
+      </div>
+      <b-table
+          striped
+          hover
+          responsive
+          class="position-relative"
+          :per-page="perPage"
+          :current-page="currentPage"
+          :items="items"
+          :fields="fields"
+          :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
+          :sort-direction="sortDirection"
+          :filter="filter"
+          :filter-included-fields="filterOn"
+          @filtered="onFiltered"
+          ref="table"
+      >
+        <template #cell(fullName)="data">
+          <b-link :href="`/forms/transaction/`+data.item.id">
+            {{ data.value }}
+          </b-link>
+        </template>
+        <template #cell(kindId)="data">
+          <b-badge :variant="kindIdType[1][data.value]">
+            {{ kindIdType[0][data.value] }}
+          </b-badge>
+        </template>
+        <template #cell(id)="data">
+          {{ data.index + 1 }}
+        </template>
+        <template #cell(date)="data">
+          {{ toShamsiDate(data.value) }}
+        </template>
+        <template #cell(amount)="data">
+          {{ convertToCurrency(data.value) }}
+        </template>
+      </b-table>
+
+      <b-card-body v-if="!loading" class="d-flex justify-content-between flex-wrap pt-0">
+
+        <!-- page length -->
+        <b-form-group
+            label="درصفحه"
+            label-cols="3"
+            label-align="right"
+            label-size="sm"
+            label-for="sortBySelect"
+            class="text-nowrap mb-md-0 mr-1"
+        >
+          <b-form-select
+              id="perPageSelect"
+              v-model="perPage"
+              size="sm"
+              inline
+              :options="pageOptions"
+          />
+        </b-form-group>
+
+        <!-- pagination -->
+        <div>
+          <b-pagination
+              v-model="currentPage"
+              :total-rows="totalRows"
+              :per-page="perPage"
+              first-number
+              last-number
+              prev-class="prev-item"
+              next-class="next-item"
+              class="mb-0"
+          >
+            <template #prev-text>
+              <feather-icon
+                  icon="ChevronLeftIcon"
+                  size="18"
+              />
+            </template>
+            <template #next-text>
+              <feather-icon
+                  icon="ChevronRightIcon"
+                  size="18"
+              />
+            </template>
+          </b-pagination>
+        </div>
+      </b-card-body>
+
+      <template #code>
+        {{ codeKitchenSink }}
+      </template>
+    </b-card-body>
+    <!--/ body -->
+  </b-card>
 </template>
 
 <script>
@@ -184,6 +219,8 @@ import BCardCode from '@core/components/b-card-code/BCardCode.vue'
 import moment from 'jalali-moment'
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 import {TRANSACTION_SEARCH} from '@/constants/graphql'
+import Ripple from 'vue-ripple-directive'
+import FormCreateTransaction from "@/views/forms/form-validation/FormCreateTransaction";
 
 import {
   BTable,
@@ -202,7 +239,12 @@ import {
   BRow,
   BForm,
   BCardText,
-  BSpinner
+  BSpinner,
+  BCard,
+  BCardHeader,
+  BCardTitle,
+  BModal,
+  VBModal,
 } from 'bootstrap-vue'
 import {codeKitchenSink} from './code'
 import vSelect from 'vue-select'
@@ -212,6 +254,7 @@ import {required, email} from '@validations'
 
 export default {
   components: {
+    FormCreateTransaction,
     ValidationProvider,
     ValidationObserver,
     BCardCode,
@@ -233,7 +276,15 @@ export default {
     BForm,
     BCardText,
     BSpinner,
+    BCard,
+    BCardHeader,
+    BCardTitle,
+    BModal,
     datePicker: VuePersianDatetimePicker
+  },
+  directives: {
+    'b-modal': VBModal,
+    Ripple,
   },
   props: [
     'items',
@@ -261,7 +312,7 @@ export default {
       email,
       infoModal: {
         id: 'info-modal',
-        title: '',
+        title: 'sghl',
         content: '',
       },
       kind: [
@@ -327,7 +378,7 @@ export default {
     validationForm() {
       this.$refs.simpleRules.validate().then(success => {
         if (success) {
-          this.loading=1;
+          this.loading = 1;
           let input = {
             profile_Id: (this.selected ? this.selected.value : null),
             kind_Id: (this.kindSelected ? this.kindSelected.value : null),
@@ -364,7 +415,7 @@ export default {
             this.totalRows = this.items.length
             this.items = transactions;
             this.$refs.table.refresh();
-            this.loading=0
+            this.loading = 0
           }).catch((result) => {
             alert("catch")
             JSON.stringify(this.fromDate);
