@@ -21,10 +21,10 @@ export default [
         title: 'لیست کاربران',
         route: 'profiles',
       },
-      {
-        title: 'تراکنش جدید',
-        route: 'create-transaction',
-      },
+      // {
+      //   title: 'تراکنش جدید',
+      //   route: 'create-transaction',
+      // },
       {
         title: 'لیست تراکنش ها',
         route: 'transactions',

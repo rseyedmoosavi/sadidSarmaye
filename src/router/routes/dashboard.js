@@ -10,6 +10,11 @@ export default [
     component: () => import('@/views/dashboard/ecommerce/Ecommerce.vue'),
   },
   {
+    path: '/dashboard/page',
+    name: 'page',
+    component: () => import('@/views/extensions/pagination/Pagination'),
+  },
+  {
     path: '/profile/create',
     name: 'create-profile',
     component: () => import('@/views/forms/form-validation/FormCreateProfile.vue'),
