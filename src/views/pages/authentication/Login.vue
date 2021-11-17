@@ -296,14 +296,14 @@ export default {
 
         const id = this.result.data.login.user.id
         const token = this.result.data.login.token
-        const fullName = this.result.data.login.user.firstName + ' ' + this.result.data.login.user.lastName
-        this.saveUserData(id, token)
+        const fullName = this.result.data.login.user.profile.firstName + ' ' + this.result.data.login.user.profile.lastName
+        this.saveUserData(id, token,fullName)
         this.$router.push({path: '/'}).then(() => {
           this.$toast({
             component: ToastificationContent,
             position: 'top-left',
             props: {
-              title: `Welcome ${fullName || this.$data.username}`,
+              title: `جناب آقای ${fullName}  خوش آمدید`,
               icon: 'CoffeeIcon',
               variant: 'success',
               text: `You have successfully logged in as admin. Now you can start to explore!`,
@@ -326,6 +326,7 @@ export default {
       localStorage.setItem(GC_USER_ID, id)
       localStorage.setItem(GC_AUTH_TOKEN, token)
       localStorage.setItem(GC_USER_DATA, JSON.stringify(userData))
+      localStorage.setItem("fullName", fullName)
       this.$root.$data.userId = localStorage.getItem(GC_USER_ID)
       this.$ability.update(userData.ability)
       this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)

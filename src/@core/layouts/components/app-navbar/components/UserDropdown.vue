@@ -5,12 +5,12 @@
     class="dropdown-user"
   >
     <template #button-content>
-      <div class="d-sm-flex d-none user-nav">
-        <p class="user-name font-weight-bolder mb-0">
-          {{ userData.fullName || userData.username }}
-        </p>
-        <span class="user-status">{{ userData.role }}</span>
-      </div>
+<!--      <div class="d-sm-flex d-none user-nav">-->
+<!--        <p class="user-name font-weight-bolder mb-0">-->
+<!--          {{ userData.fullName || userData.username }}-->
+<!--        </p>-->
+<!--        <span class="user-status">{{ userData.role }}</span>-->
+<!--      </div>-->
       <b-avatar
         size="40"
         :src="userData.avatar"
@@ -33,80 +33,34 @@
     >
       <feather-icon
         size="16"
+        icon="LockIcon"
+        class="mr-50"
+      />
+      <span>تغییر رمز</span>
+    </b-dropdown-item>
+<!--    <b-dropdown-item-->
+<!--      :to="{ name: 'pages-profile'}"-->
+<!--      link-class="d-flex align-items-center"-->
+<!--    >-->
+<!--      <feather-icon-->
+<!--        size="16"-->
+<!--        icon="UserIcon"-->
+<!--        class="mr-50"-->
+<!--      />-->
+<!--      <span>اخرین ورود: یکشنبه 20 آذر 1400</span>-->
+<!--    </b-dropdown-item>-->
+    <b-dropdown-item
+      :to="{ name: 'pages-profile'}"
+      link-class="d-flex align-items-center"
+    >
+      <feather-icon
+        size="16"
         icon="UserIcon"
         class="mr-50"
       />
-      <span>Profile</span>
+      <span>پروفایل</span>
     </b-dropdown-item>
-    <b-dropdown-item
-      :to="{ name: 'apps-email' }"
-      link-class="d-flex align-items-center"
-    >
-      <feather-icon
-        size="16"
-        icon="MailIcon"
-        class="mr-50"
-      />
-      <span>Inbox</span>
-    </b-dropdown-item>
-    <b-dropdown-item
-      :to="{ name: 'apps-todo' }"
-      link-class="d-flex align-items-center"
-    >
-      <feather-icon
-        size="16"
-        icon="CheckSquareIcon"
-        class="mr-50"
-      />
-      <span>Task</span>
-    </b-dropdown-item>
-    <b-dropdown-item
-      :to="{ name: 'apps-chat' }"
-      link-class="d-flex align-items-center"
-    >
-      <feather-icon
-        size="16"
-        icon="MessageSquareIcon"
-        class="mr-50"
-      />
-      <span>Chat</span>
-    </b-dropdown-item>
-
     <b-dropdown-divider />
-
-    <b-dropdown-item
-      :to="{ name: 'pages-account-setting' }"
-      link-class="d-flex align-items-center"
-    >
-      <feather-icon
-        size="16"
-        icon="SettingsIcon"
-        class="mr-50"
-      />
-      <span>Settings</span>
-    </b-dropdown-item>
-    <b-dropdown-item
-      :to="{ name: 'pages-pricing' }"
-      link-class="d-flex align-items-center"
-    >
-      <feather-icon
-        size="16"
-        icon="CreditCardIcon"
-        class="mr-50"
-      />
-      <span>Pricing</span>
-    </b-dropdown-item>
-    <b-dropdown-item
-      :to="{ name: 'pages-faq' }"
-      link-class="d-flex align-items-center"
-    >
-      <feather-icon
-        size="16"
-        icon="HelpCircleIcon"
-        class="mr-50"
-      />
-      <span>FAQ</span>
-    </b-dropdown-item>
     <b-dropdown-item
       link-class="d-flex align-items-center"
       @click="logout"
@@ -116,7 +70,7 @@
         icon="LogOutIcon"
         class="mr-50"
       />
-      <span>Logout</span>
+      <span>خروج</span>
     </b-dropdown-item></b-nav-item-dropdown>
 </template>
 
