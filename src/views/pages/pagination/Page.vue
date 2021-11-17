@@ -7,7 +7,7 @@
       <b-col cols="12">
         <b-table striped hover responsive class="position-relative" show-empty :items="items" :fields="fields"
                  :current-page="currentPage" :per-page="0"></b-table>
-        <b-pagination size="md" :total-rows="totalItems" v-model="currentPage" :per-page="perPage"></b-pagination>
+        <b-pagination align="fill" size="md" :total-rows="totalItems" v-model="currentPage" :per-page="perPage"></b-pagination>
       </b-col>
     </b-row>
   </b-card>
@@ -42,7 +42,8 @@ export default {
         {key: 'date', label: 'تاریخ', sortable: true},
       ],
       currentPage: 0,
-      perPage: [10,20,30],
+      perPage: 10,
+      pageOptions: [30, 50, 100],
       totalItems: 0
     }
   },
@@ -54,14 +55,6 @@ export default {
 
   methods: {
     async fetchData() {
-      // this.items = await fetch(`https://jsonplaceholder.typicode.com/comments?_page=${this.currentPage}&_limit=${this.perPage}`)
-      //     .then(res => {
-      //       this.totalItems = parseInt(res.headers.get('x-total-count'), 10)
-      //
-      //       return res.json()
-      //     })
-      //     .then(items => items)
-
       this.$apollo.mutate({
         mutation: USER_TRANSACTIONS,
         variables: {
@@ -80,7 +73,7 @@ export default {
             "date": item.node.effectiveDate,
           })
         }
-        this.totalItems = parseInt(100, 10)
+        this.totalItems = parseInt(result.data.transactions.totalCount, 10)
         this.items = transactions
       }).catch((error) => {
         console.log(error)

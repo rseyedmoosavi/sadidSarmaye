@@ -181,6 +181,7 @@
         <!-- pagination -->
         <div>
           <b-pagination
+              align="left"
               v-model="currentPage"
               :total-rows="totalRows"
               :per-page="perPage"

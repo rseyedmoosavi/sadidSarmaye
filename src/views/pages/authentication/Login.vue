@@ -27,9 +27,9 @@
               ref="loginForm"
               #default="{invalid}"
           >
-            <b-form
-                class="auth-login-form mt-2"
-                @submit.prevent="login"
+            <b-form v-if="!showSms"
+                    class="auth-login-form mt-2"
+                    @submit.prevent="login"
             >
               <!-- email -->
               <b-form-group
@@ -113,6 +113,36 @@
                 ورود!
               </b-button>
             </b-form>
+            <b-form v-if="showSms" @submit.prevent="login2Site">
+              <b-form-group
+                  label="پیامک دریافتی"
+                  label-for="smsNo"
+              >
+                <validation-provider
+                    #default="{ errors }"
+                    name="smsNo"
+                    vid="smsNo"
+                    rules="required"
+                >
+                  <b-form-input
+                      id="smsNo"
+                      v-model="smsNo"
+                      :state="errors.length > 0 ? false:null"
+                      name="smsNo"
+                      placeholder="12345"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+              <b-button
+                  type="submit"
+                  variant="primary"
+                  block
+                  :disabled="invalid"
+              >
+                ورود!
+              </b-button>
+            </b-form>
           </validation-observer>
 
           <b-card-text class="text-center mt-2">
@@ -128,7 +158,7 @@
 
       <!-- Brand logo-->
       <b-link class="brand-logo">
-<!--        <vuexy-logo/>-->
+        <!--        <vuexy-logo/>-->
         <b-img
             fluid
             :src="Logo"
@@ -213,6 +243,9 @@ export default {
   data() {
     return {
       status: '',
+      showSms: false,
+      result: null,
+      smsNo: null,
       password: 'M@123456',
       username: 'morteza',
       sideImg: require('@/assets/images/pages/login.png'),
@@ -248,22 +281,8 @@ export default {
                 password
               }
             }).then((result) => {
-              const id = result.data.login.user.id
-              const token = result.data.login.token
-              const fullName = result.data.login.user.firstName + ' ' + result.data.login.user.lastName
-              this.saveUserData(id, token)
-              this.$router.push({path: '/'}).then(() => {
-                this.$toast({
-                  component: ToastificationContent,
-                  position: 'top-left',
-                  props: {
-                    title: `Welcome ${fullName || this.$data.username}`,
-                    icon: 'CoffeeIcon',
-                    variant: 'success',
-                    text: `You have successfully logged in as admin. Now you can start to explore!`,
-                  },
-                })
-              })
+              this.result=result
+              this.showSms = true
             }).catch((error) => {
               alert(error);
               console.log(error)
@@ -271,6 +290,27 @@ export default {
           }
         }
       })
+    },
+    login2Site() {
+      if (this.smsNo == 10) {
+
+        const id = this.result.data.login.user.id
+        const token = this.result.data.login.token
+        const fullName = this.result.data.login.user.firstName + ' ' + this.result.data.login.user.lastName
+        this.saveUserData(id, token)
+        this.$router.push({path: '/'}).then(() => {
+          this.$toast({
+            component: ToastificationContent,
+            position: 'top-left',
+            props: {
+              title: `Welcome ${fullName || this.$data.username}`,
+              icon: 'CoffeeIcon',
+              variant: 'success',
+              text: `You have successfully logged in as admin. Now you can start to explore!`,
+            },
+          })
+        })
+      }
     },
     saveUserData(id, token, fullName) {
       let userData = {
