@@ -5,10 +5,10 @@ export default [
     tag: '4',
     tagVariant: 'light-success',
     children: [
-      // {
-      //   title: 'خدمات ما',
-      //   route: 'dashboard-ecommerce',
-      // },
+      {
+        title: 'تست صفحه بندی',
+        route: 'page',
+      },
       // {
       //   title: 'خدمات شما',
       //   route: 'dashboard-analytics',

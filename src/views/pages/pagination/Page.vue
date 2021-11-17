@@ -42,7 +42,7 @@ export default {
         {key: 'date', label: 'تاریخ', sortable: true},
       ],
       currentPage: 0,
-      perPage: 10,
+      perPage: [10,20,30],
       totalItems: 0
     }
   },

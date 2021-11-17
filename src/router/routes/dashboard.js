@@ -10,11 +10,6 @@ export default [
     component: () => import('@/views/dashboard/ecommerce/Ecommerce.vue'),
   },
   {
-    path: '/dashboard/page',
-    name: 'page',
-    component: () => import('@/views/extensions/pagination/Pagination'),
-  },
-  {
     path: '/profile/create',
     name: 'create-profile',
     component: () => import('@/views/forms/form-validation/FormCreateProfile.vue'),
@@ -28,6 +23,11 @@ export default [
     path: '/transaction/create',
     name: 'create-transaction',
     component: () => import('@/views/forms/form-validation/FormCreateTransaction.vue'),
+  },
+  {
+    path: '/page',
+    name:'page',
+    component:()=>import('@/views/pages/pagination/Page.vue')
   },
   {
     path: '/transaction/update',
