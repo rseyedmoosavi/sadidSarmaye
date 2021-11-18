@@ -3,7 +3,7 @@
       v-if="data"
       class="card-congratulation-medal"
   >
-    <h5>خوش آمدید 🎉 {{ data.firstName }}!</h5>
+    <h5 id="persent">خوش آمدید 🎉 {{ data.firstName }}!</h5>
     <b-card-text class="font-small-3">
       You have won gold medal
     </b-card-text>

@@ -194,8 +194,10 @@ export const LOGIN = gql`
         ){
             user {
                 id
-                firstName
-                lastName
+                profile{
+                    firstName
+                    lastName
+                }
                 lastLogin
             }
             token

@@ -117,7 +117,7 @@ type ProfileType implements Node {
         taDate: Date!
     ): Float
     tel: String
-    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection!
+    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection!
     user: UserType
 }
 
@@ -162,7 +162,7 @@ type Query {
     posts: [PostType]
     profiles(after: String, before: String, codeMeli: String, codeMeli_Icontains: String, codeMeli_Istartswith: String, first: Int, id: Float, last: Int, lastName: String, lastName_Icontains: String, lastName_Istartswith: String, mobile1: String, mobile1_Icontains: String, mobile1_Istartswith: String, offset: Int, presenter_Id: Float): ProfileTypeConnection
     transactionKinds: [TransactionKindType]
-    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection
+    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection
     users: [UserType]
 }
 
@@ -182,11 +182,13 @@ type TransactionKindType {
 }
 
 type TransactionType implements Node {
-    amount: Int!
+    "مبلغ"
+    amount: Float!
     dateTime: DateTime!
     description: String
     effectiveDate: Date
     id: ID!
+    images: [ImageType]
     kind: TransactionKindType!
     percent: Int!
     profile: ProfileType!
@@ -259,11 +261,13 @@ input CreateProfileInput {
 "ورودی های لازم برای ایجاد تراکنش"
 input CreateTransactionInput {
     "مبلغ"
-    amount: Int!
+    amount: Float!
     "توضیحات"
     description: String
     "تاریخ موثر"
     effectiveDate: Date!
+    "پیوست ها"
+    images: [CreateImageInput]
     "id نوع تراکنش"
     kindId: Int!
     "کاربر تراکنش"

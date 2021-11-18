@@ -403,7 +403,7 @@ export default {
       },
     },
     data: {
-      labels: ['Africa', 'Asia', 'Europe', 'America', 'Antarctica', 'Australia'],
+      labels: ['Africa', 'Asia1', 'Europe', 'America', 'Antarctica', 'Australia'],
       datasets: [
         {
           label: 'Population (millions)',
