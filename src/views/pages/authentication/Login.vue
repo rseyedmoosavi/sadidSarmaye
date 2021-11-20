@@ -306,7 +306,7 @@ export default {
               title: `جناب آقای ${fullName}  خوش آمدید`,
               icon: 'CoffeeIcon',
               variant: 'success',
-              text: `You have successfully logged in as admin. Now you can start to explore!`,
+              text: `شما با موفقیت به سیستم وارد شدید`,
             },
           })
         })

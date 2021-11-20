@@ -1,15 +1,32 @@
 <template>
-<PieChart/>
+  <b-container>
+    <b-row>
+      <b-col cols="4">
+        <Deposits/>
+      </b-col>
+      <b-col cols="4">
+        <PieChart/>
+      </b-col>
+      <b-col cols="4">
+        <Profits/>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
 import PieChart from "./component/PieChart";
+import Deposits from "@/views/dashboard/ecommerce/component/Deposits";
+import Profits from "@/views/dashboard/ecommerce/component/Profits";
 import {BRow, BCol} from 'bootstrap-vue'
 import {PERSON_SEPORDE} from "@/constants/graphql";
 import useJwt from "@/auth/jwt/useJwt";
 import {initialAbility} from "@/libs/acl/config";
+
 export default {
   components: {
+    Profits,
+    Deposits,
     BRow,
     BCol,
     PieChart
@@ -21,27 +38,27 @@ export default {
     }
   },
   mounted() {
-    if (!localStorage.getItem('userData')){
+    if (!localStorage.getItem('userData')) {
       this.logout()
     }
   },
-  methods:{
+  methods: {
     logout() {
       localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)
       localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
       localStorage.removeItem('userData')
       this.$ability.update(initialAbility)
-      this.$router.push({ name: 'auth-login' })
+      this.$router.push({name: 'auth-login'})
     }
   },
   created() {
-    if (!localStorage.getItem('userData')){
+    if (!localStorage.getItem('userData')) {
       this.logout()
     }
     this.$apollo.mutate({
       mutation: PERSON_SEPORDE,
     }).then((result) => {
-      this.newData=result.data.me.profile;
+      this.newData = result.data.me.profile;
     }).catch((error) => {
       this.logout();
     })

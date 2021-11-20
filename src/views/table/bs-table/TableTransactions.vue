@@ -32,7 +32,7 @@ export default {
       variables:{
       }
     }).then((result) => {
-      var transactions=new Array()
+      let transactions = [];
       let items = result.data.transactions.edges
       for (const item of items) {
         transactions.push({

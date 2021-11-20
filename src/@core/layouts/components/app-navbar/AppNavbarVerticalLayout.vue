@@ -1,42 +1,18 @@
 <template>
-  <div class="navbar-container d-flex content align-items-center">
-
-    <!-- Nav Menu Toggler -->
-    <ul class="nav navbar-nav d-xl-none">
-      <li class="nav-item">
-        <b-link
-          class="nav-link"
-          @click="toggleVerticalMenuActive"
-        >
-          <feather-icon
-            icon="MenuIcon"
-            size="21"
-          />
-        </b-link>
-      </li>
-    </ul>
-
-    <!--      <locale />-->
-
-    <!--      <search-bar />-->
-    <!--      <cart-dropdown />-->
-    <b-navbar-nav class="nav align-items-center ml-auto">
-      <full-name/>
-      <today class="d-none d-lg-block" />
-      <ads class="d-none d-lg-block" />
-      <notification-dropdown />
-      <dark-Toggler class="d-none d-lg-block" />
-      <tour class="d-none d-lg-block" />
-      <user-dropdown />
-    </b-navbar-nav>
-  </div>
+  <b-container class="bv-example-row">
+    <b-row>
+      <b-col cols="6">1 of 3</b-col>
+      <b-col>2 of 3</b-col>
+      <b-col>3 of 3</b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
 // import Bookmarks from './components/Bookmarks.vue'
 // import CartDropdown from './components/CartDropdown.vue'
 import {
-  BLink, BNavbarNav,BImg
+  BLink, BNavbarNav, BImg, BCol, BRow, BContainer
 } from 'bootstrap-vue'
 import Locale from './components/Locale.vue'
 import SearchBar from './components/SearchBar.vue'
@@ -50,6 +26,9 @@ import UserDropdown from './components/UserDropdown.vue'
 
 export default {
   components: {
+    BContainer,
+    BCol,
+    BRow,
     BLink,
     Tour,
     BImg,
@@ -67,10 +46,11 @@ export default {
     UserDropdown,
   },
   props: {
-    fullName:null,
+    fullName: null,
     toggleVerticalMenuActive: {
       type: Function,
-      default: () => {},
+      default: () => {
+      },
     },
   },
 }

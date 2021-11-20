@@ -1,17 +1,10 @@
 <template>
   <b-card>
-    <b-card-title className="mb-1">
-      Expense Ratio
-    </b-card-title>
-    <b-card-sub-title className="mb-2">
-      Spending on various categories
-    </b-card-sub-title>
-
     <vue-apex-charts
-        type="donut"
+        type="pie"
         height="350"
-        :options="apexChatData.donutChart.chartOptions"
-        :series="apexChatData.donutChart.series"
+        :options="donutChart.chartOptions"
+        :series="donutChart.series"
     />
   </b-card>
 </template>
@@ -32,7 +25,93 @@ export default {
   },
   data() {
     return {
-      apexChatData,
+      donutChart: {
+        series: [85, 16, 50],
+        chartOptions: {
+          legend: {
+            show: true,
+            position: 'bottom',
+            fontSize: '14px',
+            fontFamily: 'yekan',
+          },
+          colors: [
+            '#00fcfc',
+            '#ffeaa9',
+            '#f4aa2b',
+          ],
+          dataLabels: {
+            enabled: true,
+            formatter(val) {
+              // eslint-disable-next-line radix
+              return `${parseInt(val)}%`
+            },
+          },
+          plotOptions: {
+            pie: {
+              donut: {
+                labels: {
+                  show: false,
+                  name: {
+                    fontSize: '2rem',
+                    fontFamily: 'yekan',
+                  },
+                  value: {
+                    fontSize: '1rem',
+                    fontFamily: 'yekan',
+                    formatter(val) {
+                      // eslint-disable-next-line radix
+                      return `${parseInt(val)}%`
+                    },
+                  },
+                },
+              },
+            },
+          },
+          labels: ['سپرده گذاری', 'پرداخت سود', 'برداشت'],
+          responsive: [
+            {
+              breakpoint: 992,
+              options: {
+                chart: {
+                  height: 380,
+                },
+                legend: {
+                  position: 'bottom',
+                },
+              },
+            },
+            {
+              breakpoint: 576,
+              options: {
+                chart: {
+                  height: 320,
+                },
+                plotOptions: {
+                  pie: {
+                    pie: {
+                      labels: {
+                        show: true,
+                        name: {
+                          fontSize: '1.5rem',
+                        },
+                        value: {
+                          fontSize: '1rem',
+                        },
+                        total: {
+                          fontSize: '1.5rem',
+                        },
+                      },
+                    },
+                  },
+                },
+                legend: {
+                  show: true,
+                },
+              },
+            },
+          ],
+        },
+      },
     }
   },
 }

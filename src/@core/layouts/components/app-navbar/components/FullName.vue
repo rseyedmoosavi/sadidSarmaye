@@ -1,5 +1,5 @@
 <template>
-  <b-nav-item>
+  <b-nav-item style="color: #4573ff">
     {{getFullName()}}
   </b-nav-item>
 </template>

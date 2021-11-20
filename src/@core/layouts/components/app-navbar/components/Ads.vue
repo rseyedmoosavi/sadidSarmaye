@@ -1,6 +1,6 @@
 <template>
-  <b-nav-item>
-    <b-img :src="require('@/assets/images/banner/banner-8.jpg')" :height="40" :width="830" />
+  <b-nav-item style="color: lawngreen">
+    سود علی الحساب این ماه:15،000،000 تومان
   </b-nav-item>
 </template>
 

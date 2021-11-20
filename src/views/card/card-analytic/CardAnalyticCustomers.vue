@@ -74,7 +74,29 @@ export default {
   },
   data() {
     return {
-      chartData: {},
+      chartData: {
+        lastDays: ['Last 28 Days', 'Last Month', 'Last Year'],
+        listData: [
+          {
+            icon: 'CircleIcon',
+            iconColor: 'text-primary',
+            text: 'New',
+            result: 890,
+          },
+          {
+            icon: 'CircleIcon',
+            iconColor: 'text-warning',
+            text: 'Returning',
+            result: 258,
+          },
+          {
+            icon: 'CircleIcon',
+            iconColor: 'text-danger',
+            text: 'Referrals',
+            result: 149,
+          },
+        ],
+      },
       customersPie: {
         series: [690, 258, 149],
         chartOptions: {
@@ -95,9 +117,6 @@ export default {
         },
       },
     }
-  },
-  created() {
-    this.$http.get('/card/card-analytics/customers').then(res => { this.chartData = res.data })
   },
 }
 </script>

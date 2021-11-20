@@ -141,6 +141,55 @@ export const USER_TRANSACTIONS = gql`
         }
     }
 `
+export const DEPOSIT_FOR_HOME_PAGE = gql`
+    query transactions($offset:Int,$first:Int,$kindId:Float){
+        transactions(offset: $offset,first:$first,kind_Id:$kindId) {
+            totalSum
+            edges {
+                node {
+                    profile{
+                        firstName
+                        lastName
+                    }
+                    amount
+                    effectiveDate
+                    id
+                    kind {
+                        id
+                    }
+
+                }
+
+            }
+
+        }
+    }
+`
+export const PROFITS_FOR_HOME_PAGE = gql`
+    query transactions($offset:Int,$first:Int,$kindId:Float){
+        transactions(offset: $offset,first:$first,kind_Id:$kindId) {
+            totalSum
+            edges {
+                node {
+                    profile{
+                        firstName
+                        lastName
+                    }
+                    amount
+                    effectiveDate
+                    id
+                    kind {
+                        id
+                    }
+
+                }
+
+            }
+
+        }
+    }
+`
+
 export const GET_TRANSACTION=gql`
     query getTransaction($id:Float){
         transactions(id:$id){
