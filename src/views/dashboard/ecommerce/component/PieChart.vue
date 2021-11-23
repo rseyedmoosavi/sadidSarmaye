@@ -1,5 +1,5 @@
 <template>
-  <b-card>
+  <b-card >
     <vue-apex-charts
         type="pie"
         height="350"

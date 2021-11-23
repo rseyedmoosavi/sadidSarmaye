@@ -4,8 +4,9 @@
         color="#7367F0"
         :title="null"
         :subtitle="null"
-        finish-button-text="Submit"
-        back-button-text="Previous"
+        finish-button-text="ذخیره"
+        back-button-text="قبلی"
+        next-button-text="مرحله بعد"
         class="steps-transparent mb-3"
         @on-complete="formSubmitted"
     >
@@ -340,3 +341,22 @@ export default {
   },
 }
 </script>
+<style>
+.vue-form-wizard .wizard-progress-bar {
+  float: right;
+}
+
+.vue-form-wizard .wizard-card-footer .wizard-footer-left {
+  float: right;
+}
+
+.vue-form-wizard .wizard-card-footer .wizard-footer-right {
+  float: left;
+}
+.vue-form-wizard .wizard-card-footer .wizard-footer-right .wizard-btn::after{
+  content:"" !important
+}
+.vue-form-wizard .wizard-card-footer .wizard-footer-left .wizard-btn::before{
+  content:"" !important
+}
+</style>

@@ -61,7 +61,7 @@
             <h5 class="mb-0">
               مشخصات فردی
             </h5>
-            <small class="text-muted">Enter Your Personal Info.</small>
+            <small class="text-muted">اطلاعات فردی را دقیقا عین شناسنامه تکمیل کنید.</small>
           </b-col>
           <b-col md="4">
             <b-form-group
@@ -148,7 +148,7 @@
 
       <!-- address -->
       <tab-content
-          title="Address"
+          title="آدرس"
           icon="feather icon-map-pin"
       >
         <b-row>
@@ -157,51 +157,137 @@
               class="mb-2"
           >
             <h5 class="mb-0">
-              Address
+              آدرس
             </h5>
-            <small class="text-muted">Enter Your Address.</small>
+            <small class="text-muted">آدرس محل زندگی خود را وارد نمایید.</small>
           </b-col>
-          <b-col md="6">
+          <b-col md="4">
             <b-form-group
-                label="Address"
+                label="استان"
+                label-for="i-state"
+            >
+              <v-select
+                  id="i-state"
+                  v-model="birthDateLocation"
+                  dir='rtl'
+                  :options="cities"
+                  label="text"
+              />
+            </b-form-group>
+          </b-col>
+          <b-col md="4">
+            <b-form-group
+                label="شهر"
+                label-for="i-city"
+            >
+              <v-select
+                  id="i-city"
+                  v-model="birthDateLocation"
+                  dir='rtl'
+                  :options="cities"
+                  label="text"
+              />
+            </b-form-group>
+          </b-col>
+          <b-col md="4">
+            <b-form-group
+                label="بخش"
+                label-for="i-section"
+            >
+              <v-select
+                  id="i-section"
+                  v-model="birthDateLocation"
+                  dir='rtl'
+                  :options="cities"
+                  label="text"
+              />
+            </b-form-group>
+          </b-col>
+          <b-col md="10">
+            <b-form-group
+                label="آدرس"
                 label-for="i-address"
             >
               <b-form-input
                   id="i-address"
-                  placeholder="98 Borough bridge Road, Birmingham"
+                  placeholder="قم، خیابان صفاییه، کوچه بیگدلی، فرعی 124، پلاک 1453"
               />
             </b-form-group>
           </b-col>
-          <b-col md="6">
+          <b-col md="2">
             <b-form-group
-                label="Landmark"
-                label-for="i-landmark"
+                label="کد پستی"
+                label-for="i-postal-code"
             >
               <b-form-input
-                  id="i-landmark"
-                  placeholder="Borough bridge"
+                  id="i-postal-code"
+                  placeholder="3714555555"
               />
             </b-form-group>
           </b-col>
-          <b-col md="6">
+        </b-row>
+        <b-row>
+          <b-col
+              cols="12"
+              class="mb-2"
+          >
+            <h5 class="mb-0">
+              اطلاعات تماس
+            </h5>
+            <small class="text-muted">اطلاعات را به طور دقیق وارد نمایید</small>
+          </b-col>
+          <b-col md="3">
             <b-form-group
-                label="Pincode"
-                label-for="i-pincode"
+                label="تلفن منزل"
+                label-for="i-home-phone"
             >
               <b-form-input
-                  id="i-pincode"
-                  placeholder="658921"
+                  id="i-home-phone"
+                  placeholder="217787477"
               />
             </b-form-group>
           </b-col>
-          <b-col md="6">
+          <b-col md="3">
             <b-form-group
-                label-for="i-city"
-                label="City"
+                label="تلفن محل کار"
+                label-for="i-work-phone"
             >
               <b-form-input
-                  id="i-city"
-                  placeholder="Birmingham"
+                  id="i-work-phone"
+                  placeholder="214578588"
+              />
+            </b-form-group>
+          </b-col>
+          <b-col md="3">
+            <b-form-group
+                label="تلفن همراه 1"
+                label-for="i-mobile-1"
+            >
+              <b-form-input
+                  id="i-mobile-1"
+                  placeholder="09123456789"
+              />
+            </b-form-group>
+          </b-col>
+          <b-col md="3">
+            <b-form-group
+                label="تلفن همراه 2"
+                label-for="i-mobile-2"
+            >
+              <b-form-input
+                  id="i-mobile-2"
+                  placeholder="09357894321"
+              />
+            </b-form-group>
+          </b-col>
+          <b-col md="12">
+            <b-form-group
+                label="رایانامه"
+                label-for="i-email"
+            >
+              <b-form-input
+                  id="i-email"
+                  placeholder="email@gmail.com"
               />
             </b-form-group>
           </b-col>
@@ -210,7 +296,7 @@
 
       <!-- social link -->
       <tab-content
-          title="Social Links"
+          title="اطلاعات بانکی"
           icon="feather icon-link"
       >
         <b-row>
@@ -219,51 +305,43 @@
               class="mb-2"
           >
             <h5 class="mb-0">
-              Social Links
+              اطلاعات بانکی
             </h5>
-            <small class="text-muted">Enter Your Social Links</small>
+            <small class="text-muted">فقط حساب(هایی)که به نام خودتان هستند را وارد کنید</small>
           </b-col>
-          <b-col md="6">
+          <b-col md="3">
             <b-form-group
-                label="Twitter"
-                label-for="i-twitter"
+                label="نام بانک"
+                label-for="i-bank"
+            >
+              <v-select
+                  id="i-bank"
+                  v-model="bankName"
+                  dir='rtl'
+                  :options="banks"
+                  label="text"
+              />
+            </b-form-group>
+          </b-col>
+          <b-col md="3">
+            <b-form-group
+                label="شماره حساب"
+                label-for="i-hesab"
             >
               <b-form-input
-                  id="i-twitter"
-                  placeholder="https://twitter.com/abc"
+                  id="i-hesab"
+                  placeholder="5741900000"
               />
             </b-form-group>
           </b-col>
           <b-col md="6">
             <b-form-group
-                label="Facebook"
-                label-for="i-facebook"
+                label="شناسه شبا"
+                label-for="i-sheba"
             >
               <b-form-input
-                  id="i-facebook"
-                  placeholder="https://facebook.com/abc"
-              />
-            </b-form-group>
-          </b-col>
-          <b-col md="6">
-            <b-form-group
-                label="Google+"
-                label-for="i-google-plus"
-            >
-              <b-form-input
-                  id="i-google-plus"
-                  placeholder="https://plus.google.com/abc"
-              />
-            </b-form-group>
-          </b-col>
-          <b-col md="6">
-            <b-form-group
-                label="LinkedIn"
-                label-for="i-linked-in"
-            >
-              <b-form-input
-                  id="i-linked-in"
-                  placeholder="https://linkedin.com/abc"
+                  id="i-sheba"
+                  placeholder="IR240120000000000000000000"
               />
             </b-form-group>
           </b-col>
@@ -301,7 +379,16 @@ export default {
   },
   data() {
     return {
-      selectedContry: 'select_value',
+      bankName:'ملت',
+      banks:[
+        {value:1,text:'ملت'},
+        {value:2,text:'ملی'},
+        {value:3,text:'رسالت'},
+        {value:4,text:'مهر ایران'},
+        {value:5,text:'سپه'},
+        {value:6,text:'صادرات'},
+        {value:7,text:'تجارت'},
+      ],
       birthDateLocation: 'تهران',
       cities:[
         {value:1,text:'ابرکوه'},
@@ -560,16 +647,28 @@ export default {
   },
 }
 </script>
-<style scoped>
+<style lang="scss">
+
+@import '@core/scss/vue/libs/vue-wizard.scss';
+@import '@core/scss/vue/libs/vue-select.scss';
+
 .vue-form-wizard .wizard-progress-bar {
-  float: right;
+  float: right !important;
 }
 
 .vue-form-wizard .wizard-card-footer .wizard-footer-left {
-  float: right;
+  float: right !important;
 }
 
 .vue-form-wizard .wizard-card-footer .wizard-footer-right {
-  float: left;
+  float: left !important;
+}
+
+.vue-form-wizard .wizard-card-footer .wizard-footer-left .wizard-btn::before{
+  content: "" !important;
+}
+
+.vue-form-wizard .wizard-card-footer .wizard-footer-right .wizard-btn::after{
+  content: "" !important;
 }
 </style>

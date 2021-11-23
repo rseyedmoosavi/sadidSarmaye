@@ -3,6 +3,7 @@
     <feather-icon
         icon="CalendarIcon"
         size="21"
+        variant="success"
     />
     {{getDate()}}
   </b-nav-item>
@@ -17,7 +18,7 @@ export default {
   methods: {
     getDate(){
       let date=new Date()
-      return moment(date, 'YYYY-M-D').locale('fa').format('dddd Do MMM YYYY')
+      return moment(date, 'YYYY-M-D').locale('fa').format('dddd D MMM YYYY')
     }
   },
 }

@@ -157,7 +157,7 @@ export default [
   {
     path: '/pages/profile',
     name: 'pages-profile',
-    component: () => import('@/views/pages/profile/Profile.vue'),
+    component: () => import('@/views/pages/profile/P.vue'),
     meta: {
       pageTitle: 'Profile',
       breadcrumb: [
