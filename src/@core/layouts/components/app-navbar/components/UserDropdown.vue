@@ -1,77 +1,78 @@
 <template>
   <b-nav-item-dropdown
-    right
-    toggle-class="d-flex align-items-center dropdown-user-link"
-    class="dropdown-user"
+      right
+      toggle-class="d-flex align-items-center dropdown-user-link"
+      class="dropdown-user"
   >
     <template #button-content>
-<!--      <div class="d-sm-flex d-none user-nav">-->
-<!--        <p class="user-name font-weight-bolder mb-0">-->
-<!--          {{ userData.fullName || userData.username }}-->
-<!--        </p>-->
-<!--        <span class="user-status">{{ userData.role }}</span>-->
-<!--      </div>-->
+      <!--      <div class="d-sm-flex d-none user-nav">-->
+      <!--        <p class="user-name font-weight-bolder mb-0">-->
+      <!--          {{ userData.fullName || userData.username }}-->
+      <!--        </p>-->
+      <!--        <span class="user-status">{{ userData.role }}</span>-->
+      <!--      </div>-->
       <b-avatar
-        size="40"
-        :src="userData.avatar"
-        variant="light-primary"
-        badge
-        class="badge-minimal"
-        badge-variant="success"
+          size="40"
+          :src="userData.avatar"
+          variant="light-primary"
+          badge
+          class="badge-minimal"
+          badge-variant="success"
       >
         <feather-icon
-          v-if="!userData.fullName"
-          icon="UserIcon"
-          size="22"
+            v-if="!userData.fullName"
+            icon="UserIcon"
+            size="22"
         />
       </b-avatar>
     </template>
 
     <b-dropdown-item
-      :to="{ name: 'pages-profile'}"
-      link-class="d-flex align-items-center"
+        v-b-modal.modal-primary
+        link-class="d-flex align-items-center"
     >
       <feather-icon
-        size="16"
-        icon="LockIcon"
-        class="mr-50"
+          size="16"
+          icon="LockIcon"
+          class="mr-50"
       />
       <span>تغییر رمز</span>
     </b-dropdown-item>
-<!--    <b-dropdown-item-->
-<!--      :to="{ name: 'pages-profile'}"-->
-<!--      link-class="d-flex align-items-center"-->
-<!--    >-->
-<!--      <feather-icon-->
-<!--        size="16"-->
-<!--        icon="UserIcon"-->
-<!--        class="mr-50"-->
-<!--      />-->
-<!--      <span>اخرین ورود: یکشنبه 20 آذر 1400</span>-->
-<!--    </b-dropdown-item>-->
+    <!--    <b-dropdown-item-->
+    <!--      :to="{ name: 'pages-profile'}"-->
+    <!--      link-class="d-flex align-items-center"-->
+    <!--    >-->
+    <!--      <feather-icon-->
+    <!--        size="16"-->
+    <!--        icon="UserIcon"-->
+    <!--        class="mr-50"-->
+    <!--      />-->
+    <!--      <span>اخرین ورود: یکشنبه 20 آذر 1400</span>-->
+    <!--    </b-dropdown-item>-->
     <b-dropdown-item
-      :to="{ name: 'pages-profile'}"
-      link-class="d-flex align-items-center"
+        :to="{ name: 'pages-profile'}"
+        link-class="d-flex align-items-center"
     >
       <feather-icon
-        size="16"
-        icon="UserIcon"
-        class="mr-50"
+          size="16"
+          icon="UserIcon"
+          class="mr-50"
       />
       <span>پروفایل</span>
     </b-dropdown-item>
-    <b-dropdown-divider />
+    <b-dropdown-divider/>
     <b-dropdown-item
-      link-class="d-flex align-items-center"
-      @click="logout"
+        link-class="d-flex align-items-center"
+        @click="logout"
     >
       <feather-icon
-        size="16"
-        icon="LogOutIcon"
-        class="mr-50"
+          size="16"
+          icon="LogOutIcon"
+          class="mr-50"
       />
       <span>خروج</span>
-    </b-dropdown-item></b-nav-item-dropdown>
+    </b-dropdown-item>
+  </b-nav-item-dropdown>
 </template>
 
 <script>

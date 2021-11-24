@@ -10,7 +10,7 @@
       :class="contentWidth === 'boxed' ? 'container p-0' : null"
     >
       <slot name="breadcrumb">
-        <app-breadcrumb />
+<!--        <app-breadcrumb />-->
       </slot>
       <div class="content-body">
         <transition

@@ -1,0 +1,348 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+"An object with an ID"
+interface Node {
+    "The ID of the object."
+    id: ID!
+}
+
+type CreateProfilePayload {
+    profile: ProfileType!
+}
+
+type CreateTransactionPayload {
+    transaction: TransactionType!
+}
+
+type CreateUser {
+    user: UserType
+}
+
+type ImageType {
+    description: String
+    id: ID!
+    image: String!
+}
+
+type Login {
+    token: String
+    user: UserType
+}
+
+type MoarefiShodeHaType {
+    firstName: String
+    lastName: String
+}
+
+type Mutation {
+    "نام کاربری و کلمه عبور معرفی شده برای ساخت کاربر جدید و اتصال آن به پروفایل درحال ساخت استفاده میشود"
+    createProfile(input: CreateProfileInput!): CreateProfilePayload
+    "ایجاد تراکنش"
+    createTransaction(input: CreateTransactionInput!): CreateTransactionPayload
+    "ایجاد کاربر"
+    createUser(input: UserInput!): CreateUser
+    deleteToken(refreshToken: String): Revoke
+    login(password: String!, username: String!): Login
+    refreshToken(token: String): Refresh
+    "Obtain JSON Web Token mutation"
+    tokenAuth(password: String!, username: String!): ObtainJSONWebToken
+    "بنابه دلایلی از اینجا نام کاربری و کلمه عبور را نمیتوان تغییر داد"
+    updateProfile(input: UpdateProfileInput!): UpdateProfilePayload
+    updateTransaction(input: UpdateTransactionInput!): UpdateTransactionPayload
+    verifyToken(token: String): Verify
+}
+
+"Obtain JSON Web Token mutation"
+type ObtainJSONWebToken {
+    payload: GenericScalar!
+    refreshExpiresIn: Int!
+    token: String!
+}
+
+"The Relay compliant `PageInfo` type, containing data necessary to paginate this connection."
+type PageInfo {
+    "When paginating forwards, the cursor to continue."
+    endCursor: String
+    "When paginating forwards, are there more items?"
+    hasNextPage: Boolean!
+    "When paginating backwards, are there more items?"
+    hasPreviousPage: Boolean!
+    "When paginating backwards, the cursor to continue."
+    startCursor: String
+}
+
+type PostType implements Node {
+    body: String
+    "The ID of the object."
+    id: ID!
+    isPublic: Boolean!
+    owner: UserType!
+    title: String!
+}
+
+type ProfileType implements Node {
+    adress: String
+    codeMeli: String
+    description: String
+    firstName: String
+    id: ID!
+    images: [ImageType]
+    lastName: String
+    moarefiShodeHa: [MoarefiShodeHaType]
+    mobile1: String
+    "نمایش جزیات محاسبه سود از تاریخ تا تاریخ برای کاربر جاری"
+    mohasebeSod(
+        "از تاریخ"
+        azDate: Date!,
+        "تا تاریخ"
+        taDate: Date!
+    ): [ProfitCalculateType]
+    "معرف"
+    presenter: String
+    "معرف id"
+    presenterId: Int
+    seporde: Float
+    shomareHesab: String
+    shomareKart: String
+    "مجموع سود از تاریخ تا تاریخ برای کاربر جاری"
+    sumOfSod(
+        "از تاریخ"
+        azDate: Date!,
+        "تا تاریخ"
+        taDate: Date!
+    ): Float
+    tel: String
+    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection!
+    user: UserType
+}
+
+type ProfileTypeConnection {
+    "Contains the nodes in this connection."
+    edges: [ProfileTypeEdge]!
+    "Pagination data for this connection."
+    pageInfo: PageInfo!
+}
+
+"A Relay edge containing a `ProfileType` and its cursor."
+type ProfileTypeEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: ProfileType
+}
+
+type ProfitCalculateType {
+    amount: Int
+    calculatedAmount: Int
+    dateFrom: Date!
+    dateTo: Date
+    days: Int
+    description: String
+    id: ID!
+    percent: Int
+}
+
+type Query {
+    lastLoggedInUsers(count: Int): [UserType]
+    me: UserType
+    "نمایش سود از تاریخ تا تاریخ برای کاربر"
+    mohasebeSod(
+        "از تاریخ"
+        azDate: Date!,
+        "تا تاریخ"
+        taDate: Date!,
+        "کابر"
+        userId: Int!
+    ): [ProfitCalculateType]
+    posts: [PostType]
+    profiles(after: String, before: String, codeMeli: String, codeMeli_Icontains: String, codeMeli_Istartswith: String, first: Int, id: Float, last: Int, lastName: String, lastName_Icontains: String, lastName_Istartswith: String, mobile1: String, mobile1_Icontains: String, mobile1_Istartswith: String, offset: Int, presenter_Id: Float): ProfileTypeConnection
+    transactionKinds: [TransactionKindType]
+    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection
+    users: [UserType]
+}
+
+type Refresh {
+    payload: GenericScalar!
+    refreshExpiresIn: Int!
+    token: String!
+}
+
+type Revoke {
+    revoked: Int!
+}
+
+type TransactionKindType {
+    id: ID!
+    title: String!
+}
+
+type TransactionType implements Node {
+    "مبلغ"
+    amount: Float!
+    dateTime: DateTime!
+    description: String
+    effectiveDate: Date
+    id: ID!
+    images: [ImageType]
+    kind: TransactionKindType!
+    percent: Int!
+    profile: ProfileType!
+}
+
+type TransactionTypeConnection {
+    "Contains the nodes in this connection."
+    edges: [TransactionTypeEdge]!
+    "Pagination data for this connection."
+    pageInfo: PageInfo!
+    totalCount: Int
+    totalSum: Float
+}
+
+"A Relay edge containing a `TransactionType` and its cursor."
+type TransactionTypeEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: TransactionType
+}
+
+type UpdateProfilePayload {
+    profile: ProfileType!
+}
+
+type UpdateTransactionPayload {
+    transaction: TransactionType!
+}
+
+"اطلاعات کاربر جاری"
+type UserType {
+    email: String!
+    firstName: String!
+    id: ID!
+    lastLogin: DateTime
+    lastName: String!
+    profile: ProfileType
+    "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
+    username: String!
+}
+
+type Verify {
+    payload: GenericScalar!
+}
+
+input CreateImageInput {
+    description: String
+    image: Upload!
+    kindId: Int
+}
+
+input CreateProfileInput {
+    adress: String
+    codeMeli: String
+    description: String
+    firstName: String
+    images: [CreateImageInput]
+    lastName: String
+    mobile1: String
+    mobile2: String
+    "id معرف"
+    presenterId: Int
+    shomareHesab: String
+    shomareKart: String
+    tel: String
+    user: UserInput!
+}
+
+"ورودی های لازم برای ایجاد تراکنش"
+input CreateTransactionInput {
+    "مبلغ"
+    amount: Float!
+    "توضیحات"
+    description: String
+    "تاریخ موثر"
+    effectiveDate: Date!
+    "پیوست ها"
+    images: [CreateImageInput]
+    "id نوع تراکنش"
+    kindId: Int!
+    "کاربر تراکنش"
+    profileId: Int!
+}
+
+input UpdateImageInput {
+    description: String
+    id: ID!
+    image: Upload
+    kindId: Int
+}
+
+input UpdateProfileInput {
+    adress: String
+    codeMeli: String
+    description: String
+    firstName: String
+    id: ID!
+    images: [UpdateImageInput]
+    lastName: String
+    mobile1: String
+    mobile2: String
+    "id معرف"
+    presenterId: Int
+    shomareHesab: String
+    shomareKart: String
+    tel: String
+    user: UserInput
+}
+
+"مبلغ را نمیتوان به روز کرد"
+input UpdateTransactionInput {
+    "توضیحات"
+    description: String
+    "تاریخ موثر"
+    effectiveDate: Date!
+    id: ID!
+    "id نوع تراکنش"
+    kindId: Int!
+    "کاربر تراکنش"
+    profileId: Int!
+}
+
+input UserInput {
+    email: String
+    id: ID
+    password: String!
+    username: String!
+}
+
+
+"""
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime
+
+"""
+The `Date` scalar type represents a Date
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar Date
+
+"""
+Create scalar that ignores normal serialization/deserialization, since
+that will be handled by the multipart request spec
+"""
+scalar Upload
+
+"""
+The `GenericScalar` scalar type represents a generic
+GraphQL scalar value that could be:
+String, Boolean, Int, Float, List or Object.
+"""
+scalar GenericScalar

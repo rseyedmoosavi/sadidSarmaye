@@ -89,7 +89,7 @@ import { onUnmounted } from '@vue/composition-api'
 import AppNavbarVerticalLayout from '@core/layouts/components/app-navbar/AppNavbarVerticalLayout.vue'
 import AppFooter from '@core/layouts/components/AppFooter.vue'
 import useAppConfig from '@core/app-config/useAppConfig'
-import { BNavbar } from 'bootstrap-vue'
+import { BNavbar,BRow,BCol } from 'bootstrap-vue'
 import LayoutContentRendererDefault from '@core/layouts/components/layout-content-renderer/LayoutContentRendererDefault.vue'
 import LayoutContentRendererLeft from '@core/layouts/components/layout-content-renderer/LayoutContentRendererLeft.vue'
 import LayoutContentRendererLeftDetached from '@core/layouts/components/layout-content-renderer/LayoutContentRendererLeftDetached.vue'
@@ -104,6 +104,8 @@ export default {
     AppFooter,
     VerticalNavMenu,
     BNavbar,
+    BRow,
+    BCol,
     LayoutContentRendererLeftDetached,
     LayoutContentRendererLeft,
     LayoutContentRendererDefault,

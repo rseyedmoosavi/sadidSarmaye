@@ -157,9 +157,26 @@ export default [
   {
     path: '/pages/profile',
     name: 'pages-profile',
-    component: () => import('@/views/pages/profile/P.vue'),
+    component: () => import('@/views/pages/profile/Profile.vue'),
     meta: {
       pageTitle: 'Profile',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Profile',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/pages/change-password',
+    name: 'pages-change-password',
+    component: () => import('@/views/pages/profile/ChangePassword'),
+    meta: {
+      pageTitle: 'تغییر کلمه عبور',
       breadcrumb: [
         {
           text: 'Pages',

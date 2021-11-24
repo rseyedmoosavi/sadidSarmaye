@@ -1,6 +1,23 @@
 <template>
   <b-container>
     <b-row>
+      <b-col>
+        <b-img src="@/assets/images/icons/dashboard/deposit.png"></b-img>
+      </b-col>
+      <b-col>
+        <b-img fluid src="@/assets/images/icons/dashboard/bardasht.png"></b-img>
+      </b-col>
+      <b-col>
+        <b-img src="@/assets/images/icons/dashboard/tajdid.png"></b-img>
+      </b-col>
+      <b-col>
+        <b-img src="@/assets/images/icons/dashboard/calc.png"></b-img>
+      </b-col>
+      <b-col>
+        <b-img src="@/assets/images/icons/dashboard/message.png"></b-img>
+      </b-col>
+    </b-row>
+    <b-row class="match-height">
       <b-col cols="4">
         <Deposits/>
       </b-col>
@@ -11,17 +28,30 @@
         <Profits/>
       </b-col>
     </b-row>
+
+    <b-modal
+        id="modal-primary"
+        modal-class="modal-primary"
+        hide-footer="true"
+        centered
+        title="تغییر کلمه عبور"
+    >
+      <ChangePassword/>
+    </b-modal>
+
   </b-container>
 </template>
 
 <script>
 import PieChart from "./component/PieChart";
+import ChangePassword from '@/views/pages/profile/ChangePassword'
 import Deposits from "@/views/dashboard/ecommerce/component/Deposits";
 import Profits from "@/views/dashboard/ecommerce/component/Profits";
-import {BRow, BCol} from 'bootstrap-vue'
+import {BRow, BCol, BImg, BCard, BCardBody, BModal, VBModal} from 'bootstrap-vue'
 import {PERSON_SEPORDE} from "@/constants/graphql";
 import useJwt from "@/auth/jwt/useJwt";
 import {initialAbility} from "@/libs/acl/config";
+import Ripple from 'vue-ripple-directive'
 
 export default {
   components: {
@@ -29,7 +59,16 @@ export default {
     Deposits,
     BRow,
     BCol,
-    PieChart
+    BImg,
+    BCard,
+    BCardBody,
+    PieChart,
+    BModal,
+    ChangePassword
+  },
+  directives: {
+    'b-modal': VBModal,
+    Ripple,
   },
   data() {
     return {
