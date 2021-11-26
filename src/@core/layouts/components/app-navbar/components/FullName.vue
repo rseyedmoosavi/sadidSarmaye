@@ -1,17 +1,20 @@
 <template>
-  <b-nav-item style="color: #4573ff">
-    {{getFullName()}}
-  </b-nav-item>
+  <div variant="success">
+    <feather-icon
+        icon="UserIcon"
+        size="21"
+    />
+    {{ getFullName() }}
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'FuuName',
-  components: {
-  },
-  methods:{
-    getFullName(){
-      return localStorage.getItem("fullName")
+  name: 'FullName',
+  components: {},
+  methods: {
+    getFullName() {
+      return localStorage.getItem('fullName')
     }
   }
 }

@@ -1,5 +1,10 @@
 <template>
-  <b-card >
+  <b-card>
+    <b-card-header>
+      <b-card-title>
+        نمودار مالی
+      </b-card-title>
+    </b-card-header>
     <vue-apex-charts
         type="pie"
         height="350"
@@ -11,22 +16,49 @@
 
 <script>
 import {
-  BCard, BCardTitle, BCardSubTitle,
+  BCard, BCardTitle, BCardHeader
 } from 'bootstrap-vue'
 import VueApexCharts from 'vue-apexcharts'
-import apexChatData from '@/views/charts-and-maps/charts/apex-chart/apexChartData'
+import gql from 'graphql-tag'
 
 export default {
   components: {
     VueApexCharts,
     BCard,
     BCardTitle,
-    BCardSubTitle,
+    BCardHeader
+  },
+  apollo: {
+    allDataSeries: {
+      query : gql`
+        {
+          profiles(id: 2) {
+            edges {
+              node {
+                deposit:transactions(kind_Id: 1) {
+                  totalSum
+                }
+                profit:transactions(kind_Id: 3) {
+                  totalSum
+                }
+                withdrawal:transactions(kind_Id: 2) {
+                  totalSum
+                }
+              }
+            }
+          }
+        }`
+    }
   },
   data() {
+    let deposit = 1,
+        profit = 2,
+        withdrawal = 3,
+        allDataSeries=[]
     return {
+
       donutChart: {
-        series: [85, 16, 50],
+        series: [deposit, profit, withdrawal],
         chartOptions: {
           legend: {
             show: true,
@@ -42,7 +74,6 @@ export default {
           dataLabels: {
             enabled: true,
             formatter(val) {
-              // eslint-disable-next-line radix
               return `${parseInt(val)}%`
             },
           },
@@ -59,8 +90,7 @@ export default {
                     fontSize: '1rem',
                     fontFamily: 'yekan',
                     formatter(val) {
-                      // eslint-disable-next-line radix
-                      return `${parseInt(val)}%`
+                      return `${parseInt(val)} میلیون`
                     },
                   },
                 },

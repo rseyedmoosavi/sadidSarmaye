@@ -1,21 +1,7 @@
 <template>
   <b-container>
     <b-row>
-      <b-col>
-        <b-img src="@/assets/images/icons/dashboard/deposit.png"></b-img>
-      </b-col>
-      <b-col>
-        <b-img fluid src="@/assets/images/icons/dashboard/bardasht.png"></b-img>
-      </b-col>
-      <b-col>
-        <b-img src="@/assets/images/icons/dashboard/tajdid.png"></b-img>
-      </b-col>
-      <b-col>
-        <b-img src="@/assets/images/icons/dashboard/calc.png"></b-img>
-      </b-col>
-      <b-col>
-        <b-img src="@/assets/images/icons/dashboard/message.png"></b-img>
-      </b-col>
+      <Icons/>
     </b-row>
     <b-row class="match-height">
       <b-col cols="4">
@@ -38,7 +24,6 @@
     >
       <ChangePassword/>
     </b-modal>
-
   </b-container>
 </template>
 
@@ -52,9 +37,11 @@ import {PERSON_SEPORDE} from "@/constants/graphql";
 import useJwt from "@/auth/jwt/useJwt";
 import {initialAbility} from "@/libs/acl/config";
 import Ripple from 'vue-ripple-directive'
+import Icons from '@/views/dashboard/ecommerce/component/Icons'
 
 export default {
   components: {
+    Icons,
     Profits,
     Deposits,
     BRow,

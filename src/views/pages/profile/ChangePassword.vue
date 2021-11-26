@@ -1,71 +1,76 @@
 <template>
   <b-container>
-        <b-row class="match-height">
-          <b-col cols="6">
-            <b-row>
-              <b-col cols="12">
-                <b-form-group
-                    label="کلمه عبور فعلی"
-                    label-for="old-password"
-                >
-                  <b-form-input
-                      id="old-password"
-                      v-model="oldPassword"
-                      placeholder="کلمه عبور فعلی"
-                  />
-                </b-form-group>
-              </b-col>
-              <b-col cols="12">
-                <b-form-group
-                    label="کلمه عبور جدید"
-                    label-for="password"
-                >
-                  <b-form-input
-                      id="password"
-                      @input="checkPassword"
-                      v-model="password"
-                      placeholder="کلمه عبور جدید"
-                  />
-                </b-form-group>
-              </b-col>
-              <b-col cols="12">
-                <b-form-group
-                    label="تکرار کلمه عبور جدید"
-                    label-for="confirm-password"
-                >
-                  <b-form-input
-                      id="confirm-password"
-                      @input="checkConfirmPassword"
-                      v-model="checkPassword"
-                      placeholder="تکرار کلمه عبور جدید"
-                  />
-                </b-form-group>
-              </b-col>
-            </b-row>
+    <b-row class="match-height">
+      <b-col cols="6">
+        <b-row>
+          <b-col cols="12">
+            <b-form-group
+                label="کلمه عبور فعلی"
+                label-for="old-password"
+            >
+              <b-form-input
+                  id="old-password"
+                  v-model="oldPassword"
+                  placeholder="کلمه عبور فعلی"
+              />
+            </b-form-group>
           </b-col>
-          <b-col cols="6">
-            <ul>
-              <li v-bind:class="{ is_valid: contains_eight_characters }" class="passText">حد اقل 8 کاراکتر</li>
-              <li v-bind:class="{ is_valid: contains_number }" class="passText">دارا بودن عدد</li>
-              <li v-bind:class="{ is_valid: contains_uppercase }" class="passText">داشتن حرف بزرگ انگلیسی</li>
-              <li v-bind:class="{ is_valid: contains_special_character }" class="passText">داشتن کاراکتر خاص مثل "@,#,$
-                و..."
-              </li>
-              <li v-bind:class="{ is_valid: equal_pass_and_confirm }" class="passText">یکسان بودن کلمه عبور جدید و تکرار آن</li>
-            </ul>
-
-            <div class="checkmark_container" v-bind:class="{ show_checkmark: valid_password }">
-              <svg width="50%" height="50%" viewBox="0 0 140 100">
-                <path class="checkmark" v-bind:class="{ checked: valid_password }" d="M10,50 l25,40 l95,-70"/>
-              </svg>
-            </div>
+          <b-col cols="12">
+            <b-form-group
+                label="کلمه عبور جدید"
+                label-for="password"
+            >
+              <b-form-input
+                  type="password"
+                  id="password"
+                  @input="checkPassword"
+                  v-model="password"
+                  placeholder="کلمه عبور جدید"
+              />
+            </b-form-group>
           </b-col>
-          <b-col>
-            <b-button variant="primary" :disabled="!valid_password">
-              ذخیره
-            </b-button>
+          <b-col cols="12">
+            <b-form-group
+                label="تکرار کلمه عبور جدید"
+                label-for="confirm-password"
+            >
+              <b-form-input
+                  type="password"
+                  id="confirm-password"
+                  @input="checkPassword"
+                  v-model="confirmPassword"
+                  placeholder="تکرار کلمه عبور جدید"
+              />
+            </b-form-group>
           </b-col>
         </b-row>
+      </b-col>
+      <b-col cols="6">
+        <small>
+          <ul>
+            <li v-bind:class="{ is_valid: contains_eight_characters }" class="passText">حد اقل 8 کاراکتر</li>
+            <li v-bind:class="{ is_valid: contains_number }" class="passText">دارا بودن عدد</li>
+            <li v-bind:class="{ is_valid: contains_uppercase }" class="passText">داشتن حرف بزرگ انگلیسی</li>
+            <li v-bind:class="{ is_valid: contains_special_character }" class="passText">داشتن کاراکتر خاص مثل "@,#,$
+              و..."
+            </li>
+            <li v-bind:class="{ is_valid: equal_pass_and_confirm }" class="passText">یکسان بودن کلمه عبور جدید و تکرار
+              آن
+            </li>
+          </ul>
+        </small
+        <div class="checkmark_container" v-bind:class="{ show_checkmark: valid_password }">
+          <svg width="50%" height="50%" viewBox="0 0 140 100">
+            <path class="checkmark" v-bind:class="{ checked: valid_password }" d="M10,50 l25,40 l95,-70"/>
+          </svg>
+        </div>
+      </b-col>
+      <b-col>
+        <b-button variant="primary" :disabled="!valid_password">
+          ذخیره
+        </b-button>
+      </b-col>
+    </b-row>
 
   </b-container>
 </template>

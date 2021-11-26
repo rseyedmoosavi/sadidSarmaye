@@ -1,12 +1,11 @@
 <template>
-  <b-nav-item>
+  <div>
     <feather-icon
         icon="CalendarIcon"
         size="21"
-        variant="success"
     />
     {{getDate()}}
-  </b-nav-item>
+  </div>
 </template>
 <script>
 import moment from 'jalali-moment'
