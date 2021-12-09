@@ -12,7 +12,7 @@ export default [
   {
     path: '/profile/create',
     name: 'create-profile',
-    component: () => import('@/views/forms/form-validation/FormCreateProfile.vue'),
+    component: () => import('@/views/forms/form-wizard/FormCreateProfile'),
   },
   {
     path: '/profile',

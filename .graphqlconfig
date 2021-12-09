@@ -4,7 +4,7 @@
   "extensions": {
     "endpoints": {
       "Remote SWAPI GraphQL Endpoint": {
-        "url": "https://sadid.iran.liara.run/api/graphql",
+        "url": "https://sadidsarmaye.iran.liara.run/api/graphql",
         "headers": {
           "user-agent": "JS GraphQL"
         },

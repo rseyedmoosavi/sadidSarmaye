@@ -1,16 +1,20 @@
 <template>
   <b-container>
     <b-row>
-      <Icons/>
+      <b-col cols="12">
+        <b-card>
+          <Icons/>
+        </b-card>
+      </b-col>
     </b-row>
     <b-row class="match-height">
-      <b-col cols="4">
+      <b-col sm="12" md="12" lg="4" xl="4">
         <Deposits/>
       </b-col>
-      <b-col cols="4">
+      <b-col  sm="12" md="12" lg="4" xl="4">
         <PieChart/>
       </b-col>
-      <b-col cols="4">
+      <b-col sm="12" md="12" lg="4" xl="4">
         <Profits/>
       </b-col>
     </b-row>
@@ -24,18 +28,20 @@
     >
       <ChangePassword/>
     </b-modal>
+
+
   </b-container>
 </template>
 
 <script>
-import PieChart from "./component/PieChart";
+import PieChart from './component/PieChart'
 import ChangePassword from '@/views/pages/profile/ChangePassword'
-import Deposits from "@/views/dashboard/ecommerce/component/Deposits";
-import Profits from "@/views/dashboard/ecommerce/component/Profits";
-import {BRow, BCol, BImg, BCard, BCardBody, BModal, VBModal} from 'bootstrap-vue'
-import {PERSON_SEPORDE} from "@/constants/graphql";
-import useJwt from "@/auth/jwt/useJwt";
-import {initialAbility} from "@/libs/acl/config";
+import Deposits from '@/views/dashboard/ecommerce/component/Deposits'
+import Profits from '@/views/dashboard/ecommerce/component/Profits'
+import { BRow, BCol, BImg, BCard, BCardBody, BModal, VBModal } from 'bootstrap-vue'
+import { PERSON_SEPORDE } from '@/constants/graphql'
+import useJwt from '@/auth/jwt/useJwt'
+import { initialAbility } from '@/libs/acl/config'
 import Ripple from 'vue-ripple-directive'
 import Icons from '@/views/dashboard/ecommerce/component/Icons'
 
@@ -51,7 +57,7 @@ export default {
     BCardBody,
     PieChart,
     BModal,
-    ChangePassword
+    ChangePassword,
   },
   directives: {
     'b-modal': VBModal,
@@ -74,7 +80,7 @@ export default {
       localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
       localStorage.removeItem('userData')
       this.$ability.update(initialAbility)
-      this.$router.push({name: 'auth-login'})
+      this.$router.push({ name: 'auth-login' })
     }
   },
   created() {
@@ -83,11 +89,13 @@ export default {
     }
     this.$apollo.mutate({
       mutation: PERSON_SEPORDE,
-    }).then((result) => {
-      this.newData = result.data.me.profile;
-    }).catch((error) => {
-      this.logout();
     })
+        .then((result) => {
+          this.newData = result.data.me.profile
+        })
+        .catch((error) => {
+          this.logout()
+        })
   },
 }
 </script>

@@ -11,6 +11,12 @@ interface Node {
     id: ID!
 }
 
+type ChangePassword {
+    errors: [String]!
+    ok: Boolean!
+    token: String
+}
+
 type CreateProfilePayload {
     profile: ProfileType!
 }
@@ -21,6 +27,12 @@ type CreateTransactionPayload {
 
 type CreateUser {
     user: UserType
+}
+
+type GroupType {
+    name: String!
+    permissions: [PermissionType!]!
+    users: [UserType]
 }
 
 type ImageType {
@@ -34,12 +46,27 @@ type Login {
     user: UserType
 }
 
+type LoginOTP {
+    errors: [String]!
+    ok: Boolean!
+    token: String
+    user: UserType
+}
+
 type MoarefiShodeHaType {
     firstName: String
     lastName: String
 }
 
 type Mutation {
+    changePassword(
+        "کلمه عبور قدیمی"
+        oldPassword: String!,
+        "کلمه عبور جدید"
+        password1: String!,
+        "تکرار کلمه عبور جدید"
+        password2: String!
+    ): ChangePassword
     "نام کاربری و کلمه عبور معرفی شده برای ساخت کاربر جدید و اتصال آن به پروفایل درحال ساخت استفاده میشود"
     createProfile(input: CreateProfileInput!): CreateProfilePayload
     "ایجاد تراکنش"
@@ -48,7 +75,10 @@ type Mutation {
     createUser(input: UserInput!): CreateUser
     deleteToken(refreshToken: String): Revoke
     login(password: String!, username: String!): Login
+    loginOtp(otp: String, password: String!, username: String!): LoginOTP
     refreshToken(token: String): Refresh
+    "تایید کابران ثبت نام کرده"
+    stuffConfirmProfile(input: ConfirmInput!): StuffConfirmProfile
     "Obtain JSON Web Token mutation"
     tokenAuth(password: String!, username: String!): ObtainJSONWebToken
     "بنابه دلایلی از اینجا نام کاربری و کلمه عبور را نمیتوان تغییر داد"
@@ -74,6 +104,11 @@ type PageInfo {
     hasPreviousPage: Boolean!
     "When paginating backwards, the cursor to continue."
     startCursor: String
+}
+
+type PermissionType {
+    codename: String!
+    name: String!
 }
 
 type PostType implements Node {
@@ -109,6 +144,9 @@ type ProfileType implements Node {
     seporde: Float
     shomareHesab: String
     shomareKart: String
+    "مرحله در گردش کار"
+    state: String
+    stateHistory: [WorkFlowHistoryType]
     "مجموع سود از تاریخ تا تاریخ برای کاربر جاری"
     sumOfSod(
         "از تاریخ"
@@ -148,6 +186,8 @@ type ProfitCalculateType {
 }
 
 type Query {
+    "گروه های دسترسی"
+    groups: [GroupType]
     lastLoggedInUsers(count: Int): [UserType]
     me: UserType
     "نمایش سود از تاریخ تا تاریخ برای کاربر"
@@ -159,8 +199,9 @@ type Query {
         "کابر"
         userId: Int!
     ): [ProfitCalculateType]
+    permissions: [PermissionType]
     posts: [PostType]
-    profiles(after: String, before: String, codeMeli: String, codeMeli_Icontains: String, codeMeli_Istartswith: String, first: Int, id: Float, last: Int, lastName: String, lastName_Icontains: String, lastName_Istartswith: String, mobile1: String, mobile1_Icontains: String, mobile1_Istartswith: String, offset: Int, presenter_Id: Float): ProfileTypeConnection
+    profiles(after: String, before: String, codeMeli: String, codeMeli_Icontains: String, codeMeli_Istartswith: String, first: Int, id: Float, last: Int, lastName: String, lastName_Icontains: String, lastName_Istartswith: String, mobile1: String, mobile1_Icontains: String, mobile1_Istartswith: String, offset: Int, presenter_Id: Float, state_In: [String]): ProfileTypeConnection
     transactionKinds: [TransactionKindType]
     transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection
     users: [UserType]
@@ -174,6 +215,12 @@ type Refresh {
 
 type Revoke {
     revoked: Int!
+}
+
+"تایید کابران ثبت نام کرده"
+type StuffConfirmProfile {
+    errors: [String]!
+    ok: Boolean!
 }
 
 type TransactionKindType {
@@ -227,12 +274,33 @@ type UserType {
     lastLogin: DateTime
     lastName: String!
     profile: ProfileType
+    "Specific permissions for this user."
+    userPermissions: [PermissionType!]!
     "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
     username: String!
 }
 
 type Verify {
     payload: GenericScalar!
+}
+
+type WorkFlowHistoryType {
+    by: UserType
+    description: String
+    id: ID!
+    objectId: Int!
+    sourceState: String
+    state: String!
+    timestamp: DateTime!
+    transition: String!
+}
+
+input ConfirmInput {
+    "درصورت تایید true در غیرآن false"
+    confirmed: Boolean!
+    "توضیحات"
+    description: String
+    id: Int!
 }
 
 input CreateImageInput {

@@ -52,7 +52,7 @@ require('@/assets/scss/style.scss')
 
 const httpLink = new HttpLink({
   // You should use an absolute URL here
-  uri: 'https://sadid.iran.liara.run/api/graphql'
+  uri: 'https://sadidsarmaye.iran.liara.run/api/graphql'
   // uri: 'https://countries.trevorblades.com/'
 })
 

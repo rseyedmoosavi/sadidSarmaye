@@ -284,8 +284,11 @@ export default {
               this.result=result
               this.showSms = true
             }).catch((error) => {
+              localStorage.removeItem(GC_USER_ID)
+              localStorage.removeItem(GC_AUTH_TOKEN)
+              localStorage.removeItem(GC_USER_DATA)
+              localStorage.removeItem("fullName")
               alert(error);
-              console.log(error)
             })
           }
         }
@@ -293,11 +296,14 @@ export default {
     },
     login2Site() {
       if (this.smsNo == 10) {
-
         const id = this.result.data.login.user.id
         const token = this.result.data.login.token
         const fullName = this.result.data.login.user.profile.firstName + ' ' + this.result.data.login.user.profile.lastName
-        this.saveUserData(id, token,fullName)
+        try {
+          this.saveUserData(id, token,fullName)
+        }catch (e) {
+          console.log(e)
+        }
         this.$router.push({path: '/'}).then(() => {
           this.$toast({
             component: ToastificationContent,
@@ -329,7 +335,7 @@ export default {
       localStorage.setItem("fullName", fullName)
       this.$root.$data.userId = localStorage.getItem(GC_USER_ID)
       this.$ability.update(userData.ability)
-      this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)
+      // this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)
     }
   },
 }
