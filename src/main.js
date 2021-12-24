@@ -1,6 +1,7 @@
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
+import { createUploadLink } from 'apollo-upload-client'
 import VueApollo from 'vue-apollo'
 import Vue from 'vue'
 import { ToastPlugin, ModalPlugin } from 'bootstrap-vue'
@@ -50,12 +51,11 @@ require('@core/scss/core.scss')
 // import assets styles
 require('@/assets/scss/style.scss')
 
+
 const httpLink = new HttpLink({
   // You should use an absolute URL here
   uri: 'https://sadidsarmaye.iran.liara.run/api/graphql'
-  // uri: 'https://countries.trevorblades.com/'
 })
-
 const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
   const token = localStorage.getItem(GC_AUTH_TOKEN)
@@ -67,9 +67,10 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 
   return forward(operation)
 })
-
+const token = localStorage.getItem(GC_AUTH_TOKEN)
 const apolloClient = new ApolloClient({
-  link: authMiddleware.concat(httpLink),
+  // link: authMiddleware.concat(httpLink),
+  link: createUploadLink({uri:'https://sadidsarmaye.iran.liara.run/api/graphql',headers:{authorization: token ? `JWT ${token}` : null}}),
   cache: new InMemoryCache(),
   connectToDevTools: true
 })

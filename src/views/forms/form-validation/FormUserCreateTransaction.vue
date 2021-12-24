@@ -5,8 +5,9 @@
     <!-- form -->
     <b-form>
       <b-row>
+
+        <!-- ********************* -->
         <b-col md="12">
-          <!-- ********************* -->
           <b-form-group>
             <b-input-group>
               <b-form-input
@@ -21,42 +22,106 @@
               </b-input-group-append>
             </b-input-group>
           </b-form-group>
-          <!-- ********************* -->
+        </b-col>
+        <!-- ********************* -->
 
-          <!-- ******************** -->
-          <b-form-group>
-            <date-picker label="تاریخ" v-model="effectiveDate" :auto-submit="true"/>
-          </b-form-group>
-          <!-- ********************* -->
-
-          <!-- ******************** -->
-          <b-form-group>
-            <b-form-input
-                v-model="description"
-                placeholder="توضیحات"
-            />
-          </b-form-group>
-          <!-- ********************* -->
+        <!-- ******************** -->
+        <b-col md="12">
+          <b-row>
+            <b-col md="6">
+              <b-form-group>
+                <date-picker label="تاریخ" @input="multipleDate" v-model="effectiveDate" :auto-submit="true"/>
+              </b-form-group>
+            </b-col>
+            <b-col md="6">
+              <b-form-group>
+                <b-form-input
+                    v-model="time"
+                    placeholder="ساعت"
+                />
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </b-col>
+        <!-- ********************* -->
+        <!-- ******************** -->
+        <b-col md="12">
+          <b-row>
+            <b-col md="6">
+              <b-form-group>
+                <b-form-input
+                    v-model="shomarePeigiry"
+                    placeholder="شماره پیگیری"
+                />
+              </b-form-group>
+            </b-col>
+            <b-col md="6">
+              <b-form-group>
+                <b-form-input
+                    v-model="description"
+                    placeholder="توضیحات"
+                />
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </b-col>
+        <!-- ********************* -->
+        <!-- ********************* -->
+        <b-col md="12">
+          <b-row>
+            <b-col md="4">
+              <b-form-group>
+                <b-form-select v-model="modateGharardad" @input="multipleDate" :options="modateGharardadOptions"></b-form-select>
+              </b-form-group>
+            </b-col>
+            <b-col md="4">
+              <b-form-group>
+                <b-form-input
+                    v-model="startDate"
+                    placeholder="تاریخ شروع"
+                    title="تاریخ شروع"
+                    v-b-tooltip.hover.v-info
+                    disabled="disabled"
+                />
+              </b-form-group>
+            </b-col>
+            <b-col md="4">
+              <b-form-group>
+                <b-form-input
+                    v-model="endDate"
+                    placeholder="تاریخ پایان"
+                    title="تاریخ پایان"
+                    v-b-tooltip.hover.v-info
+                    disabled="disabled"
+                />
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </b-col>
+        <!-- ********************* -->
+        <b-col md="12">
           <b-form-group label="نوع واریز">
             <b-form-radio-group
                 v-model="imageKindSelected"
                 :options="imageKind"
-                :aria-describedby="ariaDescribedby"
                 name="radio-options"
             ></b-form-radio-group>
           </b-form-group>
+        </b-col>
+        <b-col md="12">
           <b-form-group>
             <b-input-group>
               <b-form-file
+                  id="file1"
                   placeholder="تصویر سند را انتخاب کنید..."
                   drop-placeholder="اینجا رها کنید..."
                   v-model="image"
-                  name="file"
+                  @change="forTest"
               />
             </b-input-group>
           </b-form-group>
-          <!-- ********************* -->
         </b-col>
+        <!-- ********************* -->
 
         <b-col cols="12">
           <b-button
@@ -89,12 +154,10 @@ import BCardCode from '@core/components/b-card-code'
 import Num2persian from 'num2persian'
 import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
-// import {ValidationProvider, ValidationObserver} from 'vee-validate'
 import {
   BInputGroup, BFormInput, BFormGroup, BForm, BRow, BCol, BButton, BCardText, BInputGroupPrepend, BInputGroupAppend,
-  BDropdown, BDropdownItem, BDropdownDivider, BFormFile, VBPopover, BFormRadioGroup
+  BDropdown, BDropdownItem, BDropdownDivider, BFormFile, VBPopover, BFormRadioGroup, BFormSelect, VBTooltip
 } from 'bootstrap-vue'
-// import {required, email} from '@validations'
 import { CREATE_TRANSACTION, GET_ALL_PRESENTER } from '@/constants/graphql'
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 import moment from 'jalali-moment'
@@ -102,6 +165,7 @@ import moment from 'jalali-moment'
 export default {
   directives: {
     'b-popover': VBPopover,
+    'b-tooltip': VBTooltip,
     Ripple,
   },
   props: [
@@ -135,6 +199,7 @@ export default {
     BRow,
     BCol,
     BButton,
+    BFormSelect,
     vSelect,
     BInputGroup,
     BInputGroupPrepend,
@@ -150,6 +215,7 @@ export default {
   data() {
     return {
       persianPrice: 'صفر ریال',
+      time: null,
       selected: {
         title: 'مرتضی مطهری',
         value: 2
@@ -207,6 +273,20 @@ export default {
       effectiveDate: null,
       kindId: [],
       description: '',
+      shomarePeigiry: null,
+      modateGharardad: 6,
+      modateGharardadOptions: [
+        {
+          value: 6,
+          text: '6 ماهه'
+        },
+        {
+          value: 12,
+          text: '12 ماهه'
+        }
+      ],
+      startDate: null,
+      endDate: null
     }
   },
   methods: {
@@ -225,6 +305,15 @@ export default {
             .format('YYYY-MM-DD')
       }
     },
+    multipleDate() {
+      let m = moment(this.effectiveDate, 'jYYYY/jM/jD')
+      m.locale('fa');
+      let addDay= (m.format("dd")==='پ'?2:1)
+      let startDate = m.add(addDay, 'day').locale('fa').format("yyyy-M-D")
+      let endDate = m.add(this.modateGharardad, 'month').locale('fa').format("yyyy-M-D")
+      this.startDate=startDate
+      this.endDate=endDate
+    },
     validationForm() {
       if (!this.selected.value) {
         this.makeToast('لطفا مشتری را انتخاب کنید', 'danger')
@@ -239,26 +328,16 @@ export default {
       } else if (this.image === null) {
         this.makeToast('لطفا تصویر سند را وارد نمایید', 'danger')
       } else {
-        const {
-          mimetype,
-          stream
-        } = this.image
-        console.clear()
-        console.log(document.getElementsByName('file').value)
+
         // return 0
         this.$apollo.mutate({
           mutation: CREATE_TRANSACTION,
           variables: {
-            input: {
-              profileId: this.selected.value,
-              amount: this.amount,
-              effectiveDate: this.toGregorianDate(this.effectiveDate),
-              kindId: this.kindSelected.value,
-              description: this.description,
-              images: {
-                image: document.getElementsByName('file').value,
-              }
-            }
+            profileId: this.selected.value,
+            effectiveDate: this.toGregorianDate(this.effectiveDate),
+            amount: this.amount,
+            kindId: this.kindSelected.value,
+            file: document.getElementById('file1').files[0],
           }
         })
             .then((result) => {
@@ -267,6 +346,7 @@ export default {
             })
             .catch((result) => {
               alert('catch')
+              console.log(result)
             })
       }
     },

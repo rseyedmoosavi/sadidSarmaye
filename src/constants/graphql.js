@@ -165,6 +165,41 @@ export const DEPOSIT_FOR_HOME_PAGE = gql`
         }
     }
 `
+export const PROFILE_FOR_CONFIRM_USER = gql`
+    query confirmUserProfile{
+      me{
+        profile{
+          id
+          firstName
+          lastName
+          fatherName
+          idNumber
+          nationalCode
+          birthDate
+          birthPlace{
+            name
+          }
+          city{
+            name
+          }
+          postalCode
+          address
+          homePhone
+          officePhone
+          mobile1
+          mobile2
+          email
+          accountNumber
+          sheba
+          cardNumber
+          images{
+            image
+          }
+        }
+      }
+    }
+`
+
 export const PROFITS_FOR_HOME_PAGE = gql`
     query transactions($offset:Int,$first:Int,$kindId:Float){
         transactions(offset: $offset,first:$first,kind_Id:$kindId) {
@@ -190,7 +225,7 @@ export const PROFITS_FOR_HOME_PAGE = gql`
     }
 `
 
-export const GET_TRANSACTION=gql`
+export const GET_TRANSACTION = gql`
     query getTransaction($id:Float){
         transactions(id:$id){
             edges{
@@ -233,6 +268,29 @@ export const TRANSACTION_SEARCH = gql`
     }
 
 `
+export const GET_PROVINCE = gql`
+    query getProvince {
+        provinces {
+            value:id
+            text:name
+        }
+    }
+
+`
+export const GET_CITIES = gql`
+    query getCity($provinceID: Float) {
+        cities(province_Id: $provinceID) {
+            edges {
+                node {
+                    text:name
+                    value:id
+                }
+            }
+        }
+    }
+
+
+`
 
 export const LOGIN = gql`
     # 2
@@ -254,7 +312,7 @@ export const LOGIN = gql`
     }
 `
 
-export const CREATE_PROFILE = gql`
+export const CREATE_PROFILE_OLD = gql`
     mutation createProfile($input: CreateProfileInput!){
         createProfile(
             input:$input
@@ -265,8 +323,123 @@ export const CREATE_PROFILE = gql`
         }
     }
 `
+export const CREATE_PROFILE = gql`
+    mutation createProfile(
+        $username:String!
+        $password:String!
+        $firstName :String
+        $lastName :String
+        $fatherName :String
+        $birthPlaceId :Int
+        $nationalCode :String
+        $idNumber :String
+        $birthDate :String
+        $accountNumber :String
+        $sheba :String
+        $cardNumber :String
+        $bankId :Int
+        $address :String
+        $cityId :Int
+        $postalCode :String
+        $tel :String
+        $homePhone :String
+        $officePhone :String
+        $mobile1 :String
+        $mobile2 :String
+        $email :String
+        $description :String
+        $file: Upload!
+    ){
+        createProfile(
+            input: {
+                user: {
+                    email: $email
+                    username: $username
+                    password: $password
+                }
+                firstName: $firstName
+                lastName: $lastName
+                fatherName: $fatherName
+                birthPlaceId: $birthPlaceId
+                nationalCode: $nationalCode
+                idNumber: $idNumber
+                birthDate: $birthDate
+                accountNumber: $accountNumber
+                sheba: $sheba
+                cardNumber: $cardNumber
+                bankId: $bankId
+                address: $address
+                cityId: $cityId
+                postalCode: $postalCode
+                tel: $tel
+                homePhone: $homePhone
+                officePhone: $officePhone
+                mobile1: $mobile1
+                mobile2: $mobile2
+                email: $email
+                images: [{
+                    image: $file
+                    kindId: 1
+                }]
+                description: $description
+
+            }
+        ){
+            profile{
+                id
+            }
+        }
+    }
+`
 export const CREATE_TRANSACTION = gql`
+    mutation (
+        $profileId: Int!
+        $effectiveDate: Date!
+        $amount: Float!
+        $kindId: Int!
+        $file: Upload!
+    ) {
+        createTransaction(
+            input: {
+                kindId: $kindId
+                profileId: $profileId
+                effectiveDate: $effectiveDate
+                amount: $amount
+                images: [{ description: "hi transaction 1234 ", image: $file}]
+            }
+        ) {
+            transaction {
+                id
+                amount
+                effectiveDate
+                kind {
+                    title
+                }
+                images {
+                    id
+                    description
+                    image
+                }
+            }
+        }
+    }
+
+`
+
+export const CREATE_TRANSACTION_OLD = gql`
     mutation createTransaction($input: CreateTransactionInput!) {
+        createTransaction(input:$input){
+            transaction {
+                id
+                images{
+                    image
+                }
+            }
+        }
+    }
+`
+export const CREATE_TRANSACTION_temp = gql`
+    mutation createTransaction($input: CreateTransactionInput!,$file:Upload!) {
         createTransaction(input:$input){
             transaction {
                 profile {

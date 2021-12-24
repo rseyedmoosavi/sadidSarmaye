@@ -17,12 +17,37 @@ type ChangePassword {
     token: String
 }
 
+type CityType implements Node {
+    id: ID!
+    name: String!
+}
+
+type CityTypeConnection {
+    "Contains the nodes in this connection."
+    edges: [CityTypeEdge]!
+    "Pagination data for this connection."
+    pageInfo: PageInfo!
+}
+
+"A Relay edge containing a `CityType` and its cursor."
+type CityTypeEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: CityType
+}
+
 type CreateProfilePayload {
     profile: ProfileType!
 }
 
 type CreateTransactionPayload {
     transaction: TransactionType!
+}
+
+type CreateTransactionRequest {
+    errors: [String]!
+    ok: Boolean!
 }
 
 type CreateUser {
@@ -58,6 +83,11 @@ type MoarefiShodeHaType {
     lastName: String
 }
 
+type MohasebeSodForAllSummaryType {
+    amount: Float
+    profile: ProfileType
+}
+
 type Mutation {
     changePassword(
         "کلمه عبور قدیمی"
@@ -71,11 +101,18 @@ type Mutation {
     createProfile(input: CreateProfileInput!): CreateProfilePayload
     "ایجاد تراکنش"
     createTransaction(input: CreateTransactionInput!): CreateTransactionPayload
+    createTransactionRequest(description: String, kindId: Int!, transactionId: Int!): CreateTransactionRequest
     "ایجاد کاربر"
     createUser(input: UserInput!): CreateUser
     deleteToken(refreshToken: String): Revoke
     login(password: String!, username: String!): Login
     loginOtp(otp: String, password: String!, username: String!): LoginOTP
+    "مرحله بعد در گردش کار پروفایل"
+    profileWorkflowTransition(
+        id: Int!,
+        "transition"
+        transition: String!
+    ): ProfileWorkFlowTransition
     refreshToken(token: String): Refresh
     "تایید کابران ثبت نام کرده"
     stuffConfirmProfile(input: ConfirmInput!): StuffConfirmProfile
@@ -121,15 +158,24 @@ type PostType implements Node {
 }
 
 type ProfileType implements Node {
-    adress: String
-    codeMeli: String
+    accountNumber: String
+    address: String
+    birthDate: Date
+    birthPlace: CityType
+    cardNumber: String
+    city: CityType
     description: String
+    email: String
+    fatherName: String
     firstName: String
+    homePhone: String
     id: ID!
+    idNumber: String
     images: [ImageType]
     lastName: String
     moarefiShodeHa: [MoarefiShodeHaType]
     mobile1: String
+    mobile2: String
     "نمایش جزیات محاسبه سود از تاریخ تا تاریخ برای کاربر جاری"
     mohasebeSod(
         "از تاریخ"
@@ -137,13 +183,16 @@ type ProfileType implements Node {
         "تا تاریخ"
         taDate: Date!
     ): [ProfitCalculateType]
+    nationalCode: String
+    officePhone: String
+    postalCode: String
     "معرف"
     presenter: String
     "معرف id"
     presenterId: Int
+    provinceId: Int
     seporde: Float
-    shomareHesab: String
-    shomareKart: String
+    sheba: String
     "مرحله در گردش کار"
     state: String
     stateHistory: [WorkFlowHistoryType]
@@ -157,6 +206,8 @@ type ProfileType implements Node {
     tel: String
     transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection!
     user: UserType
+    "مرحله بعدی در گردش کار"
+    workflowTransition: [String]
 }
 
 type ProfileTypeConnection {
@@ -174,6 +225,11 @@ type ProfileTypeEdge {
     node: ProfileType
 }
 
+type ProfileWorkFlowTransition {
+    errors: [String]!
+    ok: Boolean!
+}
+
 type ProfitCalculateType {
     amount: Int
     calculatedAmount: Int
@@ -183,9 +239,17 @@ type ProfitCalculateType {
     description: String
     id: ID!
     percent: Int
+    profile: ProfileType!
+}
+
+type ProvinceType {
+    cites(after: String, before: String, first: Int, last: Int, name_Icontains: String, name_Istartswith: String, offset: Int, province_Id: Float): CityTypeConnection!
+    id: ID!
+    name: String!
 }
 
 type Query {
+    cities(after: String, before: String, first: Int, last: Int, name_Icontains: String, name_Istartswith: String, offset: Int, province_Id: Float): CityTypeConnection
     "گروه های دسترسی"
     groups: [GroupType]
     lastLoggedInUsers(count: Int): [UserType]
@@ -194,15 +258,36 @@ type Query {
     mohasebeSod(
         "از تاریخ"
         azDate: Date!,
-        "تا تاریخ"
-        taDate: Date!,
         "کابر"
-        userId: Int!
+        profileId: Int!,
+        "تا تاریخ"
+        taDate: Date!
     ): [ProfitCalculateType]
+    "خروجی اکسل سود از تاریخ تا تاریخ برای  همه کاربران"
+    mohasebeSodAllExportExcel(
+        "از تاریخ"
+        azDate: Date!,
+        first: Int,
+        offset: Int,
+        "تا تاریخ"
+        taDate: Date!
+    ): String
+    "نمایش سود از تاریخ تا تاریخ برای  همه کاربران"
+    mohasebeSodForAllSummary(
+        "از تاریخ"
+        azDate: Date!,
+        first: Int,
+        offset: Int,
+        "تا تاریخ"
+        taDate: Date!
+    ): [MohasebeSodForAllSummaryType]
     permissions: [PermissionType]
     posts: [PostType]
-    profiles(after: String, before: String, codeMeli: String, codeMeli_Icontains: String, codeMeli_Istartswith: String, first: Int, id: Float, last: Int, lastName: String, lastName_Icontains: String, lastName_Istartswith: String, mobile1: String, mobile1_Icontains: String, mobile1_Istartswith: String, offset: Int, presenter_Id: Float, state_In: [String]): ProfileTypeConnection
+    profiles(after: String, before: String, first: Int, id: Float, last: Int, lastName: String, lastName_Icontains: String, lastName_Istartswith: String, mobile1: String, mobile1_Icontains: String, mobile1_Istartswith: String, nationalCode: String, nationalCode_Icontains: String, nationalCode_Istartswith: String, offset: Int, presenter_Id: Float, state_In: [String]): ProfileTypeConnection
+    provinces: [ProvinceType]
     transactionKinds: [TransactionKindType]
+    transactionRequestKinds: [TransactionRequestKindType]
+    transactionRequests(after: String, before: String, first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, transaction_Id: Float): TransactionRequestTypeConnection
     transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection
     users: [UserType]
 }
@@ -228,12 +313,44 @@ type TransactionKindType {
     title: String!
 }
 
+type TransactionRequestKindType {
+    description: String!
+    id: ID!
+    title: String!
+}
+
+type TransactionRequestType implements Node {
+    created: DateTime!
+    description: String
+    id: ID!
+    kind: TransactionRequestKindType!
+    transaction: TransactionType!
+}
+
+type TransactionRequestTypeConnection {
+    "Contains the nodes in this connection."
+    edges: [TransactionRequestTypeEdge]!
+    "Pagination data for this connection."
+    pageInfo: PageInfo!
+}
+
+"A Relay edge containing a `TransactionRequestType` and its cursor."
+type TransactionRequestTypeEdge {
+    "A cursor for use in pagination"
+    cursor: String!
+    "The item at the end of the edge"
+    node: TransactionRequestType
+}
+
 type TransactionType implements Node {
+    alias: String
     "مبلغ"
     amount: Float!
+    contractTerm: Int
     dateTime: DateTime!
     description: String
     effectiveDate: Date
+    expireDate: Date
     id: ID!
     images: [ImageType]
     kind: TransactionKindType!
@@ -268,7 +385,6 @@ type UpdateTransactionPayload {
 
 "اطلاعات کاربر جاری"
 type UserType {
-    email: String!
     firstName: String!
     id: ID!
     lastLogin: DateTime
@@ -310,18 +426,27 @@ input CreateImageInput {
 }
 
 input CreateProfileInput {
-    adress: String
-    codeMeli: String
+    accountNumber: String
+    address: String
+    bankId: Int
+    birthDate: String
+    birthPlaceId: Int
+    cardNumber: String
+    cityId: Int
     description: String
+    email: String
+    fatherName: String
     firstName: String
+    homePhone: String
+    idNumber: String
     images: [CreateImageInput]
     lastName: String
     mobile1: String
     mobile2: String
-    "id معرف"
-    presenterId: Int
-    shomareHesab: String
-    shomareKart: String
+    nationalCode: String
+    officePhone: String
+    postalCode: String
+    sheba: String
     tel: String
     user: UserInput!
 }
@@ -330,6 +455,8 @@ input CreateProfileInput {
 input CreateTransactionInput {
     "مبلغ"
     amount: Float!
+    "مدت قرارداد"
+    contractTerm: String
     "توضیحات"
     description: String
     "تاریخ موثر"
@@ -350,19 +477,28 @@ input UpdateImageInput {
 }
 
 input UpdateProfileInput {
-    adress: String
-    codeMeli: String
+    accountNumber: String
+    address: String
+    bankId: Int
+    birthDate: String
+    birthPlaceId: Int
+    cardNumber: String
+    cityId: Int
     description: String
+    email: String
+    fatherName: String
     firstName: String
+    homePhone: String
     id: ID!
+    idNumber: String
     images: [UpdateImageInput]
     lastName: String
     mobile1: String
     mobile2: String
-    "id معرف"
-    presenterId: Int
-    shomareHesab: String
-    shomareKart: String
+    nationalCode: String
+    officePhone: String
+    postalCode: String
+    sheba: String
     tel: String
     user: UserInput
 }

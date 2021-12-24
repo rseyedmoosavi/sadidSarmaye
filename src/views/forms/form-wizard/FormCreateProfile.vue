@@ -12,7 +12,7 @@
         @on-complete="formSubmitted"
     >
 
-      <!-- accoint details tab -->
+      <!-- account details tab -->
       <tab-content
           title="اطلاعات ورود به سیستم"
           :before-change="validationForm"
@@ -134,6 +134,7 @@
                       type="password"
                       :state="errors.length > 0 ? false:null"
                   />
+                  <password v-model="password" :strength-meter-only="true"/>
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
@@ -154,7 +155,9 @@
                       type="password"
                       :state="errors.length > 0 ? false:null"
                   />
+                  <password v-model="confirmPassword" :strength-meter-only="true"/>
                   <small class="text-danger">{{ errors[0] }}</small>
+
                 </validation-provider>
               </b-form-group>
             </b-col>
@@ -244,25 +247,16 @@
             </b-col>
 
             <b-col md="4">
-              <validation-provider
-                  #default="{ errors }"
-                  name="idNumber"
-                  rules="required|numeric"
+              <b-form-group
+                  label="شماره شناسنامه"
+                  label-for="idNumber"
               >
-                <b-form-group
-                    label="شماره شناسنامه"
-                    label-for="idNumber"
-                    :state="errors.length > 0 ? false:null"
-                >
-                  <b-form-input
-                      id="idNumber"
-                      v-model="idNumber"
-                      :state="errors.length > 0 ? false:null"
-                      placeholder="157"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </b-form-group>
-              </validation-provider>
+                <b-form-input
+                    id="idNumber"
+                    v-model="idNumber"
+                    placeholder="157"
+                />
+              </b-form-group>
             </b-col>
 
             <b-col md="4">
@@ -305,33 +299,50 @@
             </b-col>
 
             <b-col md="6">
-              <b-form-group
-                  label="استان محل تولد"
-                  label-for="birthProvince"
+              <validation-provider
+                  #default="{ errors }"
+                  name="birthProvince"
+                  rules="required"
               >
-                <v-select
-                    id="birthProvince"
-                    v-model="birthProvince"
-                    dir="rtl"
-                    :options="provinces"
-                    label="استان"
-                />
-              </b-form-group>
+                <b-form-group
+                    label="استان محل تولد"
+                    label-for="birthProvince"
+                >
+                  <v-select
+                      id="birthProvince"
+                      v-model="birthProvince"
+                      dir="rtl"
+                      :options="provinces"
+                      label="text"
+                      @input="selectCity"
+
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </b-form-group>
+              </validation-provider>
             </b-col>
 
             <b-col md="6">
-              <b-form-group
-                  label="شهر محل تولد"
-                  label-for="birthCity"
+              <validation-provider
+                  #default="{ errors }"
+                  name="birthPlace"
+                  rules="required"
               >
-                <v-select
-                    id="birthCity"
-                    v-model="birthCity"
-                    dir="rtl"
-                    :options="cities"
-                    label="شهر"
-                />
-              </b-form-group>
+                <b-form-group
+                    label="شهر محل تولد"
+                    label-for="birthPlace"
+                >
+                  <v-select
+                      id="birthPlace"
+                      v-model="birthPlace"
+                      dir="rtl"
+                      :options="cities"
+                      label="text"
+
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </b-form-group>
+              </validation-provider>
             </b-col>
 
           </b-row>
@@ -362,27 +373,42 @@
                   label="استان"
                   label-for="birthProvince"
               >
-                <v-select
-                    id="locationProvince"
-                    v-model="locationProvince"
-                    dir="rtl"
-                    :options="provinces"
-                    label="استان"
-                />
+                <validation-provider
+                    #default="{ errors }"
+                    name="locationProvince"
+                    rules="required"
+                >
+                  <v-select
+                      id="locationProvince"
+                      v-model="locationProvince"
+                      dir="rtl"
+                      :options="provinces"
+                      label="text"
+                      @input="selectLocationCity"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
               </b-form-group>
             </b-col>
             <b-col md="4">
               <b-form-group
-                  label="شهر محل تولد"
+                  label="شهر"
                   label-for="birthProvince"
               >
-                <v-select
-                    id="locationCity"
-                    v-model="locationCity"
-                    dir="rtl"
-                    :options="cities"
-                    label="شهر"
-                />
+                <validation-provider
+                    #default="{ errors }"
+                    name="city"
+                    rules="required"
+                >
+                  <v-select
+                      id="city"
+                      v-model="city"
+                      dir="rtl"
+                      :options="cities"
+                      label="text"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
               </b-form-group>
             </b-col>
             <b-col md="4">
@@ -393,7 +419,7 @@
                 <validation-provider
                     #default="{ errors }"
                     name="postalCode"
-                    rules="required"
+                    rules="required|digits:10"
                 >
                   <b-form-input
                       id="postalCode"
@@ -457,31 +483,22 @@
               </validation-provider>
             </b-col>
             <b-col md="3">
-              <validation-provider
-                  #default="{ errors }"
-                  name="workPhone"
-                  rules="required"
+              <b-form-group
+                  label="تلفن محل کار"
+                  label-for="officePhone"
               >
-                <b-form-group
-                    label="تلفن محل کار"
-                    label-for="workPhone"
-                    :state="errors.length > 0 ? false:null"
-                >
-                  <b-form-input
-                      id="workPhone"
-                      v-model="workPhone"
-                      :state="errors.length > 0 ? false:null"
-                      placeholder="02166225544"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </b-form-group>
-              </validation-provider>
+                <b-form-input
+                    id="officePhone"
+                    v-model="officePhone"
+                    placeholder="02166225544"
+                />
+              </b-form-group>
             </b-col>
             <b-col md="3">
               <validation-provider
                   #default="{ errors }"
                   name="mobile1"
-                  rules="required"
+                  rules="required|regex:09\d{9}$"
               >
                 <b-form-group
                     label="تلفن همراه 1"
@@ -490,56 +507,39 @@
                 >
                   <b-form-input
                       id="mobile1"
-                      v-model="mobile1"
+                      v-model="tel"
                       :state="errors.length > 0 ? false:null"
                       placeholder="0923456789"
+                      readonly="true"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </b-form-group>
               </validation-provider>
             </b-col>
             <b-col md="3">
-              <validation-provider
-                  #default="{ errors }"
-                  name="mobile2"
-                  rules="required"
+              <b-form-group
+                  label="تلفن همراه 2"
+                  label-for="mobile2"
               >
-                <b-form-group
-                    label="تلفن همراه 2"
-                    label-for="mobile2"
-                    :state="errors.length > 0 ? false:null"
-                >
-                  <b-form-input
-                      id="mobile2"
-                      v-model="mobile2"
-                      :state="errors.length > 0 ? false:null"
-                      placeholder="09351246789"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </b-form-group>
-              </validation-provider>
+                <b-form-input
+                    id="mobile2"
+                    v-model="mobile2"
+                    placeholder="09351246789"
+                />
+              </b-form-group>
             </b-col>
             <b-col md="12">
-              <validation-provider
-                  #default="{ errors }"
-                  name="email"
-                  rules="required"
+              <b-form-group
+                  label="رایانامه"
+                  label-for="email"
               >
-                <b-form-group
-                    label="رایانامه"
-                    label-for="email"
-                    :state="errors.length > 0 ? false:null"
-                >
-                  <b-form-input
-                      id="email"
-                      style="font-family: auto,cursive"
-                      v-model="email"
-                      :state="errors.length > 0 ? false:null"
-                      placeholder="seyedAliAlavi@iran.ir"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </b-form-group>
-              </validation-provider>
+                <b-form-input
+                    id="email"
+                    style="font-family: auto,cursive"
+                    v-model="email"
+                    placeholder="seyedAliAlavi@iran.ir"
+                />
+              </b-form-group>
             </b-col>
 
           </b-row>
@@ -566,7 +566,7 @@
                 لطفا حساب بانکی را وارد نمایید که از آن استفاده می کنید
               </small>
             </b-col>
-            <b-col md="4">
+            <b-col md="2">
               <b-form-group
                   label="نام بانک"
                   label-for="bankName"
@@ -581,13 +581,13 @@
                       v-model="bankName"
                       dir="rtl"
                       :options="bankNames"
-                      label="بانک"
+                      label="text"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
             </b-col>
-            <b-col md="4">
+            <b-col md="3">
               <b-form-group
                   label="شماره حساب"
                   label-for="accountNumber"
@@ -616,7 +616,7 @@
                 <validation-provider
                     #default="{ errors }"
                     name="sheba"
-                    rules="required"
+                    rules="required|regex:ir[\d]{24}$"
                 >
                   <b-form-input
                       id="sheba"
@@ -624,6 +624,27 @@
                       type="text"
                       :state="errors.length > 0 ? false:null"
                       placeholder="ir240000000000000000000000"
+                  />
+                  <small class="text-danger">{{ errors[0] }}</small>
+                </validation-provider>
+              </b-form-group>
+            </b-col>
+            <b-col md="3">
+              <b-form-group
+                  label="شماره کارت"
+                  label-for="shomare-cart"
+              >
+                <validation-provider
+                    #default="{ errors }"
+                    name="cardNumber"
+                    rules="required|regex:[\d]{16}$"
+                >
+                  <b-form-input
+                      id="shomare-cart"
+                      v-model="cardNumber"
+                      type="text"
+                      :state="errors.length > 0 ? false:null"
+                      placeholder="6104337854552222"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
@@ -649,52 +670,52 @@
                 آپلود مدارک
               </h5>
               <small class="text-muted">
-                تصویر شناسنامه و کارت ملی خورد را آپلود نمایید
+                تصویر کارت ملی خورد را آپلود نمایید
               </small>
             </b-col>
-            <b-col md="3">
-              <b-form-group
-                  label="صفحه اول شناسنامه"
-                  label-for="shenasnameP1"
-              >
-                <validation-provider
-                    #default="{ errors }"
-                    name="shenasnameP1"
-                    rules="required"
-                >
-                  <b-form-file
-                      id="shenasnameP1"
-                      placeholder="تصویر سند را انتخاب کنید..."
-                      drop-placeholder="اینجا رها کنید..."
-                      v-model="shenasnameP1"
-                      name="shenasnameP1"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-            <b-col md="3">
-              <b-form-group
-                  label="صفحه توضیحات شناسنامه"
-                  label-for="shenasnameP2"
-              >
-                <validation-provider
-                    #default="{ errors }"
-                    name="shenasnameP2"
-                    rules="required"
-                >
-                  <b-form-file
-                      id="shenasnameP2"
-                      placeholder="تصویر سند را انتخاب کنید..."
-                      drop-placeholder="اینجا رها کنید..."
-                      v-model="shenasnameP2"
-                      name="shenasnameP2"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-            <b-col md="3">
+            <!--            <b-col md="3">-->
+            <!--              <b-form-group-->
+            <!--                  label="صفحه اول شناسنامه"-->
+            <!--                  label-for="shenasnameP1"-->
+            <!--              >-->
+            <!--                <validation-provider-->
+            <!--                    #default="{ errors }"-->
+            <!--                    name="shenasnameP1"-->
+            <!--                    rules="required"-->
+            <!--                >-->
+            <!--                  <b-form-file-->
+            <!--                      id="shenasnameP1"-->
+            <!--                      placeholder="تصویر سند را انتخاب کنید..."-->
+            <!--                      drop-placeholder="اینجا رها کنید..."-->
+            <!--                      v-model="shenasnameP1"-->
+            <!--                      name="shenasnameP1"-->
+            <!--                  />-->
+            <!--                  <small class="text-danger">{{ errors[0] }}</small>-->
+            <!--                </validation-provider>-->
+            <!--              </b-form-group>-->
+            <!--            </b-col>-->
+            <!--            <b-col md="3">-->
+            <!--              <b-form-group-->
+            <!--                  label="صفحه توضیحات شناسنامه"-->
+            <!--                  label-for="shenasnameP2"-->
+            <!--              >-->
+            <!--                <validation-provider-->
+            <!--                    #default="{ errors }"-->
+            <!--                    name="shenasnameP2"-->
+            <!--                    rules="required"-->
+            <!--                >-->
+            <!--                  <b-form-file-->
+            <!--                      id="shenasnameP2"-->
+            <!--                      placeholder="تصویر سند را انتخاب کنید..."-->
+            <!--                      drop-placeholder="اینجا رها کنید..."-->
+            <!--                      v-model="shenasnameP2"-->
+            <!--                      name="shenasnameP2"-->
+            <!--                  />-->
+            <!--                  <small class="text-danger">{{ errors[0] }}</small>-->
+            <!--                </validation-provider>-->
+            <!--              </b-form-group>-->
+            <!--            </b-col>-->
+            <b-col md="6">
               <b-form-group
                   label="تصویر کارت ملی"
                   label-for="carteMeli"
@@ -710,32 +731,36 @@
                       drop-placeholder="اینجا رها کنید..."
                       v-model="carteMeli"
                       name="carteMeli"
+                      @change="onFileChange"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
             </b-col>
-            <b-col md="3">
-              <b-form-group
-                  label="تصویر پشت کارت ملی"
-                  label-for="carteMeliPosht"
-              >
-                <validation-provider
-                    #default="{ errors }"
-                    name="carteMeliPosht"
-                    rules="required"
-                >
-                  <b-form-file
-                      id="carteMeliPosht"
-                      placeholder="تصویر سند را انتخاب کنید..."
-                      drop-placeholder="اینجا رها کنید..."
-                      v-model="carteMeliPosht"
-                      name="carteMeliPosht"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
+            <b-col md="6">
+              <b-img v-if="carteMeli" :src="imgCarteMEliURL" fluid alt="Responsive image"></b-img>
             </b-col>
+            <!--            <b-col md="3">-->
+            <!--              <b-form-group-->
+            <!--                  label="تصویر پشت کارت ملی"-->
+            <!--                  label-for="carteMeliPosht"-->
+            <!--              >-->
+            <!--                <validation-provider-->
+            <!--                    #default="{ errors }"-->
+            <!--                    name="carteMeliPosht"-->
+            <!--                    rules="required"-->
+            <!--                >-->
+            <!--                  <b-form-file-->
+            <!--                      id="carteMeliPosht"-->
+            <!--                      placeholder="تصویر سند را انتخاب کنید..."-->
+            <!--                      drop-placeholder="اینجا رها کنید..."-->
+            <!--                      v-model="carteMeliPosht"-->
+            <!--                      name="carteMeliPosht"-->
+            <!--                  />-->
+            <!--                  <small class="text-danger">{{ errors[0] }}</small>-->
+            <!--                </validation-provider>-->
+            <!--              </b-form-group>-->
+            <!--            </b-col>-->
           </b-row>
         </validation-observer>
       </tab-content>
@@ -748,6 +773,7 @@
 <script>
 import { FormWizard, TabContent } from 'vue-form-wizard'
 import vSelect from 'vue-select'
+import Password from 'vue-password-strength-meter'
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
@@ -757,11 +783,12 @@ import {
   BFormGroup,
   BFormInput,
   BFormInvalidFeedback,
-  BFormFile
+  BFormFile,
+  BImg
 } from 'bootstrap-vue'
 import { required, email } from '@validations'
-import { codeIcon } from './code'
-import VuePersianDatetimePicker from "vue-persian-datetime-picker";
+import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
+import { CREATE_PROFILE, GET_CITIES, GET_PROVINCE } from '@/constants/graphql'
 
 export default {
   components: {
@@ -771,29 +798,306 @@ export default {
     TabContent,
     BRow,
     BCol,
+    BImg,
     BFormGroup,
     BFormInput,
     vSelect,
     BFormInvalidFeedback,
     BFormFile,
     ToastificationContent,
-    datePicker: VuePersianDatetimePicker
+    datePicker: VuePersianDatetimePicker,
+    required,
+    email,
+    Password
   },
   data() {
     return {
-
+      username: 'seyedmoosavi',//null
+      tel: '09127514245',//null
+      sms: '1010',//null
+      password: 1,//null,
+      confirmPassword: 1,//null,
+      firstName: 'asd',// null,
+      lastName: '456',//null,
+      fatherName: '456',//null,
+      idNumber: '456',//null,
+      nationalCode: '4564564564',//null,
+      birthDate: '1369-03-13',// null,
+      birthProvince: 1,// null,
+      provinces: [],
+      birthPlace: null,
+      cities: [],
+      locationProvince: null,
+      city: null,
+      postalCode: null,
+      address: null,
+      homePhone: null,
+      officePhone: null,
+      mobile1: null,
+      mobile2: null,
+      email: null,
+      bankName: null,
+      bankNames: [
+        {
+          text: 'اقتصاد نوین',
+          value: 1
+        },
+        {
+          text: 'انصار',
+          value: 2
+        },
+        {
+          text: 'ایران زمین',
+          value: 3
+        },
+        {
+          text: 'پارسیان',
+          value: 4
+        },
+        {
+          text: 'پاسارگاد',
+          value: 5
+        },
+        {
+          text: 'پست ایران',
+          value: 6
+        },
+        {
+          text: 'تجارت',
+          value: 7
+        },
+        {
+          text: 'توسعه تعاون',
+          value: 8
+        },
+        {
+          text: 'توسعه صادرات ایران',
+          value: 9
+        },
+        {
+          text: 'حکمت ایرانیان',
+          value: 10
+        },
+        {
+          text: 'خاور میانه',
+          value: 11
+        },
+        {
+          text: 'دی',
+          value: 12
+        },
+        {
+          text: 'رفاه',
+          value: 13
+        },
+        {
+          text: 'سامان',
+          value: 14
+        },
+        {
+          text: 'سپه',
+          value: 15
+        },
+        {
+          text: 'سرمایه',
+          value: 16
+        },
+        {
+          text: 'سینا',
+          value: 17
+        },
+        {
+          text: 'شهر',
+          value: 18
+        },
+        {
+          text: 'صادرات',
+          value: 19
+        },
+        {
+          text: 'صنعت و معدن',
+          value: 20
+        },
+        {
+          text: 'قرض‌الحسنه رسالت',
+          value: 21
+        },
+        {
+          text: 'قرض‌الحسنه مهر ایران',
+          value: 22
+        },
+        {
+          text: 'قوامین',
+          value: 23
+        },
+        {
+          text: 'کارآفرین',
+          value: 24
+        },
+        {
+          text: 'کشاورزی',
+          value: 25
+        },
+        {
+          text: 'گردشگری',
+          value: 26
+        },
+        {
+          text: 'مسکن',
+          value: 27
+        },
+        {
+          text: 'مشترک ایران-ونزوئلا',
+          value: 28
+        },
+        {
+          text: 'ملّی ایران',
+          value: 29
+        },
+        {
+          text: 'ملت',
+          value: 30
+        }],
+      accountNumber: null,
+      sheba: null,
+      cardNumber: null,
+      shenasnameP1: null,
+      shenasnameP2: null,
+      carteMeli: null,
+      imgCarteMEliURL: null,
+      carteMeliPosht: null,
+      file: null
     }
   },
+  mounted() {
+    this.$apollo.mutate({
+      mutation: GET_PROVINCE
+    })
+        .then((result) => {
+          this.provinces = result.data.provinces
+        })
+  },
   methods: {
-    formSubmitted() {
-      this.$toast({
-        component: ToastificationContent,
-        props: {
-          title: 'Form Submitted',
-          icon: 'EditIcon',
-          variant: 'success',
-        },
+    onFileChange(e) {
+      this.file = e.target.files[0]
+      this.imgCarteMEliURL = URL.createObjectURL(this.file)
+    },
+    selectCity(provinceID) {
+      this.$apollo.mutate({
+        mutation: GET_CITIES,
+        variables: {
+          provinceID: this.birthProvince.value
+        }
       })
+          .then((result) => {
+
+            let cities = result.data.cities.edges
+            let tempCities = []
+            for (let city in cities) {
+              tempCities.push({
+                text: cities[city].node.text,
+                value: cities[city].node.value
+              })
+            }
+            this.cities = tempCities
+            this.birthPlace.text = tempCities[0].text
+          })
+    },
+
+    selectLocationCity(provinceID) {
+      this.$apollo.mutate({
+        mutation: GET_CITIES,
+        variables: {
+          provinceID: this.locationProvince.value
+        }
+      })
+          .then((result) => {
+            let cities = result.data.cities.edges
+            let tempCities = []
+            for (let city in cities) {
+              tempCities.push({
+                text: cities[city].node.text,
+                value: cities[city].node.value
+              })
+            }
+            this.cities = tempCities
+            this.city.text = tempCities[0].text
+          })
+    },
+
+    formSubmitted() {
+      let input = {
+        user: {
+          username: this.username,
+          password: this.password.toString(),
+          email: this.email
+        },
+        firstName: this.firstName,
+        lastName: this.lastName,
+        fatherName: this.fatherName,
+        idNumber: this.idNumber,
+        nationalCode: this.nationalCode,
+        birthDate: this.birthDate,
+        birthPlaceId: parseInt(this.birthPlace.value),
+        cityId: parseInt(this.city.value),
+        postalCode: this.postalCode,
+        address: this.address,
+        homePhone: this.homePhone,
+        officePhone: this.officePhone,
+        mobile1: this.tel,
+        mobile2: this.mobile2,
+        bankId: this.bankName.value,
+        accountNumber: this.accountNumber,
+        sheba: this.sheba,
+        cardNumber: this.cardNumber,
+        tel: this.tel,
+        images: {
+          image: document.getElementById('carteMeli').files[0]
+        }
+
+      }
+      this.$apollo.mutate({
+        mutation: CREATE_PROFILE,
+        variables: {
+          username: this.username,
+          password: this.password.toString(),
+          email: this.email,
+          firstName: this.firstName,
+          lastName: this.lastName,
+          fatherName: this.fatherName,
+          idNumber: this.idNumber,
+          nationalCode: this.nationalCode,
+          birthDate: this.birthDate,
+          birthPlaceId: parseInt(this.birthPlace.value),
+          cityId: parseInt(this.city.value),
+          postalCode: this.postalCode,
+          address: this.address,
+          homePhone: this.homePhone,
+          officePhone: this.officePhone,
+          mobile1: this.tel,
+          mobile2: this.mobile2,
+          bankId: this.bankName.value,
+          accountNumber: this.accountNumber,
+          sheba: this.sheba,
+          cardNumber: this.cardNumber,
+          tel: this.tel,
+          file:document.getElementById('carteMeli').files[0]
+        }
+      })
+          .then((result) => {
+            this.$toast({
+              component: ToastificationContent,
+              props: {
+                title: 'Form Submitted',
+                icon: 'EditIcon',
+                variant: 'success',
+              },
+            })
+          })
+          .catch((result) => {
+            alert('catch')
+            console.log(result)
+          })
     },
     validationForm() {
       return new Promise((resolve, reject) => {
