@@ -67,7 +67,7 @@ body {
   }
   100% {
     -webkit-transform: rotate(1turn);
-    transform: rotate(1turn);
+    /*transform: rotate(1turn);*/
   }
 }
 @keyframes rotateOpacity {
@@ -78,7 +78,7 @@ body {
   }
   100% {
     -webkit-transform: rotate(1turn);
-    transform: rotate(1turn);
+    /*transform: rotate(1turn);*/
     opacity: 1;
   }
 }

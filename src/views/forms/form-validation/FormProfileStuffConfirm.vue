@@ -111,8 +111,8 @@
           <b-input-group prepend="توضیحات" class="mb-2">
             <b-form-input v-model="description" ></b-form-input>
           </b-input-group>
-          <b-button class="m-1" variant="success" @click="userResponse('to_customer_confirm')">تایید</b-button>
-          <b-button variant="danger" @click="userResponse('customer_reject')">عدم تایید</b-button>
+          <b-button class="m-1" variant="success" @click="userResponse('to_stuff_confirm')">تایید</b-button>
+          <b-button variant="danger" @click="userResponse('stuff_reject')">عدم تایید</b-button>
         </div>
       </b-col>
     </b-row>
@@ -122,7 +122,7 @@
 <script>
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
-import { PROFILE_FOR_CONFIRM_USER,PROFILE_CONFIRM_WITH_USER } from '@/constants/graphql'
+import { PROFILE_CONFIRM_WITH_USER, PROFILE_STUFF_CONFIRM } from '@/constants/graphql'
 import {
   BRow,
   BCol,
@@ -186,11 +186,15 @@ export default {
   },
   mounted() {
     this.$apollo.mutate({
-      mutation: PROFILE_FOR_CONFIRM_USER
+      mutation: PROFILE_STUFF_CONFIRM,
+      variables:{
+        id: this.$route.params.id
+      }
     })
         .then((resutl) => {
-          console.log(resutl.data.me.profile)
-          resutl = resutl.data.me.profile
+          console.clear()
+          console.log(resutl.data.profiles.edges[0].node)
+          resutl = resutl.data.profiles.edges[0].node
           this.firstName = resutl.firstName
           this.lastName = resutl.lastName
           this.fatherName = resutl.fatherName

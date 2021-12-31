@@ -55,8 +55,8 @@
 
 <script>
 import moment from 'jalali-moment'
-import Num2persian from 'num2persian';
-import FormCreateTransaction from "@/views/forms/form-validation/FormCreateTransaction";
+import Num2persian from 'num2persian'
+import FormCreateTransaction from '@/views/forms/form-validation/FormCreateTransaction'
 import {
   BTable,
   BCol,
@@ -64,12 +64,13 @@ import {
   BCardText,
   BCard,
   BCardHeader,
+  BCardBody,
   BCardTitle,
   BSpinner,
   BBadge,
   VBTooltip
 } from 'bootstrap-vue'
-import {PROFITS_FOR_HOME_PAGE} from '@/constants/graphql'
+import { PROFITS_FOR_HOME_PAGE } from '@/constants/graphql'
 
 export default {
   components: {
@@ -79,6 +80,7 @@ export default {
     BRow,
     BCardText,
     BCard,
+    BCardBody,
     BCardHeader,
     BCardTitle,
     BSpinner,
@@ -100,7 +102,13 @@ export default {
       currentPage: 1,
       totalSum: 0,
       fields: [
-        {key: 'id', label: '#', sortable: true, tdClass: 'text-center text-info', thClass: 'text-center text-primary'},
+        {
+          key: 'id',
+          label: '#',
+          sortable: true,
+          tdClass: 'text-center text-info',
+          thClass: 'text-center text-primary'
+        },
         {
           key: 'amount',
           label: 'مبلغ',
@@ -117,10 +125,18 @@ export default {
         },
       ],
       kindIdType: [{
-        1: 'سپرده گزاری', 2: 'برداشت', 3: 'واریز سود', 4: 'برداشت سود', 5: 'واریز سود معرفی',
+        1: 'سپرده گزاری',
+        2: 'برداشت',
+        3: 'واریز سود',
+        4: 'برداشت سود',
+        5: 'واریز سود معرفی',
       },
         {
-          1: 'light-primary', 2: 'light-danger', 3: 'light-info', 4: 'light-warning', 5: 'light-success',
+          1: 'light-primary',
+          2: 'light-danger',
+          3: 'light-info',
+          4: 'light-warning',
+          5: 'light-success',
         }],
     }
   },
@@ -128,7 +144,7 @@ export default {
     this.totalRows = this.items.length
   },
   mounted() {
-    this.loading = 1;
+    this.loading = 1
     this.$apollo.mutate({
       mutation: PROFITS_FOR_HOME_PAGE,
       variables: {
@@ -136,48 +152,57 @@ export default {
         first: 10,
         kindId: 3
       }
-    }).then((result) => {
-      let transactions = [];
-      let items = result.data.transactions.edges
-      for (const item of items) {
-        transactions.push({
-          "id": item.node.id,
-          "amount": item.node.amount,
-          "date": item.node.effectiveDate,
-        })
-      }
-      this.totalSum = result.data.transactions.totalSum
-      this.items = transactions
-      this.loading = 0
-    }).catch((error) => {
-      console.log(error)
     })
+        .then((result) => {
+          let transactions = []
+          let items = result.data.transactions.edges
+          for (const item of items) {
+            transactions.push({
+              'id': item.node.id,
+              'amount': item.node.amount,
+              'date': item.node.effectiveDate,
+            })
+          }
+          this.totalSum = result.data.transactions.totalSum
+          this.items = transactions
+          this.loading = 0
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     // Set the initial number of items
     this.totalRows = this.items.length
   },
   methods: {
     num2per(price) {
-      return Num2persian(price) + " تومان"
+      return Num2persian(price) + ' تومان'
     },
     toShamsiDate(date) {
-      return moment(date, 'YYYY-M-D').locale('fa').format('YYYY/MM/DD')
+      return moment(date, 'YYYY-M-D')
+          .locale('fa')
+          .format('YYYY/MM/DD')
     },
     toGregorianDate(date) {
       if (date) {
-        return moment.from(date, 'fa', 'YYYY/MM/DD').locale('en').format('YYYY-MM-DD')
+        return moment.from(date, 'fa', 'YYYY/MM/DD')
+            .locale('en')
+            .format('YYYY-MM-DD')
       }
     },
     convertToCurrency(Number) {
-      let x, y, z;
-      Number += '';
-      Number = Number.replace(',', '');
-      x = Number.split('.');
-      y = x[0];
-      z = x.length > 1 ? '.' + x[1] : '';
-      let rgx = /(\d+)(\d{3})/;
-      while (rgx.test(y))
-        y = y.replace(rgx, '$1' + ',' + '$2');
-      return y + z;
+      let x,
+          y,
+          z
+      Number += ''
+      Number = Number.replace(',', '')
+      x = Number.split('.')
+      y = x[0]
+      z = x.length > 1 ? '.' + x[1] : ''
+      let rgx = /(\d+)(\d{3})/
+      while (rgx.test(y)) {
+        y = y.replace(rgx, '$1' + ',' + '$2')
+      }
+      return y + z
     },
   },
 }

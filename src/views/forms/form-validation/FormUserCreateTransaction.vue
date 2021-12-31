@@ -5,8 +5,30 @@
     <!-- form -->
     <b-form>
       <b-row>
-
-        <!-- ********************* -->
+        <b-col>
+          <b-row>
+            <b-col cols="8">
+              <b-row>
+                <b-col cols="3" class="text-center">طرح</b-col>
+                <b-col cols="9">
+                  <b-form-group>
+                    <b-form-select v-model="planName" :options="planNameOptions"></b-form-select>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+            </b-col>
+            <b-col cols="4">
+              <b-form-group>
+                <b-input-group>
+                  <b-form-input
+                      placeholder="نام مستعار"
+                      v-model="alias"
+                  />
+                </b-input-group>
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </b-col>
         <b-col md="12">
           <b-form-group>
             <b-input-group>
@@ -50,7 +72,7 @@
             <b-col md="6">
               <b-form-group>
                 <b-form-input
-                    v-model="shomarePeigiry"
+                    v-model="receiptNumber"
                     placeholder="شماره پیگیری"
                 />
               </b-form-group>
@@ -71,7 +93,8 @@
           <b-row>
             <b-col md="4">
               <b-form-group>
-                <b-form-select v-model="modateGharardad" @input="multipleDate" :options="modateGharardadOptions"></b-form-select>
+                <b-form-select v-model="contractTerm" @input="multipleDate" :options="contractTermOptions"
+                ></b-form-select>
               </b-form-group>
             </b-col>
             <b-col md="4">
@@ -116,7 +139,6 @@
                   placeholder="تصویر سند را انتخاب کنید..."
                   drop-placeholder="اینجا رها کنید..."
                   v-model="image"
-                  @change="forTest"
               />
             </b-input-group>
           </b-form-group>
@@ -156,11 +178,12 @@ import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
 import {
   BInputGroup, BFormInput, BFormGroup, BForm, BRow, BCol, BButton, BCardText, BInputGroupPrepend, BInputGroupAppend,
-  BDropdown, BDropdownItem, BDropdownDivider, BFormFile, VBPopover, BFormRadioGroup, BFormSelect, VBTooltip
+  BDropdown, BDropdownItem, BDropdownDivider, BFormFile, VBPopover, BFormRadioGroup, BFormSelect, VBTooltip,BCard
 } from 'bootstrap-vue'
-import { CREATE_TRANSACTION, GET_ALL_PRESENTER } from '@/constants/graphql'
+import { CREATE_TRANSACTION, GET_ALL_PRESENTER, GET_PLAN } from '@/constants/graphql'
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 import moment from 'jalali-moment'
+import ToastificationContent from '@core/components/toastification/ToastificationContent'
 
 export default {
   directives: {
@@ -173,6 +196,12 @@ export default {
     'user'
   ],
   mounted() {
+    this.$apollo.mutate({
+      mutation: GET_PLAN
+    })
+        .then((result) => {
+          this.planNameOptions = result.data.plan
+        })
     this.$apollo.mutate({
       mutation: GET_ALL_PRESENTER
     })
@@ -190,8 +219,7 @@ export default {
   },
   components: {
     BCardCode,
-    // ValidationProvider,
-    // ValidationObserver,
+    BCard,
     BCardText,
     BFormInput,
     BFormGroup,
@@ -214,6 +242,9 @@ export default {
   },
   data() {
     return {
+      planName: null,
+      planNameOptions: null,
+      alias:null,
       persianPrice: 'صفر ریال',
       time: null,
       selected: {
@@ -273,9 +304,9 @@ export default {
       effectiveDate: null,
       kindId: [],
       description: '',
-      shomarePeigiry: null,
-      modateGharardad: 6,
-      modateGharardadOptions: [
+      receiptNumber: null,
+      contractTerm: 6,
+      contractTermOptions: [
         {
           value: 6,
           text: '6 ماهه'
@@ -307,12 +338,16 @@ export default {
     },
     multipleDate() {
       let m = moment(this.effectiveDate, 'jYYYY/jM/jD')
-      m.locale('fa');
-      let addDay= (m.format("dd")==='پ'?2:1)
-      let startDate = m.add(addDay, 'day').locale('fa').format("yyyy-M-D")
-      let endDate = m.add(this.modateGharardad, 'month').locale('fa').format("yyyy-M-D")
-      this.startDate=startDate
-      this.endDate=endDate
+      m.locale('fa')
+      let addDay = (m.format('dd') === 'پ' ? 2 : 1)
+      let startDate = m.add(addDay, 'day')
+          .locale('fa')
+          .format('yyyy-M-D')
+      let endDate = m.add(this.contractTerm, 'month')
+          .locale('fa')
+          .format('yyyy-M-D')
+      this.startDate = startDate
+      this.endDate = endDate
     },
     validationForm() {
       if (!this.selected.value) {
@@ -333,16 +368,29 @@ export default {
         this.$apollo.mutate({
           mutation: CREATE_TRANSACTION,
           variables: {
-            profileId: this.selected.value,
-            effectiveDate: this.toGregorianDate(this.effectiveDate),
+            profileId: localStorage.getItem('profile-id'),
+            alias:this.alias,
+            plan:this.planName,
+            effectiveDate: this.toGregorianDate(this.startDate),
+            contractTerm:this.contractTerm,
             amount: this.amount,
+            receiptNumber:this.receiptNumber,
             kindId: this.kindSelected.value,
             file: document.getElementById('file1').files[0],
           }
         })
             .then((result) => {
               // console.log(result.data.profiles.edges[0].node.firstName)
-              console.log(result)
+              this.$toast({
+                component: ToastificationContent,
+                props: {
+                  title: 'تراکنش با موفقیت ثبت شد',
+                  text:'پس از تایید توسط شرکت در حساب شما لحاظ خواهد شد',
+                  icon: 'EditIcon',
+                  variant: 'success',
+                },
+              })
+              this.$bvModal.hide("createTransaction")
             })
             .catch((result) => {
               alert('catch')

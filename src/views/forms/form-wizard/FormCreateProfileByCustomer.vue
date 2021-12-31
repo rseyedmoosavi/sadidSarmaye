@@ -11,160 +11,6 @@
         class="mb-3"
         @on-complete="formSubmitted"
     >
-
-      <!-- account details tab -->
-      <tab-content
-          title="اطلاعات ورود به سیستم"
-          :before-change="validationForm"
-      >
-        <validation-observer
-            ref="accountRules"
-            tag="form"
-        >
-          <b-row>
-            <b-col
-                cols="12"
-                class="mb-2"
-            >
-              <h5 class="mb-0">
-                گزینه های اصلی ثبت نام
-              </h5>
-              <small class="text-muted">
-                لطفا نام کاربری و شماره همراه مورد استفاده خود را وارد نمایید.
-              </small>
-            </b-col>
-            <b-col md="6">
-              <b-form-group
-                  label="نام کاربری"
-                  label-for="username"
-              >
-                <validation-provider
-                    #default="{ errors }"
-                    name="username"
-                    rules="required"
-                >
-                  <b-form-input
-                      id="username"
-                      v-model="username"
-                      :state="errors.length > 0 ? false:null"
-                      placeholder="m.hoseini"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-            <b-col md="6">
-              <b-form-group
-                  label="تلفن همراه"
-                  label-for="tel"
-              >
-                <validation-provider
-                    #default="{ errors }"
-                    name="tel"
-                    rules="required|regex:09\d{9}$"
-                >
-                  <b-form-input
-                      id="tel"
-                      v-model="tel"
-                      type="text"
-                      :state="errors.length > 0 ? false:null"
-                      placeholder="09123456789"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-          </b-row>
-        </validation-observer>
-      </tab-content>
-
-      <tab-content
-          title="کلمه عبور"
-          :before-change="validationFormPassword"
-      >
-        <validation-observer
-            ref="passwordRule"
-            tag="form"
-        >
-          <b-row>
-            <b-col
-                cols="12"
-                class="mb-2"
-            >
-              <h5 class="mb-0">
-                انتخاب کلمه عبور
-              </h5>
-              <small class="text-muted">
-                لطفا کلمه عبور خود را در اختیار دیگران قرار ندهید
-              </small>
-            </b-col>
-            <b-col md="2">
-              <b-form-group
-                  label="پیامک تایید"
-                  label-for="sms"
-              >
-                <validation-provider
-                    #default="{ errors }"
-                    name="sms"
-                    rules="required|digits:4"
-                >
-                  <b-form-input
-                      id="sms"
-                      v-model="sms"
-                      :state="errors.length > 0 ? false:null"
-                      placeholder="1234"
-                  />
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-            <b-col md="5">
-              <b-form-group
-                  label="کلمه عبور"
-                  label-for="password"
-              >
-                <validation-provider
-                    #default="{ errors }"
-                    name="password"
-                    rules="required"
-                >
-                  <b-form-input
-                      id="password"
-                      v-model="password"
-                      type="password"
-                      :state="errors.length > 0 ? false:null"
-                  />
-                  <password v-model="password" :strength-meter-only="true"/>
-                  <small class="text-danger">{{ errors[0] }}</small>
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-            <b-col md="5">
-              <b-form-group
-                  label="تایید کلمه عبور"
-                  label-for="confirm-password"
-              >
-                <validation-provider
-                    #default="{ errors }"
-                    name="confirm-password"
-                    rules="required|confirmed:password"
-                >
-                  <b-form-input
-                      id="confirm-password"
-                      v-model="confirmPassword"
-                      type="password"
-                      :state="errors.length > 0 ? false:null"
-                  />
-                  <password v-model="confirmPassword" :strength-meter-only="true"/>
-                  <small class="text-danger">{{ errors[0] }}</small>
-
-                </validation-provider>
-              </b-form-group>
-            </b-col>
-          </b-row>
-        </validation-observer>
-      </tab-content>
-
       <!-- personal details tab -->
       <tab-content
           title="اطلاعات شخصی"
@@ -673,48 +519,6 @@
                 تصویر کارت ملی خورد را آپلود نمایید
               </small>
             </b-col>
-            <!--            <b-col md="3">-->
-            <!--              <b-form-group-->
-            <!--                  label="صفحه اول شناسنامه"-->
-            <!--                  label-for="shenasnameP1"-->
-            <!--              >-->
-            <!--                <validation-provider-->
-            <!--                    #default="{ errors }"-->
-            <!--                    name="shenasnameP1"-->
-            <!--                    rules="required"-->
-            <!--                >-->
-            <!--                  <b-form-file-->
-            <!--                      id="shenasnameP1"-->
-            <!--                      placeholder="تصویر سند را انتخاب کنید..."-->
-            <!--                      drop-placeholder="اینجا رها کنید..."-->
-            <!--                      v-model="shenasnameP1"-->
-            <!--                      name="shenasnameP1"-->
-            <!--                  />-->
-            <!--                  <small class="text-danger">{{ errors[0] }}</small>-->
-            <!--                </validation-provider>-->
-            <!--              </b-form-group>-->
-            <!--            </b-col>-->
-            <!--            <b-col md="3">-->
-            <!--              <b-form-group-->
-            <!--                  label="صفحه توضیحات شناسنامه"-->
-            <!--                  label-for="shenasnameP2"-->
-            <!--              >-->
-            <!--                <validation-provider-->
-            <!--                    #default="{ errors }"-->
-            <!--                    name="shenasnameP2"-->
-            <!--                    rules="required"-->
-            <!--                >-->
-            <!--                  <b-form-file-->
-            <!--                      id="shenasnameP2"-->
-            <!--                      placeholder="تصویر سند را انتخاب کنید..."-->
-            <!--                      drop-placeholder="اینجا رها کنید..."-->
-            <!--                      v-model="shenasnameP2"-->
-            <!--                      name="shenasnameP2"-->
-            <!--                  />-->
-            <!--                  <small class="text-danger">{{ errors[0] }}</small>-->
-            <!--                </validation-provider>-->
-            <!--              </b-form-group>-->
-            <!--            </b-col>-->
             <b-col md="6">
               <b-form-group
                   label="تصویر کارت ملی"
@@ -740,27 +544,6 @@
             <b-col md="6">
               <b-img v-if="carteMeli" :src="imgCarteMEliURL" fluid alt="Responsive image"></b-img>
             </b-col>
-            <!--            <b-col md="3">-->
-            <!--              <b-form-group-->
-            <!--                  label="تصویر پشت کارت ملی"-->
-            <!--                  label-for="carteMeliPosht"-->
-            <!--              >-->
-            <!--                <validation-provider-->
-            <!--                    #default="{ errors }"-->
-            <!--                    name="carteMeliPosht"-->
-            <!--                    rules="required"-->
-            <!--                >-->
-            <!--                  <b-form-file-->
-            <!--                      id="carteMeliPosht"-->
-            <!--                      placeholder="تصویر سند را انتخاب کنید..."-->
-            <!--                      drop-placeholder="اینجا رها کنید..."-->
-            <!--                      v-model="carteMeliPosht"-->
-            <!--                      name="carteMeliPosht"-->
-            <!--                  />-->
-            <!--                  <small class="text-danger">{{ errors[0] }}</small>-->
-            <!--                </validation-provider>-->
-            <!--              </b-form-group>-->
-            <!--            </b-col>-->
           </b-row>
         </validation-observer>
       </tab-content>
@@ -788,7 +571,14 @@ import {
 } from 'bootstrap-vue'
 import { required, email } from '@validations'
 import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
-import { CREATE_PROFILE, CREATE_USER, GET_CITIES, GET_PROVINCE, LOGIN } from '@/constants/graphql'
+import {
+  CREATE_PROFILE,
+  CREATE_USER,
+  GET_CITIES,
+  GET_PROVINCE,
+  LOGIN,
+  PROFILE_CONFIRM_WITH_USER
+} from '@/constants/graphql'
 import { GC_AUTH_TOKEN, GC_USER_DATA, GC_USER_ID } from '@/constants/settings'
 
 export default {
@@ -814,11 +604,8 @@ export default {
   data() {
     return {
       userID:null,
-      username: 'seyedmoosavi',//null
       tel: '09127514245',//null
       sms: '1010',//null
-      password: 1,//null,
-      confirmPassword: 1,//null,
       firstName: 'asd',// null,
       lastName: '456',//null,
       fatherName: '456',//null,
@@ -1028,39 +815,12 @@ export default {
     },
 
     formSubmitted() {
-      let input = {
-        userID:this.userID,
-        firstName: this.firstName,
-        lastName: this.lastName,
-        fatherName: this.fatherName,
-        idNumber: this.idNumber,
-        nationalCode: this.nationalCode,
-        birthDate: this.birthDate,
-        birthPlaceId: parseInt(this.birthPlace.value),
-        cityId: parseInt(this.city.value),
-        postalCode: this.postalCode,
-        address: this.address,
-        homePhone: this.homePhone,
-        officePhone: this.officePhone,
-        mobile1: this.tel,
-        mobile2: this.mobile2,
-        bankId: this.bankName.value,
-        accountNumber: this.accountNumber,
-        sheba: this.sheba,
-        cardNumber: this.cardNumber,
-        tel: this.tel,
-        images: {
-          image: document.getElementById('carteMeli').files[0]
-        }
-
-      }
+      console.clear()
+      console.log(parseInt(localStorage.getItem('user-id')))
       this.$apollo.mutate({
         mutation: CREATE_PROFILE,
         variables: {
-          userID: parseInt(this.userID),
-          username: this.username,
-          password: this.password.toString(),
-          email: this.email,
+          userID: parseInt(localStorage.getItem('user-id')),
           firstName: this.firstName,
           lastName: this.lastName,
           fatherName: this.fatherName,
@@ -1084,6 +844,13 @@ export default {
         }
       })
           .then((result) => {
+            // this.$apollo.mutate({
+            //   mutation:PROFILE_CONFIRM_WITH_USER,
+            //   variables:{
+            //     id:result.data.createProfile.profile.id,
+            //     transition:"to_stuff_confirm"
+            //   }
+            // })
             this.$toast({
               component: ToastificationContent,
               props: {
@@ -1104,35 +871,6 @@ export default {
             .then(success => {
               if (success) {
                 resolve(true)
-              } else {
-                reject()
-              }
-            })
-      })
-    },
-    validationFormPassword() {
-      return new Promise((resolve, reject) => {
-        this.$refs.passwordRule.validate()
-            .then(success => {
-              if (success) {
-                this.$apollo.mutate({
-                  mutation: CREATE_USER,
-                  variables: {
-                    username: this.username,
-                    password: this.password
-                  }
-                })
-                    .then((result) => {
-                      this.userID = result.data.createUser.user.id
-                        this.login()
-
-                      resolve(true)
-                    })
-                    .catch(function (result) {
-                      alert(result)
-                      console.log(result)
-                    })
-
               } else {
                 reject()
               }
@@ -1187,58 +925,6 @@ export default {
             })
       })
     },
-    login() {
-      const {
-        username,
-        password
-      } = this.$data
-      if (this.login) {
-        this.$apollo.mutate({
-          mutation: LOGIN,
-          variables: {
-            username,
-            password
-          }
-        })
-            .then((result) => {
-              const id = result.data.login.user.id
-              const token = result.data.login.token
-              let fullName=result.data.login.user.username
-              this.saveUserData(id,token,fullName)
-              this.showSms = true
-            })
-            .catch((error) => {
-              console.log(error)
-              localStorage.removeItem(GC_USER_ID)
-              localStorage.removeItem(GC_AUTH_TOKEN)
-              localStorage.removeItem(GC_USER_DATA)
-              localStorage.removeItem('fullName')
-              alert(error)
-            })
-      }
-    },
-    saveUserData(id, token, fullName) {
-      let userData = {
-        id: this.userID,
-        fullName: fullName,
-        username: this.$data.username,
-        avatar: '/demo/vuexy-vuejs-admin-dashboard-template/demo-1/img/13-small.d796bffd.png',
-        email: 'admin@demo.com',
-        role: 'admin',
-        ability: [{
-          'action': 'customer',
-          'subject': 'all'
-        }],
-        extras: { 'eCommerceCartItemsCount': 5 }
-      }
-      localStorage.setItem(GC_USER_ID, id)
-      localStorage.setItem(GC_AUTH_TOKEN, token)
-      localStorage.setItem(GC_USER_DATA, JSON.stringify(userData))
-      localStorage.setItem('fullName', fullName)
-      this.$root.$data.userId = localStorage.getItem(GC_USER_ID)
-      this.$ability.update(userData.ability)
-      // this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)
-    }
   },
 }
 </script>

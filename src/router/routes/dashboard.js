@@ -13,6 +13,10 @@ export default [
     path: '/profile/create',
     name: 'create-profile',
     component: () => import('@/views/forms/form-wizard/FormCreateProfile'),
+  },  {
+    path: '/profile/create',
+    name: 'create-profile',
+    component: () => import('@/views/forms/form-wizard/FormCreateProfile'),
   },
   {
     path: '/profile',
@@ -38,5 +42,20 @@ export default [
     path: '/transaction',
     name: 'transactions',
     component: () => import('@/views/table/bs-table/TableTransactions.vue'),
+  },
+  {
+    path: '/transaction-stuff-confirm',
+    name: 'transactions-stuff-confirm',
+    component: () => import('@/views/table/bs-table/TableTransactionsStuffConfirm.vue'),
+  },
+  {
+    path: '/transaction-boss-confirm',
+    name: 'transactions-boss-confirm',
+    component: () => import('@/views/table/bs-table/TableTransactionsBossConfirm.vue'),
+  },
+  {
+    path: '/profile-stuff-confirm',
+    name: 'profile-stuff-confirm',
+    component: () => import('@/views/table/bs-table/TableProfileStuffConfirm'),
   },
 ]

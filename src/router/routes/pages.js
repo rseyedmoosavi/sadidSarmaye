@@ -38,7 +38,8 @@ export default [
   {
     path: '/register',
     name: 'auth-register',
-    component: () => import('@/views/pages/authentication/Register.vue'),
+    component: () => import('@/views/pages/authentication/Register'),
+    // component: () => import('@/views/pages/authentication/Register.vue'),
     meta: {
       layout: 'full',
       resource: 'Auth',
@@ -157,7 +158,24 @@ export default [
   {
     path: '/pages/profile',
     name: 'pages-profile',
-    component: () => import('@/views/pages/profile/Profile.vue'),
+    component: () => import('@/views/pages/profile/Profile'),
+    meta: {
+      pageTitle: 'Profile',
+      breadcrumb: [
+        {
+          text: 'Pages',
+        },
+        {
+          text: 'Profile',
+          active: true,
+        },
+      ],
+    },
+  },
+  {
+    path: '/pages/customer-edit-profile',
+    name: 'customer-edit-profile',
+    component: () => import('@/views/forms/form-wizard/FormCreateProfileByCustomer'),
     meta: {
       pageTitle: 'Profile',
       breadcrumb: [

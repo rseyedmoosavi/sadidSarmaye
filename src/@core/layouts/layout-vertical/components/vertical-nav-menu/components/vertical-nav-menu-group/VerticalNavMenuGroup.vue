@@ -14,6 +14,7 @@
     >
       <feather-icon :icon="item.icon || 'CircleIcon'" />
       <span class="menu-title text-truncate">{{ t(item.title) }}</span>
+<!--      <span class="menu-title text-truncate">{{ t(item.title) }}</span>-->
       <b-badge
         v-if="item.tag"
         pill

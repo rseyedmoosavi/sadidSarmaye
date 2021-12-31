@@ -5,12 +5,6 @@
       class="dropdown-user"
   >
     <template #button-content>
-      <!--      <div class="d-sm-flex d-none user-nav">-->
-      <!--        <p class="user-name font-weight-bolder mb-0">-->
-      <!--          {{ userData.fullName || userData.username }}-->
-      <!--        </p>-->
-      <!--        <span class="user-status">{{ userData.role }}</span>-->
-      <!--      </div>-->
       <b-avatar
           size="40"
           :src="userData.avatar"
@@ -50,7 +44,7 @@
     <!--      <span>اخرین ورود: یکشنبه 20 آذر 1400</span>-->
     <!--    </b-dropdown-item>-->
     <b-dropdown-item
-        :to="{ name: 'pages-profile'}"
+        :to="{ name: this.profileAddress}"
         link-class="d-flex align-items-center"
     >
       <feather-icon
@@ -82,6 +76,7 @@ import {
 import { initialAbility } from '@/libs/acl/config'
 import useJwt from '@/auth/jwt/useJwt'
 import { avatarText } from '@core/utils/filter'
+import { GET_PROFILE_ADDRESS } from '@/constants/graphql'
 
 export default {
   components: {
@@ -94,7 +89,28 @@ export default {
     return {
       userData: JSON.parse(localStorage.getItem('userData')),
       avatarText,
+      profileAddress:null,
+      userName:null
     }
+  },
+  // apollo:{
+  //   profileAddress:{
+  //     query:GET_PROFILE
+  //   }
+  // },
+  mounted() {
+    this.$apollo.mutate({
+      mutation:GET_PROFILE_ADDRESS
+    }).then((result)=>{
+      if(result.data.me.profile){
+        this.profileAddress= "pages-profile"
+      }else{
+        this.profileAddress= "customer-edit-profile"
+      }
+    }).catch((result)=>{
+      console.clear()
+      console.log(result)
+    })
   },
   methods: {
     logout() {
@@ -105,6 +121,11 @@ export default {
 
       // Remove userData from localStorage
       localStorage.removeItem('userData')
+      localStorage.removeItem('user-id')
+      localStorage.removeItem('fullName')
+      localStorage.removeItem('profile-id')
+      localStorage.removeItem('loglevel:webpack-dev-server')
+      localStorage.removeItem('auth-token')
 
       // Reset ability
       this.$ability.update(initialAbility)

@@ -11,6 +11,12 @@ interface Node {
     id: ID!
 }
 
+type BankType {
+    description: String
+    id: ID!
+    name: String!
+}
+
 type ChangePassword {
     errors: [String]!
     ok: Boolean!
@@ -20,6 +26,7 @@ type ChangePassword {
 type CityType implements Node {
     id: ID!
     name: String!
+    provinceId: Int
 }
 
 type CityTypeConnection {
@@ -37,6 +44,10 @@ type CityTypeEdge {
     node: CityType
 }
 
+type CreateImagePayload {
+    image: ImageType!
+}
+
 type CreateProfilePayload {
     profile: ProfileType!
 }
@@ -48,9 +59,11 @@ type CreateTransactionPayload {
 type CreateTransactionRequest {
     errors: [String]!
     ok: Boolean!
+    transactionRequest: TransactionRequestType
 }
 
 type CreateUser {
+    token: String
     user: UserType
 }
 
@@ -60,10 +73,16 @@ type GroupType {
     users: [UserType]
 }
 
+type ImageKindType {
+    description: String
+    name: String!
+}
+
 type ImageType {
     description: String
     id: ID!
     image: String!
+    kind: ImageKindType
 }
 
 type Login {
@@ -97,11 +116,13 @@ type Mutation {
         "تکرار کلمه عبور جدید"
         password2: String!
     ): ChangePassword
+    "افزودن تصویر"
+    createImage(input: CreateImageInput!): CreateImagePayload
     "نام کاربری و کلمه عبور معرفی شده برای ساخت کاربر جدید و اتصال آن به پروفایل درحال ساخت استفاده میشود"
     createProfile(input: CreateProfileInput!): CreateProfilePayload
     "ایجاد تراکنش"
     createTransaction(input: CreateTransactionInput!): CreateTransactionPayload
-    createTransactionRequest(description: String, kindId: Int!, transactionId: Int!): CreateTransactionRequest
+    createTransactionRequest(input: CreateTransactionRequestImput!): CreateTransactionRequest
     "ایجاد کاربر"
     createUser(input: UserInput!): CreateUser
     deleteToken(refreshToken: String): Revoke
@@ -109,6 +130,8 @@ type Mutation {
     loginOtp(otp: String, password: String!, username: String!): LoginOTP
     "مرحله بعد در گردش کار پروفایل"
     profileWorkflowTransition(
+        "description"
+        description: String,
         id: Int!,
         "transition"
         transition: String!
@@ -118,6 +141,14 @@ type Mutation {
     stuffConfirmProfile(input: ConfirmInput!): StuffConfirmProfile
     "Obtain JSON Web Token mutation"
     tokenAuth(password: String!, username: String!): ObtainJSONWebToken
+    "مرحله بعد در گردش کار تراکنش"
+    transactionWorkflowTransition(
+        "description"
+        description: String,
+        id: Int!,
+        "transition"
+        transition: String!
+    ): TransactionWorkFlowTransition
     "بنابه دلایلی از اینجا نام کاربری و کلمه عبور را نمیتوان تغییر داد"
     updateProfile(input: UpdateProfileInput!): UpdateProfilePayload
     updateTransaction(input: UpdateTransactionInput!): UpdateTransactionPayload
@@ -143,9 +174,27 @@ type PageInfo {
     startCursor: String
 }
 
+type PelekanType {
+    az: Float
+    description: String
+    id: ID!
+    percent: Int!
+    ta: Float
+}
+
 type PermissionType {
     codename: String!
     name: String!
+}
+
+type PlanType {
+    description: String
+    endDate: Date
+    id: ID!
+    monthly: Boolean!
+    pelekans: [PelekanType!]!
+    startDate: Date
+    title: String!
 }
 
 type PostType implements Node {
@@ -160,6 +209,13 @@ type PostType implements Node {
 type ProfileType implements Node {
     accountNumber: String
     address: String
+    "تمامی گردش کارهای پروفایل"
+    allWorkflowTransitions: [TransitionType]
+    "گردش کارهای مجاز در این مرحله و توسط کاربر جاری"
+    availableUserWorkflowTransitions: [TransitionType]
+    "گردش کارهای مجاز در این مرحله"
+    availableWorkflowTransitions: [TransitionType]
+    bank: BankType
     birthDate: Date
     birthPlace: CityType
     cardNumber: String
@@ -204,10 +260,8 @@ type ProfileType implements Node {
         taDate: Date!
     ): Float
     tel: String
-    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection!
+    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float, state_In: [String]): TransactionTypeConnection!
     user: UserType
-    "مرحله بعدی در گردش کار"
-    workflowTransition: [String]
 }
 
 type ProfileTypeConnection {
@@ -249,9 +303,11 @@ type ProvinceType {
 }
 
 type Query {
+    bank: [BankType]
     cities(after: String, before: String, first: Int, last: Int, name_Icontains: String, name_Istartswith: String, offset: Int, province_Id: Float): CityTypeConnection
     "گروه های دسترسی"
     groups: [GroupType]
+    imageKind: [ImageKindType]
     lastLoggedInUsers(count: Int): [UserType]
     me: UserType
     "نمایش سود از تاریخ تا تاریخ برای کاربر"
@@ -282,13 +338,15 @@ type Query {
         taDate: Date!
     ): [MohasebeSodForAllSummaryType]
     permissions: [PermissionType]
+    "طرح های سرمایه گزاری"
+    plan: [PlanType]
     posts: [PostType]
     profiles(after: String, before: String, first: Int, id: Float, last: Int, lastName: String, lastName_Icontains: String, lastName_Istartswith: String, mobile1: String, mobile1_Icontains: String, mobile1_Istartswith: String, nationalCode: String, nationalCode_Icontains: String, nationalCode_Istartswith: String, offset: Int, presenter_Id: Float, state_In: [String]): ProfileTypeConnection
     provinces: [ProvinceType]
     transactionKinds: [TransactionKindType]
     transactionRequestKinds: [TransactionRequestKindType]
     transactionRequests(after: String, before: String, first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, transaction_Id: Float): TransactionRequestTypeConnection
-    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float): TransactionTypeConnection
+    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float, state_In: [String]): TransactionTypeConnection
     users: [UserType]
 }
 
@@ -320,10 +378,19 @@ type TransactionRequestKindType {
 }
 
 type TransactionRequestType implements Node {
+    "تمامی گردش کارهای تراکنش"
+    allWorkflowTransitions: [TransitionType]
+    "گردش کارهای مجاز در این مرحله و توسط کاربر جاری"
+    availableUserWorkflowTransitions: [TransitionType]
+    "گردش کارهای مجاز در این مرحله"
+    availableWorkflowTransitions: [TransitionType]
     created: DateTime!
     description: String
     id: ID!
+    images: [ImageType]
     kind: TransactionRequestKindType!
+    state: TransactionRequestState!
+    stateHistory: [WorkFlowHistoryType]
     transaction: TransactionType!
 }
 
@@ -344,8 +411,14 @@ type TransactionRequestTypeEdge {
 
 type TransactionType implements Node {
     alias: String
+    "تمامی گردش کارهای تراکنش"
+    allWorkflowTransitions: [TransitionType]
     "مبلغ"
     amount: Float!
+    "گردش کارهای مجاز در این مرحله و توسط کاربر جاری"
+    availableUserWorkflowTransitions: [TransitionType]
+    "گردش کارهای مجاز در این مرحله"
+    availableWorkflowTransitions: [TransitionType]
     contractTerm: Int
     dateTime: DateTime!
     description: String
@@ -355,7 +428,11 @@ type TransactionType implements Node {
     images: [ImageType]
     kind: TransactionKindType!
     percent: Int!
+    plan: PlanType
     profile: ProfileType!
+    receiptNumber: String
+    state: TransactionState!
+    stateHistory: [WorkFlowHistoryType]
 }
 
 type TransactionTypeConnection {
@@ -375,6 +452,18 @@ type TransactionTypeEdge {
     node: TransactionType
 }
 
+type TransactionWorkFlowTransition {
+    errors: [String]!
+    ok: Boolean!
+}
+
+type TransitionType {
+    name: String
+    permission: String
+    source: String
+    target: String
+}
+
 type UpdateProfilePayload {
     profile: ProfileType!
 }
@@ -385,7 +474,10 @@ type UpdateTransactionPayload {
 
 "اطلاعات کاربر جاری"
 type UserType {
+    allPermissions: [String]
     firstName: String!
+    "The groups this user belongs to. A user will get all permissions granted to each of their groups."
+    groups: [GroupType!]!
     id: ID!
     lastLogin: DateTime
     lastName: String!
@@ -411,6 +503,46 @@ type WorkFlowHistoryType {
     transition: String!
 }
 
+"An enumeration."
+enum TransactionRequestState {
+    "boss_confirmed"
+    BOSS_CONFIRMED
+    "converted"
+    CONVERTED
+    "customer_added"
+    CUSTOMER_ADDED
+    "customer_confirmed"
+    CUSTOMER_CONFIRMED
+    "start"
+    START
+    "stuff_added"
+    STUFF_ADDED
+    "stuff_checked"
+    STUFF_CHECKED
+    "stuff_confirmed"
+    STUFF_CONFIRMED
+}
+
+"An enumeration."
+enum TransactionState {
+    "boss_confirmed"
+    BOSS_CONFIRMED
+    "converted"
+    CONVERTED
+    "customer_added"
+    CUSTOMER_ADDED
+    "customer_confirmed"
+    CUSTOMER_CONFIRMED
+    "start"
+    START
+    "stuff_added"
+    STUFF_ADDED
+    "stuff_checked"
+    STUFF_CHECKED
+    "stuff_confirmed"
+    STUFF_CONFIRMED
+}
+
 input ConfirmInput {
     "درصورت تایید true در غیرآن false"
     confirmed: Boolean!
@@ -423,6 +555,9 @@ input CreateImageInput {
     description: String
     image: Upload!
     kindId: Int
+    "نام چیزی مه این تصویر مربوط به آن است مانند profile , transaction"
+    model: String
+    objectId: Int
 }
 
 input CreateProfileInput {
@@ -448,11 +583,14 @@ input CreateProfileInput {
     postalCode: String
     sheba: String
     tel: String
-    user: UserInput!
+    "کاربر متناظر"
+    userId: Int!
 }
 
 "ورودی های لازم برای ایجاد تراکنش"
 input CreateTransactionInput {
+    "نام دیگر"
+    alias: String
     "مبلغ"
     amount: Float!
     "مدت قرارداد"
@@ -461,12 +599,25 @@ input CreateTransactionInput {
     description: String
     "تاریخ موثر"
     effectiveDate: Date!
+    "تاریخ انقضا"
+    expireDate: Date
     "پیوست ها"
     images: [CreateImageInput]
     "id نوع تراکنش"
     kindId: Int!
+    "کد طرح"
+    planId: Int!
     "کاربر تراکنش"
     profileId: Int!
+    "شماره پیگیری"
+    receiptNumber: String
+}
+
+input CreateTransactionRequestImput {
+    description: String
+    images: [CreateImageInput]
+    kindId: Int!
+    transactionId: Int!
 }
 
 input UpdateImageInput {
@@ -474,6 +625,9 @@ input UpdateImageInput {
     id: ID!
     image: Upload
     kindId: Int
+    "نام چیزی مه این تصویر مربوط به آن است مانند profile , transaction"
+    model: String
+    objectId: Int
 }
 
 input UpdateProfileInput {
@@ -501,6 +655,8 @@ input UpdateProfileInput {
     sheba: String
     tel: String
     user: UserInput
+    "کاربر متناظر"
+    userId: Int!
 }
 
 "مبلغ را نمیتوان به روز کرد"
@@ -517,7 +673,6 @@ input UpdateTransactionInput {
 }
 
 input UserInput {
-    email: String
     id: ID
     password: String!
     username: String!

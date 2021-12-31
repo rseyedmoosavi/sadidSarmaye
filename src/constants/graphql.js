@@ -22,7 +22,6 @@ export const PROFILE_FOR_DROPDOWN = gql`
                     id
                     firstName
                     lastName
-                    codeMeli
                     presenter
                     #                transactions(kind_Id:1){
                     #                    totalSum
@@ -40,10 +39,9 @@ export const PROFILE = gql`
                     id
                     firstName
                     lastName
-                    codeMeli
                     presenter
-                    adress
-                    shomareKart
+                    address
+                    cardNumber
                     shomareHesab
                     description
                     tel
@@ -141,6 +139,123 @@ export const USER_TRANSACTIONS = gql`
         }
     }
 `
+
+export const TRANSACTION_STUFF_CONFIRM = gql`
+    query transaction($id:Float){
+        transactions(id:$id,state_In:"CUSTOMER_ADDED"){
+            edges{
+                node{
+                    images{
+                        image
+                    }
+                    id
+                    effectiveDate
+                    dateTime
+                    expireDate
+                    amount
+                    contractTerm
+                    receiptNumber
+                    availableUserWorkflowTransitions{
+                        name
+                    }
+                }
+            }
+        }
+    }
+`
+
+export const PROFILE_STUFF_CONFIRM = gql`
+    query profileStuffConfirm($id:Float){
+        profiles(id:$id,state_In: "customer_added") {
+            edges {
+                node {
+                    id
+                    firstName
+                    lastName
+                    fatherName
+                    idNumber
+                    nationalCode
+                    birthDate
+                    birthPlace{
+                        name
+                    }
+                    city{
+                        name
+                    }
+                    postalCode
+                    address
+                    homePhone
+                    officePhone
+                    mobile1
+                    mobile2
+                    email
+                    bank{
+                        name
+                    }
+                    accountNumber
+                    sheba
+                    cardNumber
+                    images{
+                        image
+                    }
+                    description
+
+                }
+            }
+        }
+    }
+`
+
+export const TRANSACTION_BOSS_CONFIRM = gql`
+    query transaction($id: Float, $state: [String]) {
+        transactions(id: $id, state_In: $state) {
+            edges {
+                node {
+                    profile{
+                        id
+                        firstName
+                        lastName
+                    }
+                    state
+                    stateHistory {
+                        transition
+                        timestamp
+                        by {
+                            profile {
+                                id
+                                firstName
+                                lastName
+                            }
+                        }
+                    }
+                    images {
+                        image
+                    }
+                    id
+                    effectiveDate
+                    dateTime
+                    expireDate
+                    amount
+                    contractTerm
+                    receiptNumber
+                    availableUserWorkflowTransitions {
+                        name
+                    }
+                }
+            }
+        }
+    }
+
+`
+
+export const TOTAL_COUNT_GHARARDAD_AND_MOJOODI = gql`
+    query getTotal($id:Float){
+        transactions(profile_Id:$id,kind_Id:1){
+            totalCount
+            totalSum
+        }
+    }
+`
 export const DEPOSIT_FOR_HOME_PAGE = gql`
     query transactions($offset:Int,$first:Int,$kindId:Float){
         transactions(offset: $offset,first:$first,kind_Id:$kindId) {
@@ -165,38 +280,59 @@ export const DEPOSIT_FOR_HOME_PAGE = gql`
         }
     }
 `
+
+export const PROFILE_CONFIRM_WITH_USER = gql`
+    mutation profileConfirmWithUser($id:Int!,$transition:String!,$description:String){
+        profileWorkflowTransition(id:$id,transition:$transition,description:$description){
+            ok
+            errors
+        }
+    }
+`
+
+export const TRANSACTION_CONFIRM_WITH_STUFF = gql`
+    mutation transactionConfirmWithStuff($id:Int!,$transition:String!,$description:String){
+        transactionWorkflowTransition(id:$id,transition:$transition,description:$description){
+            ok
+            errors
+        }
+    }
+`
 export const PROFILE_FOR_CONFIRM_USER = gql`
     query confirmUserProfile{
-      me{
-        profile{
-          id
-          firstName
-          lastName
-          fatherName
-          idNumber
-          nationalCode
-          birthDate
-          birthPlace{
-            name
-          }
-          city{
-            name
-          }
-          postalCode
-          address
-          homePhone
-          officePhone
-          mobile1
-          mobile2
-          email
-          accountNumber
-          sheba
-          cardNumber
-          images{
-            image
-          }
+        me{
+            profile{
+                id
+                firstName
+                lastName
+                fatherName
+                idNumber
+                nationalCode
+                birthDate
+                birthPlace{
+                    name
+                }
+                city{
+                    name
+                }
+                bank{
+                    name
+                }
+                postalCode
+                address
+                homePhone
+                officePhone
+                mobile1
+                mobile2
+                email
+                accountNumber
+                sheba
+                cardNumber
+                images{
+                    image
+                }
+            }
         }
-      }
     }
 `
 
@@ -268,6 +404,16 @@ export const TRANSACTION_SEARCH = gql`
     }
 
 `
+
+export const GET_PROFILE_ADDRESS = gql`
+    query getProfile{
+        me{
+            profile{
+                firstName
+            }
+        }
+    }
+`
 export const GET_PROVINCE = gql`
     query getProvince {
         provinces {
@@ -301,13 +447,46 @@ export const LOGIN = gql`
         ){
             user {
                 id
+                username
                 profile{
+                    id
                     firstName
                     lastName
                 }
                 lastLogin
             }
             token
+        }
+    }
+`
+export const GET_GROUPS_NAME = gql`
+    query getGroupsName{
+        me{
+            groups{
+                name
+            }
+        }
+    }
+`
+
+export const CREATE_USER = gql`
+    mutation createUser($username: String!, $password: String!) {
+        createUser(
+            input: { username: $username, password: $password }
+        ) {
+            user {
+                id
+            }
+        }
+    }
+
+`
+
+export const GET_PLAN = gql`
+    query getPlan{
+        plan{
+            value:id
+            text:title
         }
     }
 `
@@ -325,8 +504,7 @@ export const CREATE_PROFILE_OLD = gql`
 `
 export const CREATE_PROFILE = gql`
     mutation createProfile(
-        $username:String!
-        $password:String!
+        $userID:Int!
         $firstName :String
         $lastName :String
         $fatherName :String
@@ -352,11 +530,7 @@ export const CREATE_PROFILE = gql`
     ){
         createProfile(
             input: {
-                user: {
-                    email: $email
-                    username: $username
-                    password: $password
-                }
+                userId: $userID
                 firstName: $firstName
                 lastName: $lastName
                 fatherName: $fatherName
@@ -394,32 +568,30 @@ export const CREATE_PROFILE = gql`
 export const CREATE_TRANSACTION = gql`
     mutation (
         $profileId: Int!
+        $plan:Int!
+        $alias:String
         $effectiveDate: Date!
         $amount: Float!
         $kindId: Int!
+        $contractTerm:String
+        $receiptNumber:String
         $file: Upload!
     ) {
         createTransaction(
             input: {
                 kindId: $kindId
                 profileId: $profileId
+                alias:$alias
                 effectiveDate: $effectiveDate
                 amount: $amount
+                contractTerm:$contractTerm
+                planId:$plan
+                receiptNumber:$receiptNumber
                 images: [{ description: "hi transaction 1234 ", image: $file}]
             }
         ) {
             transaction {
                 id
-                amount
-                effectiveDate
-                kind {
-                    title
-                }
-                images {
-                    id
-                    description
-                    image
-                }
             }
         }
     }

@@ -2,20 +2,31 @@ export default [
   {
     title: 'داشبورد',
     icon: 'HomeIcon',
-    tag: '4',
     tagVariant: 'light-success',
     children: [
       {
         title: 'تست صفحه بندی',
         route: 'page',
       },
-      // {
-      //   title: 'خدمات شما',
-      //   route: 'dashboard-analytics',
-      // },
+      {
+        title: 'پروفایل های منتظر تایید',
+        route: 'profile-stuff-confirm',
+        action: 'stuff_group'
+      },
+      {
+        title: 'تراکنش های منتظر تایید',
+        route: 'transactions-stuff-confirm',
+        action: 'stuff_group'
+      },
+      {
+        title: 'تراکنش های منتظر تایید رییس',
+        route: 'transactions-boss-confirm',
+        action: 'boss_group'
+      },
       {
         title: 'کاربر جدید',
         route: 'create-profile',
+        action: 'stuff_group',
       },
       {
         title: 'لیست کاربران',

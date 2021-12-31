@@ -190,10 +190,10 @@
 
 <script>
 /* eslint-disable global-require */
-import {ValidationProvider, ValidationObserver} from 'vee-validate'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
-import {GC_USER_ID, GC_AUTH_TOKEN, GC_USER_DATA} from '@/constants/settings'
-import {LOGIN} from "@/constants/graphql";
+import { GC_USER_ID, GC_AUTH_TOKEN, GC_USER_DATA } from '@/constants/settings'
+import { GET_GROUPS_NAME, LOGIN } from '@/constants/graphql'
 import {
   BRow,
   BCol,
@@ -211,8 +211,8 @@ import {
   BAlert,
   VBTooltip,
 } from 'bootstrap-vue'
-import {required, email} from '@validations'
-import {togglePasswordVisibility} from '@core/mixins/ui/forms'
+import { required, email } from '@validations'
+import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
@@ -251,6 +251,7 @@ export default {
       sideImg: require('@/assets/images/pages/login.png'),
       Logo: require('@/assets/images/logo/logo.png'),
       // validation rules
+      groupName:null,
       required,
       email,
     }
@@ -270,69 +271,93 @@ export default {
   },
   methods: {
     login() {
-      this.$refs.loginForm.validate().then(success => {
-        if (success) {
-          const {username, password} = this.$data
-          if (this.login) {
-            this.$apollo.mutate({
-              mutation: LOGIN,
-              variables: {
+      this.$refs.loginForm.validate()
+          .then(success => {
+            if (success) {
+              const {
                 username,
                 password
+              } = this.$data
+              if (this.login) {
+                this.$apollo.mutate({
+                  mutation: LOGIN,
+                  variables: {
+                    username,
+                    password
+                  }
+                })
+                    .then((result) => {
+                      this.$apollo.mutate({
+                        mutation:GET_GROUPS_NAME
+                      }).then((groupName)=>{
+                        this.groupName=groupName.data.me.groups[0].name
+                      })
+                      this.result = result
+                      this.showSms = true
+                    })
+                    .catch((error) => {
+                      localStorage.removeItem(GC_USER_ID)
+                      localStorage.removeItem(GC_AUTH_TOKEN)
+                      localStorage.removeItem(GC_USER_DATA)
+                      localStorage.removeItem('fullName')
+                      localStorage.removeItem('profile-id')
+                      alert(error)
+                    })
               }
-            }).then((result) => {
-              this.result=result
-              this.showSms = true
-            }).catch((error) => {
-              localStorage.removeItem(GC_USER_ID)
-              localStorage.removeItem(GC_AUTH_TOKEN)
-              localStorage.removeItem(GC_USER_DATA)
-              localStorage.removeItem("fullName")
-              alert(error);
-            })
-          }
-        }
-      })
+            }
+          })
     },
     login2Site() {
-      if (this.smsNo == 10) {
+      if (this.smsNo === '10') {
         const id = this.result.data.login.user.id
         const token = this.result.data.login.token
-        const fullName = this.result.data.login.user.profile.firstName + ' ' + this.result.data.login.user.profile.lastName
+        let fullName=this.result.data.login.user.username
+        let profileID=0
+        if(this.result.data.login.user.profile){
+          let firstName=this.result.data.login.user.profile.firstName
+          let lastName=this.result.data.login.user.profile.lastName
+          profileID=this.result.data.login.user.profile.id
+          fullName = firstName+' '+lastName
+        }
         try {
-          this.saveUserData(id, token,fullName)
-        }catch (e) {
+          this.saveUserData(id, token, fullName,profileID)
+        } catch (e) {
           console.log(e)
         }
-        this.$router.push({path: '/'}).then(() => {
-          this.$toast({
-            component: ToastificationContent,
-            position: 'top-left',
-            props: {
-              title: `جناب آقای ${fullName}  خوش آمدید`,
-              icon: 'CoffeeIcon',
-              variant: 'success',
-              text: `شما با موفقیت به سیستم وارد شدید`,
-            },
-          })
-        })
+        this.$router.push({ path: '/' })
+            .then(() => {
+              this.$toast({
+                component: ToastificationContent,
+                position: 'top-left',
+                props: {
+                  title: `جناب آقای ${fullName}  خوش آمدید`,
+                  icon: 'CoffeeIcon',
+                  variant: 'success',
+                  text: `شما با موفقیت به سیستم وارد شدید`,
+                },
+              })
+            })
       }
     },
-    saveUserData(id, token, fullName) {
+    saveUserData(id, token, fullName,profileID) {
       let userData = {
-        id: 1,
+        id: id,
         fullName: fullName,
         username: this.$data.username,
-        avatar: "/demo/vuexy-vuejs-admin-dashboard-template/demo-1/img/13-small.d796bffd.png",
-        email: "admin@demo.com",
-        role: "admin",
-        ability: [{"action": "manage", "subject": "all"}],
-        extras: {"eCommerceCartItemsCount": 5}
+        avatar: '/demo/vuexy-vuejs-admin-dashboard-template/demo-1/img/13-small.d796bffd.png',
+        email: 'admin@demo.com',
+        role: this.groupName,
+        ability: [{
+          'action': this.groupName,
+          'subject': 'all'
+        }],
+        extras: { 'eCommerceCartItemsCount': 5 }
       }
       localStorage.setItem(GC_USER_ID, id)
       localStorage.setItem(GC_AUTH_TOKEN, token)
       localStorage.setItem(GC_USER_DATA, JSON.stringify(userData))
-      localStorage.setItem("fullName", fullName)
+      localStorage.setItem('fullName', fullName)
+      localStorage.setItem('profile-id',profileID )
       this.$root.$data.userId = localStorage.getItem(GC_USER_ID)
       this.$ability.update(userData.ability)
       // this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)

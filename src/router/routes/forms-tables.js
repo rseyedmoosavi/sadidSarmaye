@@ -375,6 +375,57 @@ export default [
         },
     },
     {
+        path: '/transaction/stuff-confirm/:id',
+        name: 'transaction stuff confirm',
+        component: () => import('@/views/forms/form-validation/FormTransactionStuffConfirm'),
+        meta: {
+            pageTitle: 'Transaction Update',
+            breadcrumb: [
+                {
+                    text: 'Form Profile',
+                },
+                {
+                    text: 'Form profile',
+                    active: true,
+                },
+            ],
+        },
+    },
+    {
+        path: '/transaction/boss-confirm/:id',
+        name: 'transaction boss confirm',
+        component: () => import('@/views/forms/form-validation/FormTransactionBossConfirm'),
+        meta: {
+            pageTitle: 'Transaction Update',
+            breadcrumb: [
+                {
+                    text: 'Form Profile',
+                },
+                {
+                    text: 'Form profile',
+                    active: true,
+                },
+            ],
+        },
+    },
+    {
+        path: '/profile/stuff-confirm/:id',
+        name: 'profile stuff confirm',
+        component: () => import('@/views/forms/form-validation/FormProfileStuffConfirm'),
+        meta: {
+            pageTitle: 'Profile Update',
+            breadcrumb: [
+                {
+                    text: 'Form Profile',
+                },
+                {
+                    text: 'Form profile',
+                    active: true,
+                },
+            ],
+        },
+    },
+    {
         path: '/profile/create',
         name: 'create profile',
         component: () => import('@/views/forms/form-validation/FormCreateProfile.vue'),

@@ -11,9 +11,8 @@
 <script>
 export default {
   name: 'FullName',
-  components: {},
-  methods: {
-    getFullName() {
+  methods:{
+    getFullName(){
       return localStorage.getItem('fullName')
     }
   }

@@ -11,6 +11,8 @@ import pages from './routes/pages'
 import chartsMaps from './routes/charts-maps'
 import formsTable from './routes/forms-tables'
 import others from './routes/others'
+import useJwt from '@/auth/jwt/useJwt'
+import { initialAbility } from '@/libs/acl/config'
 
 Vue.use(VueRouter)
 
@@ -63,6 +65,12 @@ const router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
+  console.clear()
+  console.log(to)
+  if(to.path==='/register') {
+    alert('sdf')
+      logout()
+  }
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // this route requires auth, check if logged in
     // if not, redirect to login page.
@@ -83,6 +91,16 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+function logout() {
+  localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)
+  localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
+  localStorage.removeItem('userData')
+  localStorage.removeItem('user-id')
+  localStorage.removeItem('fullName')
+  localStorage.removeItem('profile-id')
+  localStorage.removeItem('loglevel:webpack-dev-server')
+  localStorage.removeItem('auth-token')
+}
 // ? For splash screen
 // Remove afterEach hook if you are not using splash screen
 router.afterEach(() => {

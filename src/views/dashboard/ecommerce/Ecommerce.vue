@@ -11,7 +11,7 @@
       <b-col sm="12" md="12" lg="4" xl="4">
         <Deposits/>
       </b-col>
-      <b-col  sm="12" md="12" lg="4" xl="4">
+      <b-col sm="12" md="12" lg="4" xl="4">
         <PieChart/>
       </b-col>
       <b-col sm="12" md="12" lg="4" xl="4">
@@ -28,8 +28,6 @@
     >
       <ChangePassword/>
     </b-modal>
-
-
   </b-container>
 </template>
 
@@ -38,7 +36,7 @@ import PieChart from './component/PieChart'
 import ChangePassword from '@/views/pages/profile/ChangePassword'
 import Deposits from '@/views/dashboard/ecommerce/component/Deposits'
 import Profits from '@/views/dashboard/ecommerce/component/Profits'
-import { BRow, BCol, BImg, BCard, BCardBody, BModal, VBModal } from 'bootstrap-vue'
+import { BRow, BCol, BImg, BCard, BCardBody, BModal, VBModal, BContainer } from 'bootstrap-vue'
 import { PERSON_SEPORDE } from '@/constants/graphql'
 import useJwt from '@/auth/jwt/useJwt'
 import { initialAbility } from '@/libs/acl/config'
@@ -58,6 +56,7 @@ export default {
     PieChart,
     BModal,
     ChangePassword,
+    BContainer
   },
   directives: {
     'b-modal': VBModal,
@@ -79,13 +78,17 @@ export default {
       localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)
       localStorage.removeItem(useJwt.jwtConfig.storageRefreshTokenKeyName)
       localStorage.removeItem('userData')
+      localStorage.removeItem('user-id')
+      localStorage.removeItem('fullName')
+      localStorage.removeItem('loglevel:webpack-dev-server')
+      localStorage.removeItem('auth-token')
       this.$ability.update(initialAbility)
       this.$router.push({ name: 'auth-login' })
     }
   },
   created() {
     if (!localStorage.getItem('userData')) {
-      this.logout()
+      // this.logout()
     }
     this.$apollo.mutate({
       mutation: PERSON_SEPORDE,
@@ -94,7 +97,7 @@ export default {
           this.newData = result.data.me.profile
         })
         .catch((error) => {
-          this.logout()
+          // this.logout()
         })
   },
 }
