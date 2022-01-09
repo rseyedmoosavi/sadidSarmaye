@@ -8,7 +8,7 @@
         <b-img fluid src="@/assets/images/icons/dashboard/bardasht.png"></b-img>
       </b-col>
       <b-col sm="6" md="3" lg="2" xl="2">
-        <b-img src="@/assets/images/icons/dashboard/renew.png"></b-img>
+        <b-img v-b-modal.renewTransaction src="@/assets/images/icons/dashboard/renew.png"></b-img>
       </b-col>
       <b-col sm="6" md="3" lg="2" xl="2">
         <b-img v-b-modal.deposit-calc src="@/assets/images/icons/dashboard/calc.png"></b-img>
@@ -25,6 +25,15 @@
     >
       <FormUserCreateTransaction/>
     </b-modal>
+    <!-- modal -->
+    <b-modal
+        id="renewTransaction"
+        title="تجدید قرارداد با قوانین به روز شرکت"
+        hide-footer
+    >
+      <DepositsForRenew/>
+    </b-modal>
+
 
     <b-modal
         id="deposit-calc"
@@ -51,9 +60,11 @@ import { BRow, BCol, BImg,BContainer,BModal,VBModal } from 'bootstrap-vue'
 import FormUserCreateTransaction from '@/views/forms/form-validation/FormUserCreateTransaction'
 import FormUserContactUs from '@/views/forms/form-validation/FormUserContactUs'
 import DepositCalc from '@/views/dashboard/ecommerce/component/DepositCalc'
+import DepositsForRenew from '@/views/table/bs-table/DepositsForRenew'
 
 export default {
   components: {
+    DepositsForRenew,
     DepositCalc,
     FormUserContactUs,
     BRow,

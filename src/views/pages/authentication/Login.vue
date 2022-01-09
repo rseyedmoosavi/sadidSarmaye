@@ -44,6 +44,8 @@
                 >
                   <b-form-input
                       id="login-email"
+                      autofocus
+                      style="direction: ltr"
                       v-model="username"
                       :state="errors.length > 0 ? false:null"
                       name="login-email"
@@ -72,6 +74,7 @@
                       :class="errors.length > 0 ? 'is-invalid':null"
                   >
                     <b-form-input
+                        style="direction: ltr"
                         id="login-password"
                         v-model="password"
                         :state="errors.length > 0 ? false:null"
@@ -191,6 +194,7 @@
 <script>
 /* eslint-disable global-require */
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import useJwt from '@/auth/jwt/useJwt'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
 import { GC_USER_ID, GC_AUTH_TOKEN, GC_USER_DATA } from '@/constants/settings'
 import { GET_GROUPS_NAME, LOGIN } from '@/constants/graphql'
@@ -251,7 +255,7 @@ export default {
       sideImg: require('@/assets/images/pages/login.png'),
       Logo: require('@/assets/images/logo/logo.png'),
       // validation rules
-      groupName:null,
+      groupName: null,
       required,
       email,
     }
@@ -287,11 +291,9 @@ export default {
                   }
                 })
                     .then((result) => {
-                      this.$apollo.mutate({
-                        mutation:GET_GROUPS_NAME
-                      }).then((groupName)=>{
-                        this.groupName=groupName.data.me.groups[0].name
-                      })
+                      useJwt.setToken(result.data.login.token)
+                      useJwt.setRefreshToken(result.data.login.token)
+                      this.groupName = result.data.login.user.groups[0].name
                       this.result = result
                       this.showSms = true
                     })
@@ -311,16 +313,16 @@ export default {
       if (this.smsNo === '10') {
         const id = this.result.data.login.user.id
         const token = this.result.data.login.token
-        let fullName=this.result.data.login.user.username
-        let profileID=0
-        if(this.result.data.login.user.profile){
-          let firstName=this.result.data.login.user.profile.firstName
-          let lastName=this.result.data.login.user.profile.lastName
-          profileID=this.result.data.login.user.profile.id
-          fullName = firstName+' '+lastName
+        let fullName = this.result.data.login.user.username
+        let profileID = 0
+        if (this.result.data.login.user.profile) {
+          let firstName = this.result.data.login.user.profile.firstName
+          let lastName = this.result.data.login.user.profile.lastName
+          profileID = this.result.data.login.user.profile.id
+          fullName = firstName + ' ' + lastName
         }
         try {
-          this.saveUserData(id, token, fullName,profileID)
+          this.saveUserData(id, token, fullName, profileID)
         } catch (e) {
           console.log(e)
         }
@@ -339,7 +341,7 @@ export default {
             })
       }
     },
-    saveUserData(id, token, fullName,profileID) {
+    saveUserData(id, token, fullName, profileID) {
       let userData = {
         id: id,
         fullName: fullName,
@@ -357,7 +359,7 @@ export default {
       localStorage.setItem(GC_AUTH_TOKEN, token)
       localStorage.setItem(GC_USER_DATA, JSON.stringify(userData))
       localStorage.setItem('fullName', fullName)
-      localStorage.setItem('profile-id',profileID )
+      localStorage.setItem('profile-id', profileID)
       this.$root.$data.userId = localStorage.getItem(GC_USER_ID)
       this.$ability.update(userData.ability)
       // this.$store.commit('app-ecommerce/UPDATE_CART_ITEMS_COUNT', userData.extras.eCommerceCartItemsCount)

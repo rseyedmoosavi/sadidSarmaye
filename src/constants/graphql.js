@@ -361,6 +361,25 @@ export const PROFITS_FOR_HOME_PAGE = gql`
     }
 `
 
+export const DEPOSIT_FOR_RENEW = gql`
+    query transactions($expireDate:Date){
+        transactions(kind_Id:1,expireDate_Lte:$expireDate) {
+            totalSum
+            edges {
+                node {
+                    expireDate
+                    amount
+                    effectiveDate
+                    id
+                }
+
+            }
+
+        }
+    }
+`
+
+
 export const GET_TRANSACTION = gql`
     query getTransaction($id:Float){
         transactions(id:$id){
@@ -446,6 +465,9 @@ export const LOGIN = gql`
             password: $password,
         ){
             user {
+                groups {
+                    name
+                }
                 id
                 username
                 profile{
@@ -456,15 +478,6 @@ export const LOGIN = gql`
                 lastLogin
             }
             token
-        }
-    }
-`
-export const GET_GROUPS_NAME = gql`
-    query getGroupsName{
-        me{
-            groups{
-                name
-            }
         }
     }
 `

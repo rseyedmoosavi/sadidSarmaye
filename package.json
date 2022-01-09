@@ -17,6 +17,7 @@
     "@fullcalendar/list": "5.x",
     "@fullcalendar/timegrid": "5.x",
     "@fullcalendar/vue": "5.x",
+    "@vee-validate/i18n": "^4.5.7",
     "@vue/composition-api": "1.0.2",
     "@vueuse/core": "4.0.0",
     "animate.css": "4.1.1",

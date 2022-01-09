@@ -254,6 +254,7 @@
                 <b-form-input
                     id="idNumber"
                     v-model="idNumber"
+                    type="number"
                     placeholder="157"
                 />
               </b-form-group>
@@ -268,6 +269,7 @@
                 <b-form-group
                     label="کد ملی"
                     label-for="nationalCode"
+                    type="number"
                     :state="errors.length > 0 ? false:null"
                 >
                   <b-form-input
@@ -474,6 +476,7 @@
                 >
                   <b-form-input
                       id="homePhone"
+                      type="number"
                       v-model="homePhone"
                       :state="errors.length > 0 ? false:null"
                       placeholder="02166225544"
@@ -489,6 +492,7 @@
               >
                 <b-form-input
                     id="officePhone"
+                    type="number"
                     v-model="officePhone"
                     placeholder="02166225544"
                 />
@@ -507,6 +511,7 @@
                 >
                   <b-form-input
                       id="mobile1"
+                      type="number"
                       v-model="tel"
                       :state="errors.length > 0 ? false:null"
                       placeholder="0923456789"
@@ -522,6 +527,7 @@
                   label-for="mobile2"
               >
                 <b-form-input
+                    type="number"
                     id="mobile2"
                     v-model="mobile2"
                     placeholder="09351246789"
@@ -600,7 +606,7 @@
                   <b-form-input
                       id="accountNumber"
                       v-model="accountNumber"
-                      type="text"
+                      type="number"
                       :state="errors.length > 0 ? false:null"
                       placeholder="5741900000"
                   />
@@ -642,7 +648,7 @@
                   <b-form-input
                       id="shomare-cart"
                       v-model="cardNumber"
-                      type="text"
+                      type="number"
                       :state="errors.length > 0 ? false:null"
                       placeholder="6104337854552222"
                   />

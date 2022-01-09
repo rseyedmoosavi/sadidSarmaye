@@ -65,10 +65,15 @@ const router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
+  const isLoggedIn = isUserLoggedIn()
   console.clear()
-  console.log(to)
-  if(to.path==='/register') {
+  console.log(to,"---",isLoggedIn)
+  if(to.path==='/pages/profile') {
     alert('sdf')
+      logout()
+  }
+  if(to.path==='/dashboard/ecommerce') {
+    alert('dashboard')
       logout()
   }
   if (to.matched.some(record => record.meta.requiresAuth)) {
@@ -90,6 +95,26 @@ router.beforeEach((to, from, next) => {
     next() // does not require auth, make sure to always call next()!
   }
 })
+
+// router.beforeEach((to, _, next) => {
+//   const isLoggedIn = isUserLoggedIn()
+//
+//   if (!canNavigate(to)) {
+//     // Redirect to login if not logged in
+//     if (!isLoggedIn) return next({ name: 'auth-login' })
+//
+//     // If logged in => not authorized
+//     return next({ name: 'misc-not-authorized' })
+//   }
+//
+//   // Redirect if logged in
+//   if (to.meta.redirectIfLoggedIn && isLoggedIn) {
+//     const userData = getUserData()
+//     next(getHomeRouteForLoggedInUser(userData ? userData.role : null))
+//   }
+//
+//   return next()
+// })
 
 function logout() {
   localStorage.removeItem(useJwt.jwtConfig.storageTokenKeyName)

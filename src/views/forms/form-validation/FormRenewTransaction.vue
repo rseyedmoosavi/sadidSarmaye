@@ -33,6 +33,7 @@
           <b-form-group>
             <b-input-group>
               <b-form-input
+                  readonly
                   placeholder="مبلغ"
                   v-model="amount"
                   @input="num2per"
@@ -52,13 +53,14 @@
           <b-row>
             <b-col md="6">
               <b-form-group>
-                <date-picker label="تاریخ" @input="multipleDate" v-model="effectiveDate" :auto-submit="true"/>
+                <date-picker readonly label="تاریخ" @input="multipleDate" v-model="effectiveDate" :auto-submit="true"/>
               </b-form-group>
             </b-col>
             <b-col md="6">
               <b-form-group>
                 <b-form-input
                     v-model="time"
+                    readonly
                     placeholder="ساعت"
                 />
               </b-form-group>
@@ -72,6 +74,7 @@
             <b-col md="6">
               <b-form-group>
                 <b-form-input
+                    readonly
                     v-model="receiptNumber"
                     placeholder="شماره پیگیری"
                 />
@@ -80,6 +83,7 @@
             <b-col md="6">
               <b-form-group>
                 <b-form-input
+                    readonly
                     v-model="description"
                     placeholder="توضیحات"
                 />
@@ -91,13 +95,13 @@
         <!-- ********************* -->
         <b-col md="12">
           <b-row>
-            <b-col md="4">
-              <b-form-group>
-                <b-form-select v-model="contractTerm" @input="multipleDate" :options="contractTermOptions"
-                ></b-form-select>
-              </b-form-group>
-            </b-col>
-            <b-col md="4">
+<!--            <b-col md="4">-->
+<!--              <b-form-group>-->
+<!--                <b-form-select v-model="contractTerm" @input="multipleDate" :options="contractTermOptions"-->
+<!--                ></b-form-select>-->
+<!--              </b-form-group>-->
+<!--            </b-col>-->
+            <b-col md="12">
               <b-form-group>
                 <b-form-input
                     v-model="startDate"
@@ -108,17 +112,17 @@
                 />
               </b-form-group>
             </b-col>
-            <b-col md="4">
-              <b-form-group>
-                <b-form-input
-                    v-model="endDate"
-                    placeholder="تاریخ پایان"
-                    title="تاریخ پایان"
-                    v-b-tooltip.hover.v-info
-                    disabled="disabled"
-                />
-              </b-form-group>
-            </b-col>
+<!--            <b-col md="6">-->
+<!--              <b-form-group>-->
+<!--                <b-form-input-->
+<!--                    v-model="endDate"-->
+<!--                    placeholder="تاریخ پایان"-->
+<!--                    title="تاریخ پایان"-->
+<!--                    v-b-tooltip.hover.v-info-->
+<!--                    disabled="disabled"-->
+<!--                />-->
+<!--              </b-form-group>-->
+<!--            </b-col>-->
           </b-row>
         </b-col>
         <!-- ********************* -->
@@ -129,18 +133,6 @@
                 :options="imageKind"
                 name="radio-options"
             ></b-form-radio-group>
-          </b-form-group>
-        </b-col>
-        <b-col md="12">
-          <b-form-group>
-            <b-input-group>
-              <b-form-file
-                  id="file1"
-                  placeholder="تصویر سند را انتخاب کنید..."
-                  drop-placeholder="اینجا رها کنید..."
-                  v-model="image"
-              />
-            </b-input-group>
           </b-form-group>
         </b-col>
         <!-- ********************* -->
@@ -194,7 +186,10 @@ export default {
   props: [
     'title',
     'user',
-    'amount'
+    'amount',
+    'receiptNumber',
+    'time',
+    'effectiveDate',
   ],
   mounted() {
     this.$apollo.mutate({
@@ -203,9 +198,7 @@ export default {
         .then((result) => {
           this.planNameOptions = result.data.plan
         })
-    this.$apollo.mutate({
-      mutation: GET_ALL_PRESENTER
-    })
+    this.num2per()
         .then((presenter) => {
           var users = new Array()
           var items = presenter.data.profiles.edges
@@ -248,63 +241,23 @@ export default {
       alias: null,
       persianPrice: 'صفر ریال',
       time: null,
-      selected: {
-        title: 'مرتضی مطهری',
-        value: 2
-      },
-      kindSelected: {
-        title: 'سپرده گزاری',
-        value: '1'
-      },
-      kind: [
-        {
-          title: 'سپرده گزاری',
-          value: '1'
-        },
-        {
-          title: 'مرجوعی',
-          value: '2'
-        },
-        {
-          title: 'واریز سود',
-          value: '3'
-        },
-        {
-          title: 'برداشت سود',
-          value: '4'
-        }
-      ],
       imageKindSelected: [
         {
-          text: 'کارت به کارت',
-          value: 1
+          text: 'از قرارداد قبل',
+          value: 5
         }
       ],
       imageKind: [
         {
-          text: 'کارت به کارت',
-          value: 1
-        },
-        {
-          text: 'پایا',
-          value: 2
-        },
-        {
-          text: 'ساتنا',
-          value: 3
-        },
-        {
-          text: 'درون بانکی',
-          value: 4
+          text: 'از قرارداد قبل',
+          value: 5
         },
       ],
-      image: null,
       profileId: [],
       users: [],
-      // amount: null,
       effectiveDate: null,
       kindId: [],
-      description: '',
+      description: 'واریز از قرارداد قبل',
       receiptNumber: null,
       contractTerm: 6,
       contractTermOptions: [
@@ -364,7 +317,6 @@ export default {
       } else if (this.image === null) {
         this.makeToast('لطفا تصویر سند را وارد نمایید', 'danger')
       } else {
-
         // return 0
         this.$apollo.mutate({
           mutation: CREATE_TRANSACTION,

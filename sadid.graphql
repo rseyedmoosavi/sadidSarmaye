@@ -260,7 +260,7 @@ type ProfileType implements Node {
         taDate: Date!
     ): Float
     tel: String
-    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float, state_In: [String]): TransactionTypeConnection!
+    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], expireDate_Gte: Date, expireDate_Lte: Date, expireDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float, state_In: [String]): TransactionTypeConnection!
     user: UserType
 }
 
@@ -346,7 +346,7 @@ type Query {
     transactionKinds: [TransactionKindType]
     transactionRequestKinds: [TransactionRequestKindType]
     transactionRequests(after: String, before: String, first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, transaction_Id: Float): TransactionRequestTypeConnection
-    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float, state_In: [String]): TransactionTypeConnection
+    transactions(after: String, before: String, effectiveDate_Gte: Date, effectiveDate_Lte: Date, effectiveDate_Range: [Date], expireDate_Gte: Date, expireDate_Lte: Date, expireDate_Range: [Date], first: Int, id: Float, kind_Id: Float, last: Int, offset: Int, profile_Id: Float, state_In: [String]): TransactionTypeConnection
     users: [UserType]
 }
 
