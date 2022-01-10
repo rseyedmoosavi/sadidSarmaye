@@ -104,7 +104,7 @@ export default {
           mimetype,
           stream
         } = this.image
-        console.clear()
+        // console.clear()
         console.log(document.getElementsByName('file').value)
         // return 0
         this.$apollo.mutate({

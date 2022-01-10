@@ -192,7 +192,7 @@ export default {
       }
     })
         .then((resutl) => {
-          console.clear()
+          // console.clear()
           console.log(resutl.data.profiles.edges[0].node)
           resutl = resutl.data.profiles.edges[0].node
           this.firstName = resutl.firstName

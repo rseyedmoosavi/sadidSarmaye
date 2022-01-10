@@ -108,7 +108,7 @@ export default {
         this.profileAddress= "customer-edit-profile"
       }
     }).catch((result)=>{
-      console.clear()
+      // console.clear()
       console.log(result)
     })
   },

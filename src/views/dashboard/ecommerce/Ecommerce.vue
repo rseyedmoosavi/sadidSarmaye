@@ -70,7 +70,7 @@ export default {
   },
   mounted() {
     if (!localStorage.getItem('userData')) {
-      this.logout()
+      // this.logout()
     }
   },
   methods: {

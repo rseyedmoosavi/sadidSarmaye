@@ -32,7 +32,7 @@ export default {
       }
     })
         .then((result) => {
-          console.clear()
+          // console.clear()
           let transactions = []
           let items = result.data.transactions.edges
           for (const item of items) {

@@ -66,15 +66,11 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const isLoggedIn = isUserLoggedIn()
-  console.clear()
+  // console.clear()
   console.log(to,"---",isLoggedIn)
   if(to.path==='/pages/profile') {
-    alert('sdf')
-      logout()
   }
   if(to.path==='/dashboard/ecommerce') {
-    alert('dashboard')
-      logout()
   }
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // this route requires auth, check if logged in

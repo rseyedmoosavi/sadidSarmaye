@@ -12,7 +12,7 @@
   .flatpickr-prev-month,
   .flatpickr-next-month {
     svg {
-      transform: rotate(180deg);
+      //transform: rotate(180deg);
     }
   }
 
@@ -35,7 +35,7 @@
   // Carousel
   .carousel-control-prev-icon,
   .carousel-control-next-icon {
-    transform: rotate(180deg);
+    //transform: rotate(180deg);
   }
 
   // Swiper Cube effect fix
@@ -74,7 +74,7 @@
   .pagination .page-item.next-item .page-link,
   .pagination .page-item .page-link {
     svg {
-      transform: rotate(180deg);
+      //transform: rotate(180deg);
     }
   }
 
@@ -131,7 +131,7 @@
     .fc-header-toolbar {
       .fc-prev-button,
       .fc-next-button {
-        transform: rotate(180deg);
+        //transform: rotate(180deg);
       }
     }
   }

@@ -815,7 +815,7 @@ export default {
     },
 
     formSubmitted() {
-      console.clear()
+      // console.clear()
       console.log(parseInt(localStorage.getItem('user-id')))
       this.$apollo.mutate({
         mutation: CREATE_PROFILE,

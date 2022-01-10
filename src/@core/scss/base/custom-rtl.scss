@@ -35,7 +35,7 @@
 // Transformed menu icons
 .vertical-layout.vertical-menu-modern.menu-expanded .main-menu .navigation li.has-sub > a:after,
 .vertical-layout.vertical-overlay-menu.menu-open .main-menu .navigation li.has-sub > a:after {
-  transform: rotate(180deg);
+  //**transform: rotate(180deg);
 }
 .vertical-layout.vertical-menu-modern.menu-expanded
   .main-menu
@@ -179,7 +179,7 @@ table.dataTable thead .sorting_desc:before {
 .breadcrumb.breadcrumb-chevron {
   .breadcrumb-item + .breadcrumb-item {
     &:before {
-      transform: rotate(180deg);
+      //**transform: rotate(180deg);
     }
   }
 }
@@ -191,19 +191,19 @@ table.dataTable thead .sorting_desc:before {
   &.previous {
     .page-link {
       &:before {
-        transform: rotate(180deg);
+        //**transform: rotate(180deg);
       }
       &:hover,
       &:active {
         &:before {
-          transform: rotate(180deg);
+          //**transform: rotate(180deg);
         }
       }
     }
     &.disabled {
       .page-link {
         &:before {
-          transform: rotate(180deg);
+          //transform: rotate(180deg);
         }
       }
     }
@@ -213,19 +213,19 @@ table.dataTable thead .sorting_desc:before {
   &.next {
     .page-link {
       &:after {
-        transform: rotate(180deg);
+        //transform: rotate(180deg);
       }
       &:hover,
       &:active {
         &:after {
-          transform: rotate(180deg);
+          //transform: rotate(180deg);
         }
       }
     }
     &.disabled {
       .page-link {
         &:before {
-          transform: rotate(180deg);
+          //transform: rotate(180deg);
         }
       }
     }
@@ -348,7 +348,7 @@ body .ps__rail-y {
   .sidebar-file-manager {
     .sidebar-inner {
       .my-drive .jstree-node.jstree-closed > .jstree-icon {
-        transform: rotate(180deg);
+        //transform: rotate(180deg);
       }
     }
   }

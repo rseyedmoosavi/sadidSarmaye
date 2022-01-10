@@ -67,14 +67,16 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 
   return forward(operation)
 })
+console.log("before")
 const token = localStorage.getItem(GC_AUTH_TOKEN)
 const apolloClient = new ApolloClient({
-  link: authMiddleware.concat(httpLink),
-  // link: createUploadLink({uri:'https://sadidsarmaye.iran.liara.run/api/graphql',headers:{authorization: token ? `JWT ${token}` : null}}),
-  cache: new InMemoryCache(),
+  // link: authMiddleware.concat(httpLink),
+  link: createUploadLink({uri:'https://sadidsarmaye.iran.liara.run/api/graphql',headers:{authorization: token ? `JWT ${token}` : null}}),
+  cache: new InMemoryCache() ,
   connectToDevTools: true
 })
-
+console.log(apolloClient,'___',token)
+console.log('after')
 const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
   defaultOptions: {
